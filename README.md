@@ -6,3 +6,4 @@ Game for RPG | SDL2
 #Architecture: ARM/x86-x64
 <br/>
 #Size: 128 MB
+ 
