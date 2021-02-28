@@ -5,7 +5,7 @@ project(Nightfear LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_BINARY_DIR build)
+set(CMAKE_BINARY_DIR build)
 
 find_package(SDL2 REQUIRED)
 

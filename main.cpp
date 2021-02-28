@@ -1,8 +1,8 @@
 #include <cstring>
 
-#include "sources/pch.h"
-#include "sources/inputSystem.h"
-#include "sources/sysInfo.h"
+#include "source/pch.h"
+#include "source/inputSystem.h"
+#include "source/sysInfo.h"
 
 using namespace std;
 using namespace RoninEngine;
