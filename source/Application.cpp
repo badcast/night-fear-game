@@ -21,7 +21,7 @@ namespace RoninEngine
 		this->m_sceneLoaded = false;
 		this->renderer = NULL;
 		this->m_scene = NULL;
-	}
+    }
 
 	RoninApplication::~RoninApplication()
 	{
@@ -29,7 +29,7 @@ namespace RoninEngine
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		Free_Controls();
-	}
+    }
 
 	void RoninApplication::init() {
 		if (m_inited)
@@ -39,7 +39,7 @@ namespace RoninEngine
 			WindowWidth, WindowHeight, SDL_WINDOW_SHOWN);
 		this->renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-		//Brightness - Яркость
+		//Brightness - РЇСЂРєРѕСЃС‚СЊ
 		SDL_SetWindowBrightness(window, 1);
 
 		Time::Init_TimeEngine();
@@ -50,7 +50,7 @@ namespace RoninEngine
 
 	void RoninApplication::LoadGame() {
 
-		//Загружаем данные и готовим программу к запуску
+		//Р—Р°РіСЂСѓР¶Р°РµРј РґР°РЅРЅС‹Рµ Рё РіРѕС‚РѕРІРёРј РїСЂРѕРіСЂР°РјРјСѓ Рє Р·Р°РїСѓСЃРєСѓ
 		ResourceManager::CheckResources();
 
 		ResourceManager::ResourcesInitialize();
@@ -64,7 +64,7 @@ namespace RoninEngine
 		temp = path + "textures.set";
 		ResourceManager::LoadImages(temp.c_str());
 
-		//Загружаем шрифты
+		//Р—Р°РіСЂСѓР¶Р°РµРј С€СЂРёС„С‚С‹
 		if (allocate_variable(font) == NULL)
 			fail_OutOfMemory();
 
@@ -73,7 +73,7 @@ namespace RoninEngine
 		font->fontSize.x = FONT_WIDTH;
 		font->fontSize.y = FONT_HEIGHT;
 
-		//Структурирование шрифта
+		//РЎС‚СЂСѓРєС‚СѓСЂРёСЂРѕРІР°РЅРёРµ С€СЂРёС„С‚Р°
 		{
 			uint8_t target;
 			uint8_t i;
@@ -123,16 +123,16 @@ namespace RoninEngine
 			}
 		}
 
-		//Загрузк шрифта и оптимизация дэффектов
+		//Р—Р°РіСЂСѓР·Рє С€СЂРёС„С‚Р° Рё РѕРїС‚РёРјРёР·Р°С†РёСЏ РґСЌС„С„РµРєС‚РѕРІ
 		ui::Initialize_Fonts(font, true);
 
-		//Инициализация инструментов
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ
 		InitalizeControls();
 
 		//Set cursor
 		SDL_SetCursor(ResourceManager::GetCursor("cursor", { 1, 1 }));
 
-		//Загружаем главное меню
+		//Р—Р°РіСЂСѓР¶Р°РµРј РіР»Р°РІРЅРѕРµ РјРµРЅСЋ
 		LoadScene(allocate_class<GameScene>());
 
 		Levels::Level_Init();
@@ -194,7 +194,7 @@ namespace RoninEngine
 	void RoninApplication::Update_Game()
 	{
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); // black clear
-		//Очистка
+		//РћС‡РёСЃС‚РєР°
 		SDL_RenderClear(renderer);
 
 		if (!m_sceneLoaded)
@@ -205,7 +205,7 @@ namespace RoninEngine
 		}
 		else
 		{
-			//Обновляем сцену
+			//РћР±РЅРѕРІР»СЏРµРј СЃС†РµРЅСѓ
 			if (!m_sceneAccept)
 			{
 				SDL_RenderFlush(renderer); // flush renderer before first render

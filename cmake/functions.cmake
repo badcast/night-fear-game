@@ -42,11 +42,16 @@ function(custom_add_test_from_dir TARGET LIBRARY)
     add_test(${TARGET} ${TARGET})
 endfunction()
 
-function(custom_add_headers_recursive TARGET_SRC)
+function(custom_add_library_static TARGET)
+    file(GLOB_RECURSE TARGET_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+    add_library(${TARGET} STATIC ${TARGET_SRC})
+endfunction(custom_add_library)
+
+function(custom_add_headers_recursive TARGET)
     file(GLOB_RECURSE TARGET_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
     add_executable(${TARGET} ${TARGET_SRC})
 endfunction(custom_add_headers_recursive)
 
 function(custom_log MESSAGE)
-    file(APPEND compile_log.log MESSAGE)
+    file(APPEND compile.log ${MESSAGE}\n)
 endfunction(header_add)

@@ -132,7 +132,7 @@ namespace RoninEngine::ui
 
 	bool CTextRandomizerDisplay::render_control(GUI* gui, RenderData& data, SDL_Renderer* render, bool* hover)
 	{
-		//todo: Доработать рандомайзера!
+		//todo: Р”РѕСЂР°Р±РѕС‚Р°С‚СЊ СЂР°РЅРґРѕРјР°Р№Р·РµСЂР°!
 		TextRandomizer_Format format = TextRandomizer_Format::OnlyNumber;// (int)(data.resources);
 
 		data.text.resize(15);
