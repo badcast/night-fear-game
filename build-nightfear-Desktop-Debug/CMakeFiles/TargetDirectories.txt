@@ -1,0 +1,3 @@
+/media/vault_teck/dev/git/night-fear-game/build-nightfear-Desktop-Debug/CMakeFiles/rebuild_cache.dir
+/media/vault_teck/dev/git/night-fear-game/build-nightfear-Desktop-Debug/CMakeFiles/edit_cache.dir
+/media/vault_teck/dev/git/night-fear-game/build-nightfear-Desktop-Debug/CMakeFiles/nightfear.dir
