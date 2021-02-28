@@ -2,3 +2,4 @@
 ./build-nightfear-Desktop-Debug/*
 ./nightfear
 ./nightfear/*
+./.project
