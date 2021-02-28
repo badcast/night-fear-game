@@ -84,6 +84,5 @@ set(NIGHTFEARSX_SRC
         ./source/Component.h
         ./source/pch.h
         ./source/font.cpp
-          source/
-        ./source/main.cpp
+        ./source/main.cpp PARENT_SCOPE
     )

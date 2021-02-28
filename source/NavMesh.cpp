@@ -248,7 +248,7 @@ namespace RoninEngine::AIPathFinder
 			pathIsNot = current;
 			AlgorithmUtils::AvailPoints(this, method, current, firstNeuron, &finded, -1, FLAG_OPEN_LIST | FLAG_CLOSED_LIST);
 			for (auto position : finded) {
-				if (position->cost() && position->cost() < current->cost() || position == firstNeuron) {
+                if ((position->cost() && position->cost() < current->cost()) || position == firstNeuron) {
 					current = position;
 					result->emplace_front(current);
 					current->flag() = FLAG_TILED_LIST;
@@ -337,7 +337,7 @@ namespace RoninEngine::AIPathFinder
 		list<Neuron*>* pathTo, int maxCount, int filterFlag)
 	{
 		Neuron* it = NULL;
-		register int i = 0, c;
+        int i = 0, c;
 		int8_t* matrixH;
 		int8_t* matrixV;
 		switch (method)

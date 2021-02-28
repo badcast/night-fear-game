@@ -96,7 +96,7 @@ namespace RoninEngine::Runtime {
 		Vec2 lastPoint;
 		Vec2 a, b;
 		AIPathFinder::Neuron* p;
-		register AIPathFinder::Disposition p1, p2;
+        AIPathFinder::Disposition p1, p2;
 		auto display = RoninApplication::instance()->display();
 
 		color.r = 53;

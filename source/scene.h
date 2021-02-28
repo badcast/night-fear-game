@@ -7,17 +7,19 @@
 #include "Object.h"
 #include "Behaviour.h"
 #include "Light.h"
+#include "ui.h"
 
 namespace RoninEngine
 {
 	class Scene
 	{
-		friend class Runtime::Object;
-		friend class RoninApplication;
-		friend class ui::GUI;
-		friend class GameObject;
-		friend class Renderer;
-		friend class Camera;
+        friend class Runtime::Object;
+        friend class RoninApplication;
+        friend class ui::GUI;
+        friend class Runtime::GameObject;
+        friend class Runtime::Renderer;
+        friend class Runtime::Camera;
+
 
 		friend bool Runtime::existObject(Object* obj);
 		friend void Runtime::Destroy(Object* obj);

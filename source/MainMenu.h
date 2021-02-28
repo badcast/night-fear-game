@@ -7,7 +7,7 @@ namespace RoninEngine {
 	class MainMenu : public Scene
 	{
 	public:
-		MainMenu() : Scene("Main Menu") {}
+        MainMenu() : Scene("Main Menu") {}
 
 		void awake();
 		void start();

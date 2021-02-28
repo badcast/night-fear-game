@@ -9,7 +9,7 @@ namespace RoninEngine::Runtime
 
 	class Transform : public Component 
 	{
-		friend class Scene;
+        friend class RoninEngine::Scene;
 		friend class Camera;
 		friend class Camera2D;
 		friend GameObject* Instantiate(GameObject* obj);

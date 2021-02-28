@@ -342,7 +342,7 @@ namespace RoninEngine
 		testObj = NULL;
 		to = Vec2::zero;
 		last = NULL;
-		deallocate_variable(navMesh);
+        deallocate_variable(navMesh);
 		paths.clear();
 		ais.clear();
 		ais.shrink_to_fit();

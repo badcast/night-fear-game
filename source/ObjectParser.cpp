@@ -320,8 +320,9 @@ namespace RoninEngine {
 	static ObjectNode* _dbgLastNode;
 #endif
 
+    //big algorithm, please free me.
 	int ObjectParser::avail(ObjectParser::_StructType& entry, const char* source, int len, int levels) {
-		register int i, j;
+        int i, j;
 
 		void* memory = NULL;
 		DataType arrayType;
@@ -389,7 +390,7 @@ namespace RoninEngine {
 
 								}
 								else if (arrayType != valueType && arrayType == DataType::Real && valueType != DataType::Number) {
-									throw std::exception("Multi type is found.");
+                                    throw std::runtime_error("Multi type is found.");
 								}
 
 								switch (arrayType)

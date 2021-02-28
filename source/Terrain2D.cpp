@@ -9,7 +9,7 @@ namespace RoninEngine::Runtime {
 	}
 	Terrain2D::~Terrain2D() {
 		if (nav)
-			deallocate_variable(nav);
+			free_variable(nav);
 	}
 	
 	const bool Terrain2D::isCollider(const Vec2 destination) {

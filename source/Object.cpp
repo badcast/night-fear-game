@@ -38,7 +38,7 @@ namespace RoninEngine::Runtime {
 		if (gObj = dynamic_cast<GameObject*>(obj))
 		{
 			if (Scene::currentScene->_firstRunScripts) {
-				Scene::currentScene->_firstRunScripts->remove_if([gObj](Behaviour* x) {
+                Scene::currentScene->_firstRunScripts->remove_if([gObj](Behaviour* x) {
 
 					auto iter = find_if(std::begin(gObj->m_components), std::end(gObj->m_components), [x](Component* c) {
 						return (Component*)x == c;
@@ -63,7 +63,7 @@ namespace RoninEngine::Runtime {
 		SDL_Log("Object destroyed id: %d", obj->id);
 
 		Scene::currentScene->_objects.erase(obj);
-		deallocate_variable(obj);
+        free_variable(obj);
 	}
 
 	bool existObject(Object* obj) {
@@ -77,7 +77,8 @@ namespace RoninEngine::Runtime {
 	//Instantaite clone
 	template<typename ObjectType>
 	ObjectType* Instantiate(ObjectType* obj) {
-		ObjectType* CreateObject<ObjectType>();
+        throw std::bad_cast();
+        //ObjectType* CreateObject<ObjectType>();
 		return NULL;
 	}
 

@@ -17,7 +17,7 @@ namespace RoninEngine
 		::instance = this;
 		this->m_inited = false;
 		this->m_sceneAccept = false;
-		this->window = NULL;
+                this->window = NULL;
 		this->m_sceneLoaded = false;
 		this->renderer = NULL;
 		this->m_scene = NULL;
@@ -28,7 +28,6 @@ namespace RoninEngine
 		ResourceManager::ResourcesRelease();
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
-
 		Free_Controls();
 	}
 
@@ -143,7 +142,7 @@ namespace RoninEngine
 	{
 		if (_lastSceneToFree) {
 			_lastSceneToFree->onUnloading();
-			deallocate_variable(_lastSceneToFree);
+            free_variable(_lastSceneToFree);
 			ResourceManager::UnloadUnused();
 		}
 
@@ -154,7 +153,7 @@ namespace RoninEngine
 	void RoninApplication::LoadScene(Scene* m_scene)
 	{
 		if (!m_scene || m_scene == this->m_scene)
-			throw std::exception();
+                        throw std::bad_cast();
 
 		if (this->m_scene)
 		{

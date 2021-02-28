@@ -44,7 +44,7 @@ namespace RoninEngine::ui
 	UIID GUI::register_ui(const UIID& parent) throw()
 	{
 		if (parent && !Has_ID(parent))
-			throw exception("Is not ed parent");
+            throw std::runtime_error("Is not ed parent");
 
 		RenderData data{ 0 };
 		data.parentId = parent;
@@ -237,7 +237,7 @@ namespace RoninEngine::ui
 
 	void GUI::Show_GroupUnique(const UIID& id) throw() {
 		if (!Is_Group(id))
-			throw exception("Is't group");
+            throw std::runtime_error("Is't group");
 
 		this->m_Sticks._rendering.remove_if([this](auto v)
 		{
@@ -248,7 +248,7 @@ namespace RoninEngine::ui
 	}
 	void GUI::Show_Group(const UIID& id) throw() {
 		if (!Is_Group(id))
-			throw exception("Is't group");
+            throw std::runtime_error("Is't group");
 
 		auto iter = find_if(begin(m_Sticks._rendering), end(m_Sticks._rendering), [&id](auto& _id)
 		{
@@ -265,7 +265,7 @@ namespace RoninEngine::ui
 
 	bool GUI::Close_Group(const UIID& id) throw() {
 		if (!Is_Group(id))
-			throw exception("Is't group");
+            throw std::runtime_error("Is't group");
 		m_Sticks._rendering.remove(id);
 		Visible(id, false);
 	}

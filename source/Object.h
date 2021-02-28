@@ -8,32 +8,41 @@ namespace RoninEngine::Runtime
 	class Object;
 
 	//create object
+
+
 	template<typename T>
-	class Instancer {
+    [[deprecated]]
+    class Instancer {
 	public:
 		Instancer() {
-			instance = allocate_class< T>();
-			if (RoninEngine::Scene::currentScene->main_object && typeid(T) == typeid(GameObject)) {
+            instance = allocate_class<T>();
+            throw std::bad_cast();
+            /*
+            if (Scene::currentScene->main_object != nullptr && typeid(T) == typeid(GameObject)) {
 				auto root = RoninEngine::Scene::currentScene->main_object->transform();
 				Transform* tr = ((GameObject*)instance)->transform();
 				root->child_append(tr);
-			}
+            }*/
 		}
 		Instancer(const string& name) {
 			instance = allocate_class< T>(name);
-			if (RoninEngine::Scene::currentScene->main_object && typeid(T) == typeid(GameObject)) {
-				auto root = RoninEngine::Scene::currentScene->main_object->transform();
-				auto tr = ((GameObject*)instance)->transform();
-				root->child_append(tr);
-			}
+            throw std::bad_cast();
+            /*
+            if (Scene::currentScene->main_object != nullptr && typeid(T) == typeid(GameObject)) {
+                auto root = RoninEngine::Scene::currentScene->main_object->transform();
+                Transform* tr = ((GameObject*)instance)->transform();
+                root->child_append(tr);
+            }*/
 		}
 		Instancer(T* val) {
 			instance = allocate_class< T>(*val);
-			if (RoninEngine::Scene::currentScene->main_object && typeid(T) == typeid(GameObject)) {
-				auto root = RoninEngine::Scene::currentScene->main_object->transform();
-				auto tr = ((GameObject*)instance)->transform();
-				root->child_append(tr);
-			}
+            throw std::bad_cast();
+            /*
+            if (Scene::currentScene->main_object != nullptr && typeid(T) == typeid(GameObject)) {
+                auto root = RoninEngine::Scene::currentScene->main_object->transform();
+                Transform* tr = ((GameObject*)instance)->transform();
+                root->child_append(tr);
+            }*/
 		}
 		Instancer(Instancer&) = delete;
 	public:
@@ -58,7 +67,7 @@ namespace RoninEngine::Runtime
 	//”ничтожает объект после рендера. 
 	void Destroy(Object* obj);
 
-	// ”ничтожает объект после прошедшего времени.
+    // ”ничтожает объект после прошедшего времени.
 	void Destroy(Object* obj, float t);
 
 	//”ничтожает объект принудительно игнориру€ все услови€ его существовани€.

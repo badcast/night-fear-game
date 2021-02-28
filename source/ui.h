@@ -11,13 +11,13 @@ using namespace RoninEngine;
 namespace RoninEngine::ui
 {
 #define UI
-	//Тип идентификатора GUI
+    //Тип идентификатора GUI
 #define UIID uint8_t
 #define NOPARENT 0
 
 	enum TextRandomizer_Format
 	{
-		All = -1,
+        All = -1,
 		OnlyText = 0,
 		OnlyNumber = 1,
 		OnlyReal = 3,
@@ -50,7 +50,7 @@ namespace RoninEngine::ui
 		//Регистрирует хранилище для пользовательских инструментов и возвращает id 
 		UI list<UIID> get_groups();
 		UI UIID register_ui(const UIID& parent = NOPARENT)throw();
-		UI RenderData& ID(const UIID& id);
+        UI RenderData& ID(const UIID& id);
 		UI bool has_action(void* outPos);
 	public:
 		bool visible;
@@ -116,7 +116,6 @@ namespace RoninEngine::ui
 
 		UI void Do_Present(SDL_Renderer* renderer);
 
-		//Устанавливает главный цвет для рендера
 		UI void GUI_SetMainColorRGB(uint32_t RGB);
 		UI void GUI_SetMainColorRGBA(uint32_t ARGB);
 
@@ -125,5 +124,5 @@ namespace RoninEngine::ui
 
 	extern GUI* guiInstance;
 
-#undef UI;
+#undef UI
 }

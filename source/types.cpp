@@ -2,10 +2,6 @@
 
 namespace RoninEngine
 {
-	const xVector2<float> xVector2<float>::up = { 0, 1 }, xVector2<float>::right = { 1, 0 }, xVector2<float>::left = { -1, 0 },
-		xVector2<float>::down = { 0, -1 }, xVector2<float>::zero = { 0, 0 },
-		xVector2<float>::one = { 1, 1 }, xVector2<float>::minusOne = { -1, -1 };
-
 	double Get_Angle(Vec2 lhs, Vec2 rhs)
 	{
 		double YEnd = rhs.y;

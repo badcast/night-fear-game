@@ -157,7 +157,7 @@ namespace RoninEngine
 			case 3:
 				return h;
 			}
-			throw std::exception("param index");
+            throw std::runtime_error("param index");
 		}
 
 		xRect()

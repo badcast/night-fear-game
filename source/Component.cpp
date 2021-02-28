@@ -22,7 +22,7 @@ namespace RoninEngine {
 
 		Transform* Component::transform() {
 			if (!isBind())
-				throw std::exception("This component isn't binding");
+                throw std::runtime_error("This component isn't binding");
 			return _derivedObject->Get_Component<Transform>();
 		}
 	}
