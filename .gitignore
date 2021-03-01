@@ -1,6 +1,4 @@
-build-nightfear-Desktop-Debug
-build-nightfear-Desktop-Debug/*
-nightfear
+nightfear/
 nightfear/*
 .project
 Makefile

@@ -17,7 +17,7 @@ namespace RoninEngine
 		::instance = this;
 		this->m_inited = false;
 		this->m_sceneAccept = false;
-                this->window = NULL;
+        this->window = NULL;
 		this->m_sceneLoaded = false;
 		this->renderer = NULL;
 		this->m_scene = NULL;
@@ -25,7 +25,7 @@ namespace RoninEngine
 
 	RoninApplication::~RoninApplication()
 	{
-		ResourceManager::ResourcesRelease();
+        ResourceManager::ResourcesRelease();
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		Free_Controls();
@@ -68,8 +68,11 @@ namespace RoninEngine
 		if (allocate_variable(font) == NULL)
 			fail_OutOfMemory();
 
-		font->texture = ResourceManager::GetSurface("font");
-		font->surfaceHilight = ResourceManager::GetSurface("fontHilight");
+        if((font->texture = ResourceManager::GetSurface("font-arealike")) == nullptr)
+            throw std::bad_alloc();
+
+        if((font->surfaceHilight = ResourceManager::GetSurface("font-arealike-hi")) == nullptr)
+              throw std::bad_alloc();
 		font->fontSize.x = FONT_WIDTH;
 		font->fontSize.y = FONT_HEIGHT;
 

@@ -1,47 +1,36 @@
 #get max version CMAKE
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
-project(nightfear LANGUAGES CXX)
+project("NightFear" LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(SDL2 REQUIRED)
 
-find_library(TARGET_LIBS NAMES libSDL2 REQUIRED)
-
-message("${TARGET_LIBS}")
-include_directories(${PROJECT_NAME} ${SDL2_INCLUDE_DIRS})
+message("${PROJECT_NAME}")
 
 #FUNCTIONS
 include(cmake/functions.cmake)
 
-add_subdirectory(source) #get sources and linking from the "source" directory
-
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+set(RUNTIME_OUTPUT_NAME "NightFear")
 
 if(UNIX)
-    set(TARGET_DESTINATION_DIR "build/linux/")
+    set(OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/linux/)
 
+    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
+    SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+    SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
+    SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+    SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
    # custom_log("<This is Linux Runtime>")
 
 elseif(WIN32)
-    set(TARGET_DESTINATION_DIR "build/windows/")
+    set(RUNTIME_OUTPUT_DIRECTORY "build/windows/")
 
    # custom_log("<This is Windows Runtime>")
 
 endif()
+
+add_subdirectory(./source) #get sources and linking from the "source" directory

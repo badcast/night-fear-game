@@ -4,6 +4,14 @@ char* basePath = NULL;
 char* prefPath = NULL;
 namespace RoninEngine
 {
+
+    static const char seperator =
+      #ifdef __WIN32__
+          '\\'
+      #else
+          '/'
+      #endif
+          ;
 	static const char data_path[] = "data";
 	static const char gfx_path[] = "gfx";
 	static const char sound_path[] = "sound";
@@ -36,7 +44,7 @@ namespace RoninEngine
 	const std::string dataAt(FolderKind type)
 	{
 		std::string p = dataPath();
-		p += '\\';
+        p += seperator;
 		switch (type)
 		{
 		case FolderKind::GFX:
@@ -58,7 +66,7 @@ namespace RoninEngine
 			p += textures_path;
 			break;
 		}
-		return p + '\\';
+        return p + seperator;
 	}
 
 }

@@ -81,9 +81,7 @@ constexpr T* allocate_class() {
 template<typename T>
 [[deprecated]]
 constexpr T*& allocate_variable(T*& var) {
-    throw std::bad_cast();
-
-    //return var = allocate_class<remove_reference<T>::type>();
+    return var = allocate_class<T>();
 }
 
 template<typename T, typename... Types>
