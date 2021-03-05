@@ -205,7 +205,7 @@ namespace RoninEngine::Runtime
 		}
 
 		if (!newParent)
-			hierarchy_append(Scene::currentScene->main_object->transform(), from); // NULL as Root
+			hierarchy_append(Scene::getScene()->main_object->transform(), from); // NULL as Root
 		else
 			from->_parent = newParent;
 	}

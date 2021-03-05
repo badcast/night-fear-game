@@ -2,6 +2,7 @@
 
 #include "framework.h"
 #include "Component.h"
+#include "Renderer.h"
 
 namespace RoninEngine::Runtime
 {

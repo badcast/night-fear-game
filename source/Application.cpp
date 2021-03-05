@@ -4,49 +4,44 @@
 #include "inputSystem.h"
 #include "LevelEntity.h"
 
-using namespace ui;
+using namespace UI;
 
 namespace RoninEngine
 {
-	ui::Font_t* font;
 	Scene* _lastSceneToFree = NULL;
-	RoninApplication* instance;
+    SDL_Renderer* renderer= nullptr;
+    SDL_Window* window = nullptr;
+    bool m_inited= false;
+    bool m_sceneAccept= false;
+    Scene* m_scene = nullptr;
+    bool m_sceneLoaded= false;
 
-	RoninApplication::RoninApplication()
+
+    void RoninApplication::Init()
 	{
-		::instance = this;
-		this->m_inited = false;
-		this->m_sceneAccept = false;
-        this->window = NULL;
-		this->m_sceneLoaded = false;
-		this->renderer = NULL;
-		this->m_scene = NULL;
+        if (m_inited)
+            return;
+
+        window = SDL_CreateWindow("NightFear @lightmister", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+            WindowWidth, WindowHeight, SDL_WINDOW_SHOWN);
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+        //Brightness - Яркость
+        SDL_SetWindowBrightness(window, 1);
+
+        Time::Init_TimeEngine();
+
+        LoadGame();
+        m_inited = true;
     }
 
-	RoninApplication::~RoninApplication()
+    void RoninApplication::Free()
 	{
         ResourceManager::ResourcesRelease();
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		Free_Controls();
     }
-
-	void RoninApplication::init() {
-		if (m_inited)
-			return;
-
-		this->window = SDL_CreateWindow("NightFear @lightmister", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			WindowWidth, WindowHeight, SDL_WINDOW_SHOWN);
-		this->renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-		//Brightness - Яркость
-		SDL_SetWindowBrightness(window, 1);
-
-		Time::Init_TimeEngine();
-
-		LoadGame();
-		m_inited = true;
-	}
 
 	void RoninApplication::LoadGame() {
 
@@ -64,70 +59,9 @@ namespace RoninEngine
 		temp = path + "textures.set";
 		ResourceManager::LoadImages(temp.c_str());
 
-		//Загружаем шрифты
-		if (allocate_variable(font) == NULL)
-			fail_OutOfMemory();
-
-        if((font->texture = ResourceManager::GetSurface("font-arealike")) == nullptr)
-            throw std::bad_alloc();
-
-        if((font->surfaceHilight = ResourceManager::GetSurface("font-arealike-hi")) == nullptr)
-              throw std::bad_alloc();
-		font->fontSize.x = FONT_WIDTH;
-		font->fontSize.y = FONT_HEIGHT;
-
-		//Структурирование шрифта
-		{
-			uint8_t target;
-			uint8_t i;
-			int deltay;
-			Rect_t* p;
-			int maxWidth = font->texture->w;
-			int maxHeight = font->texture->h;
-			//set unknown symbols
-			for (i = 0; i < 32; ++i)
-			{
-				p = font->data + i;
-				//to unknown '?'
-				p->x = 195;
-				p->y = 17;
-				p->w = font->fontSize.x;
-				p->h = font->fontSize.y;
-			}
-
-			//load Eng & other chars
-			maxWidth /= font->fontSize.x;
-			target = 32;
-			deltay = 0;
-			for (i = 0; target != 127;)
-			{
-				p = font->data + target++;
-				p->x = font->fontSize.x * i;
-				p->y = deltay;
-				p->w = font->fontSize.x;
-				p->h = font->fontSize.y;
-				++i;
-				if (!(i = i % maxWidth) || target == 127)
-					deltay += font->fontSize.y;
-			}
-
-			// load Rus
-			target = 192;
-			for (i = 0; target != 0;)
-			{
-				p = font->data + target++;
-				p->x = font->fontSize.x * i;
-				p->y = deltay;
-				p->w = font->fontSize.x;
-				p->h = font->fontSize.y;
-				++i;
-				if (!(i = i % maxWidth))
-					deltay += font->fontSize.y;
-			}
-		}
 
 		//Загрузк шрифта и оптимизация дэффектов
-		ui::Initialize_Fonts(font, true);
+        UI::Initialize_Fonts(true);
 
 		//Инициализация инструментов
 		InitalizeControls();
@@ -155,16 +89,16 @@ namespace RoninEngine
 
 	void RoninApplication::LoadScene(Scene* m_scene)
 	{
-		if (!m_scene || m_scene == this->m_scene)
+        if (!m_scene || m_scene == m_scene)
                         throw std::bad_cast();
 
-		if (this->m_scene)
+        if (m_scene)
 		{
-			_lastSceneToFree = this->m_scene;
-			this->m_scene->Unload();
+            _lastSceneToFree = m_scene;
+            m_scene->Unload();
 		}
 
-		this->m_scene = m_scene;
+        m_scene = m_scene;
 		m_scene->renderer = renderer;
 		m_scene->ui->renderer = renderer;
 		m_sceneAccept = false;
@@ -178,7 +112,7 @@ namespace RoninEngine
 
 	void RoninApplication::ScreenShot(const char* filename)
 	{
-		SDL_Surface* surf = this->ScreenShot();
+        SDL_Surface* surf = ScreenShot();
 		IMG_SavePNG(surf, filename);
 	}
 
@@ -242,12 +176,12 @@ namespace RoninEngine
 
 	SDL_Window* RoninApplication::GetWindow()
 	{
-		return this->window;
+        return window;
 	}
 
 	SDL_Renderer* RoninApplication::GetRenderer()
 	{
-		return this->renderer;
+        return renderer;
 	}
 
 	void RoninApplication::back_fail(void) {
@@ -262,7 +196,7 @@ namespace RoninEngine
 		time(&tt);
 
 		ltime = localtime(&tt);
-		strftime(_temp, sizeof(_temp), "%d:%m:%y %H:%M:%S", ltime);
+        strftime(_temp, sizeof(_temp), "%d.%m.%y %H:%M:%S", ltime);
 		_template += "\n\n\t";
 		_template += _temp;
 
@@ -277,11 +211,4 @@ namespace RoninEngine
 	void RoninApplication::fail_OutOfMemory() {
 		fail("Out of memory!");
 	}
-
-
-	RoninApplication* RoninApplication::instance()
-	{
-		return ::instance;
-	}
-
 }

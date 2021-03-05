@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ObjectParser.h"
 
+#include <stdexcept>
+
 namespace RoninEngine {
 
 	static int Get_FormatType(const char* c, void** mem, DataType& out)
@@ -324,12 +326,12 @@ namespace RoninEngine {
 	int ObjectParser::avail(ObjectParser::_StructType& entry, const char* source, int len, int levels) {
         int i, j;
 
-		void* memory = NULL;
+        void* memory = NULL;
 		DataType arrayType;
 		DataType valueType;
 		ObjectNode curNode;
 
-		//Áàçîâûé ñëó÷àè
+		//Ð‘Ð°Ð·Ð¾Ð²Ñ‹Ð¹ ÑÐ»ÑƒÑ‡Ð°Ð¸
 		if (!len)
 			return 0;
 
@@ -493,7 +495,7 @@ namespace RoninEngine {
 			if (_dbgLastNode)
 				_dbgLastNode->nextNode = &_curIter->second;
 			_curIter->second.prevNode = _dbgLastNode;
-			_dbgLastNode = &_curIter->second;
+            _dbgLastNode = &_curIter->second;
 #endif
 			i += ignoreComment(source + i, len - i);
 		}
@@ -555,9 +557,9 @@ namespace RoninEngine {
 	ObjectNode* ObjectParser::FindNode(const std::string& nodePath) {
 		ObjectNode* node = NULL;
 		decltype(this->entry)* entry = &this->entry;
+        decltype(entry->begin()) iter;
 		int l = 0, r;
 		int hash;
-		decltype(entry->begin()) iter;
 		//get splits
 		do
 		{
@@ -569,13 +571,11 @@ namespace RoninEngine {
 			{
 				if (iter->second.isStruct())
 					entry = decltype(entry)(iter->second.value);
-				else if (r == nodePath.length())
+                else
 				{
-					node = &iter->second;
-					break;
-				}
-				else {
-					break;
+                    if (r == nodePath.length())
+                       node = &iter->second; // get the next section
+                    break;
 				}
 			}
 			l = r + 1;

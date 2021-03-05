@@ -7,7 +7,7 @@ namespace RoninEngine
 	float _startedTime = 0;
 
 	void Time::Init_TimeEngine()
-	{
+    {
 		_time = 0;
 		_lastTime = 0;
 		timeScale = 1;
@@ -16,7 +16,7 @@ namespace RoninEngine
 		update();
 	}
 
-	//обновляет локальное время для метода time()
+	//РѕР±РЅРѕРІР»СЏРµС‚ Р»РѕРєР°Р»СЊРЅРѕРµ РІСЂРµРјСЏ РґР»СЏ РјРµС‚РѕРґР° time()
 	void Time::update()
 	{
 		float _newTime = startUpTime();

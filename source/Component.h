@@ -1,26 +1,27 @@
 #pragma once
-
-#include "framework.h"
 #include "Object.h"
+#include "framework.h"
 
-namespace RoninEngine::Runtime
-{
-	class Component : public Object
-	{
-	private:
-		friend GameObject;
-		friend GameObject* Instantiate(GameObject* obj);
+namespace RoninEngine {
 
-		GameObject* _derivedObject;
-	public:
-		Component();
-		explicit Component(const string& name);
-		Component(const Component&) = delete;
-		virtual ~Component() = default;
+   namespace Runtime {
 
-		const bool isBind();
-		GameObject* gameObject();
-		Transform* transform();
-	};
-}
+      class Component : public Object {
+         private:
+            friend GameObject;
+            friend GameObject* Instantiate(GameObject* obj);
 
+            GameObject* _derivedObject;
+
+         public:
+            Component();
+            explicit Component(const string& name);
+            Component(const Component&) = delete;
+            virtual ~Component() = default;
+
+            const bool isBind();
+            GameObject* gameObject();
+            Transform* transform();
+      };
+   }  // namespace Runtime
+}  // namespace RoninEngine

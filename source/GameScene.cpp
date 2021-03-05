@@ -27,7 +27,7 @@ namespace RoninEngine
 	uint8_t b_clearNav;
 	uint8_t t_infoblock;
 	uint8_t t_speedLabel;
-	RoninEngine::ui::GUI* gui;
+	RoninEngine::UI::GUI* gui;
 	AIPathFinder::NavMesh* navMesh = NULL;
 	list<AIPathFinder::Neuron*> paths;
 
@@ -41,7 +41,7 @@ namespace RoninEngine
 
 		if (b_mainMenu == id)
 		{
-			RoninApplication::instance()->LoadScene(allocate_class<MainMenu>());
+            RoninApplication::LoadScene(allocate_class<MainMenu>());
 		}
 		else if (b_generateNav == id || id == b_clearNav) {
 			paths.clear();
@@ -57,14 +57,14 @@ namespace RoninEngine
 	void GameScene::awake() {
 		gui = this->ui;
 
-		auto display = RoninApplication::instance()->display();
+        auto display = RoninApplication::display();
 
 		GameObject* playerObj = CreateObject<GameObject>("Player");
-		player = playerObj->Add_Component<Player>();
+        player = playerObj->Add_Component<Player>();
 		g_buttons = ui->Create_Group();
-		b_mainMenu = this->ui->Push_Button("Íàçàä â ãëàâíîå ìåíþ", { 25,25 }, g_buttons);
-		b_generateNav = this->ui->Push_Button("Ãåíåðèðîâàòü Nav Mesh", { 300, 25 }, g_buttons);
-		b_clearNav = this->ui->Push_Button("Î÷èñòèòü Nav Mesh", { 550, 25 }, g_buttons);
+		b_mainMenu = this->ui->Push_Button("ÐÐ°Ð·Ð°Ð´ Ð² Ð³Ð»Ð°Ð²Ð½Ð¾Ðµ Ð¼ÐµÐ½ÑŽ", { 25,25 }, g_buttons);
+		b_generateNav = this->ui->Push_Button("Ð“ÐµÐ½ÐµÑ€Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Nav Mesh", { 300, 25 }, g_buttons);
+		b_clearNav = this->ui->Push_Button("ÐžÑ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ Nav Mesh", { 550, 25 }, g_buttons);
 		t_infoblock = this->ui->Push_Label("", { display.w / 2 - 130, display.h / 2 + 25 }, 5);
 		t_speedLabel = this->ui->Push_Label("", { 0, 70 }, 5);
 		gui->Register_Callback(ui_event_handler, NULL);

@@ -8,10 +8,10 @@
 using namespace std;
 using namespace RoninEngine;
 
-namespace RoninEngine::ui
+namespace RoninEngine::UI
 {
-#define UI
-    //Тип идентификатора GUI
+#define CI
+    //РўРёРї РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° GUI
 #define UIID uint8_t
 #define NOPARENT 0
 
@@ -38,91 +38,91 @@ namespace RoninEngine::ui
 		{
 			//controls
 			vector<RenderData> controls;
-			list<UIID> _rendering;
+            list<UIID> _rendering;
 		}m_Sticks;
 
-		UI ui_callback callback;
-		UI void* callbackData;
+        CI ui_callback callback;
+        CI void* callbackData;
 		Scene* m_scene;
 		bool hitCast;
 		bool _focusedUI;
 
-		//Регистрирует хранилище для пользовательских инструментов и возвращает id 
-		UI list<UIID> get_groups();
-		UI UIID register_ui(const UIID& parent = NOPARENT)throw();
-        UI RenderData& ID(const UIID& id);
-		UI bool has_action(void* outPos);
+        ///Р РµРіРёСЃС‚СЂРёСЂСѓРµС‚ С…СЂР°РЅРёР»РёС‰Рµ РґР»СЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ id
+        CI list<UIID> get_groups();
+        CI UIID register_ui(const UIID& parent = NOPARENT)throw();
+        CI RenderData& ID(const UIID& id);
+        CI bool has_action(void* outPos);
 	public:
 		bool visible;
 
-		UI SDL_Renderer* renderer;
+        CI SDL_Renderer* renderer;
 
-		UI GUI(Scene* m_scene);
-		UI virtual ~GUI();
+        CI GUI(Scene* m_scene);
+        CI virtual ~GUI();
 
-		UI bool Has_ID(const UIID& id);
+        CI bool Has_ID(const UIID& id);
 
-		UI UIID Create_Group(const Rect_t& rect);
-		UI UIID Create_Group();
+        CI UIID Create_Group(const Rect_t& rect);
+        CI UIID Create_Group();
 
-		UI UIID Push_Label(const string& text, const Rect_t& rect, const int& fontWidth = 13, const UIID& parent = NOPARENT);
-		UI UIID Push_Label(const string& text, const Vector2i& point, const int& fontWidth = 13, const UIID& parent = NOPARENT);
-		UI UIID Push_Button(const string& text, const Rect_t& rect, const UIID& parent = NOPARENT);
-		UI UIID Push_Button(const string& text, const Vector2i point, const UIID& parent = NOPARENT);
-		UI UIID Push_DisplayRandomizer(TextRandomizer_Format format, const Vector2i& point, const UIID& parent = NOPARENT);
-		UI UIID Push_DisplayRandomizer(TextRandomizer_Format format = TextRandomizer_Format::All, const UIID& parent = NOPARENT);
-		UI UIID Push_DisplayRanomizer_Text(const string& text, const Vector2i& point, const UIID& parent = 0);
-		UI UIID Push_DisplayRanomizer_Number(const int&min, const int& max, TextAlign textAlign, const UIID& parent = NOPARENT);
-		UI UIID Push_TextureStick(Texture* texture, const Rect_t& rect, const UIID& parent = NOPARENT);
-		UI UIID Push_TextureStick(Texture* texture, const Vector2i point, const UIID& parent = NOPARENT);
-		UI UIID Push_TextureAnimator(Timeline* timeline, const Rect_t& rect, const UIID& parent = NOPARENT);
-		UI UIID Push_TextureAnimator(Timeline* timeline, const Vector2i& point, const UIID& parent = NOPARENT);
-		UI UIID Push_TextureAnimator(const list<Texture*>& roads, float duration, TimelineOptions option, const Rect_t& rect, const UIID& parent = NOPARENT);
-		UI UIID Push_TextureAnimator(const list<Texture*>& roads, float duration, TimelineOptions option, const Vector2i& point, const UIID& parent = NOPARENT);
+        CI UIID Push_Label(const string& text, const Rect_t& rect, const int& fontWidth = 13, const UIID& parent = NOPARENT);
+        CI UIID Push_Label(const string& text, const Vector2i& point, const int& fontWidth = 13, const UIID& parent = NOPARENT);
+        CI UIID Push_Button(const string& text, const Rect_t& rect, const UIID& parent = NOPARENT);
+        CI UIID Push_Button(const string& text, const Vector2i point, const UIID& parent = NOPARENT);
+        CI UIID Push_DisplayRandomizer(TextRandomizer_Format format, const Vector2i& point, const UIID& parent = NOPARENT);
+        CI UIID Push_DisplayRandomizer(TextRandomizer_Format format = TextRandomizer_Format::All, const UIID& parent = NOPARENT);
+        CI UIID Push_DisplayRanomizer_Text(const string& text, const Vector2i& point, const UIID& parent = 0);
+        CI UIID Push_DisplayRanomizer_Number(const int&min, const int& max, TextAlign textAlign, const UIID& parent = NOPARENT);
+        CI UIID Push_TextureStick(Texture* texture, const Rect_t& rect, const UIID& parent = NOPARENT);
+        CI UIID Push_TextureStick(Texture* texture, const Vector2i point, const UIID& parent = NOPARENT);
+        CI UIID Push_TextureAnimator(Timeline* timeline, const Rect_t& rect, const UIID& parent = NOPARENT);
+        CI UIID Push_TextureAnimator(Timeline* timeline, const Vector2i& point, const UIID& parent = NOPARENT);
+        CI UIID Push_TextureAnimator(const list<Texture*>& roads, float duration, TimelineOptions option, const Rect_t& rect, const UIID& parent = NOPARENT);
+        CI UIID Push_TextureAnimator(const list<Texture*>& roads, float duration, TimelineOptions option, const Vector2i& point, const UIID& parent = NOPARENT);
 
 		//property-----------------------------------------------------------------------------------------------------------
 
-		UI void* Resources(const UIID& id);
-		UI void Resources(const UIID& id, void* data);
+        CI void* Resources(const UIID& id);
+        CI void Resources(const UIID& id, void* data);
 
-		UI Rect_t Rect(const UIID& id);
-		UI void Rect(const UIID& id, const Rect_t& rect);
+        CI Rect_t Rect(const UIID& id);
+        CI void Rect(const UIID& id, const Rect_t& rect);
 
-		UI string Text(const UIID& id);
-		UI void Text(const UIID& id, const string& text);
+        CI string Text(const UIID& id);
+        CI void Text(const UIID& id, const string& text);
 
-		UI void Visible(const UIID& id, bool state);
-		UI bool Visible(const UIID& id);
+        CI void Visible(const UIID& id, bool state);
+        CI bool Visible(const UIID& id);
 
-		UI void Enable(const UIID& id, bool state);
-		UI bool Enable(const UIID& id);
+        CI void Enable(const UIID& id, bool state);
+        CI bool Enable(const UIID& id);
 
 		//grouping-----------------------------------------------------------------------------------------------------------
 
-		UI bool Is_Group(const UIID& id);
-		UI void Show_GroupUnique(const UIID& id) throw();
-		UI void Show_Group(const UIID& id) throw();
-		UI bool Close_Group(const UIID& id) throw();
+        CI bool Is_Group(const UIID& id);
+        CI void Show_GroupUnique(const UIID& id) throw();
+        CI void Show_Group(const UIID& id) throw();
+        CI bool Close_Group(const UIID& id) throw();
 
 		//other--------------------------------------------------------------------------------------------------------------
 
-		UI void Cast(bool state);
-		UI bool Cast();
+        CI void Cast(bool state);
+        CI bool Cast();
 
-		UI void Register_Callback(ui_callback callback, void* userData);
+        CI void Register_Callback(ui_callback callback, void* userData);
 
-		UI bool Remove(const UIID& id);
-		UI void RemoveAll();
+        CI bool Remove(const UIID& id);
+        CI void RemoveAll();
 
-		UI void Do_Present(SDL_Renderer* renderer);
+        CI void Do_Present(SDL_Renderer* renderer);
 
-		UI void GUI_SetMainColorRGB(uint32_t RGB);
-		UI void GUI_SetMainColorRGBA(uint32_t ARGB);
+        CI void GUI_SetMainColorRGB(uint32_t RGB);
+        CI void GUI_SetMainColorRGBA(uint32_t ARGB);
 
-		UI bool Focused_UI();
+        CI bool Focused_UI();
 	};
 
 	extern GUI* guiInstance;
 
-#undef UI
+#undef CI
 }

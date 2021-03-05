@@ -3,59 +3,54 @@
 #include "Object.h"
 #include "Transform.h"
 
-namespace RoninEngine::Runtime
-{
-	//[attrib class]
-	template<typename T>
-	class AttribGetTypeHelper {
-	public:
-		T* getType(list<Component*>& container) {
-			decltype(end(container)) iter = find_if(begin(container), end(container), [](Component* c) {
-				return dynamic_cast<T*>(c) != 0;
-			});
+namespace RoninEngine {
+   namespace Runtime {
+      //[attrib class]
+      template <typename T>
+      class AttribGetTypeHelper {
+         public:
+            T* getType(list<Component*>& container) {
+               decltype(end(container)) iter =
+                     find_if(begin(container), end(container),
+                             [](Component* c) { return dynamic_cast<T*>(c) != 0; });
 
-			if (iter != end(container))
-				return dynamic_cast<T*>(*iter);
+               if (iter != end(container)) return dynamic_cast<T*>(*iter);
 
-			return NULL;
-		}
-	};
+               return NULL;
+            }
+      };
 
-	class GameObject final :
-		public Object
-	{
-		friend Camera2D;
-		friend GameObject* Instantiate(GameObject* obj);
-		friend GameObject* Instantiate(GameObject* obj, Vec2 position, float angle);
-		friend GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent, bool worldPositionState);
-		friend void Destroy(Object* obj);
-		friend void Destroy(Object* obj, float t);
-		friend void Destroy_Immediate(Object* obj);
-	private:
-		list<Component*> m_components;
-	public:
-		GameObject();
+      class GameObject final : public Object {
+            friend Camera2D;
+            friend GameObject* Instantiate(GameObject* obj);
+            friend GameObject* Instantiate(GameObject* obj, Vec2 position, float angle);
+            friend GameObject* Instantiate(GameObject* obj, Vec2 position,
+                                           Transform* parent, bool worldPositionState);
+            friend void Destroy(Object* obj);
+            friend void Destroy(Object* obj, float t);
+            friend void Destroy_Immediate(Object* obj);
 
-		GameObject(const string&);
-		GameObject(const GameObject&) = delete;
-		virtual ~GameObject();
+         private:
+            list<Component*> m_components;
 
-		Transform* transform();
+         public:
+            GameObject();
 
-		Component* Add_Component(Component* component);
+            GameObject(const string&);
+            GameObject(const GameObject&) = delete;
+            virtual ~GameObject();
 
-		template<typename T>
-		T* Add_Component() {
-			T* comp = CreateObject<T>();
-			Add_Component(reinterpret_cast<Component*>(comp));
-			return comp;
-		}
+            Transform* transform();
 
-		template<typename T>
-		T* Get_Component() {
-			return AttribGetTypeHelper<T>().getType(this->m_components);
-		}
-	};
-}
+            Component* Add_Component(Component* component);
 
+            template <typename T>
+            T* Add_Component();
 
+            template <typename T>
+            T* Get_Component() {
+               return AttribGetTypeHelper<T>().getType(this->m_components);
+            }
+      };
+   }  // namespace Runtime
+}  // namespace RoninEngine

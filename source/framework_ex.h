@@ -15,6 +15,15 @@
 
 //objects
 #include "Object.h"
+#include "GameObject.h"
+#include "Component.h"
+#include "Camera.h"
+#include "Camera2D.h"
+#include "Transform.h"
+
+#include "Behaviour.h"
+
+
 //#include "GameObject.h"
 //#include "Camera.h"
 //#include "Camera2D.h"

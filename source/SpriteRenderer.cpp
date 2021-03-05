@@ -101,7 +101,7 @@ namespace RoninEngine::Runtime
 					texture = Texture::Create_Texture(_srcRect.w, _srcRect.h, SDL_PIXELFORMAT_RGBA8888, SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET);
 					
 					if (texture == NULL)
-						RoninApplication::instance()->fail("Texture create fail");
+						RoninApplication::fail("Texture create fail");
 
 					SDL_SetRenderTarget(render->renderer, texture->native());
 

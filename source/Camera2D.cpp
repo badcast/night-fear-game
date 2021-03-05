@@ -51,9 +51,9 @@ namespace RoninEngine::Runtime
 				dst.w = renderInfo.dst.w * squarePerPixels;
 				dst.h = renderInfo.dst.h * squarePerPixels;
 
-				//Положение по горизонтале 
+				//РџРѕР»РѕР¶РµРЅРёРµ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рµ 
 				dst.x = ((rect.w - dst.w) / 2.0f - (point->x - sourcePoint->x) * squarePerPixels);
-				//Положение по вертикале 
+				//РџРѕР»РѕР¶РµРЅРёРµ РїРѕ РІРµСЂС‚РёРєР°Р»Рµ 
 				dst.y = ((rect.h - dst.h) / 2.0f + (point->y - sourcePoint->y) * squarePerPixels);
 
 				//SDL_RenderCopyF(renderer, renderInfo.texture, (SDL_Rect*)&renderInfo.src, (SDL_FRect*)&dst);
@@ -72,16 +72,16 @@ namespace RoninEngine::Runtime
 			lightSource->GetLightSource(&renderInfo); // draw
 
 			if (renderInfo.texture)
-			{
+            {
 				Vec2* point = &transform()->point;
 				Vec2* sourcePoint = &lightSource->transform()->point;
 
 				dst.w = renderInfo.dst.w * squarePerPixels;
 				dst.h = renderInfo.dst.h * squarePerPixels;
 
-				//Положение по горизонтале 
+				//РџРѕР»РѕР¶РµРЅРёРµ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рµ 
 				dst.x = ((rect.w - dst.w) / 2.0f - (point->x - sourcePoint->x) * squarePerPixels);
-				//Положение по вертикале 
+				//РџРѕР»РѕР¶РµРЅРёРµ РїРѕ РІРµСЂС‚РёРєР°Р»Рµ 
 				dst.y = ((rect.h - dst.h) / 2.0f + (point->y - sourcePoint->y) * squarePerPixels);
 
 				//SDL_RenderCopyF(renderer, renderInfo.texture, (SDL_Rect*)&renderInfo.src, (SDL_FRect*)&dst);

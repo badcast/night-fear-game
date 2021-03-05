@@ -1,8 +1,8 @@
 #include "pch.h"
 
-using namespace RoninEngine::ui;
+using namespace RoninEngine::UI;
 
-ui::GUI* gui;
+UI::GUI* gui;
 namespace RoninEngine
 {
 	void controlEvent(const uint8_t&, void*);
@@ -14,14 +14,14 @@ namespace RoninEngine
 	uint8_t ssb_backmenu;
 	uint8_t sab_backmenu;
 
-	//Запуск после инициализаций
+	//Р—Р°РїСѓСЃРє РїРѕСЃР»Рµ РёРЅРёС†РёР°Р»РёР·Р°С†РёР№
 	void MainMenu::awake()
 	{
 		gui = ui;
 		constexpr int _OFSET = 0x21;
 
-		//Инициализация меню
-		SDL_DisplayMode gameDisplay = RoninApplication::instance()->display();
+		//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРµРЅСЋ
+		SDL_DisplayMode gameDisplay = RoninApplication::display();
 
 		Vector2i point = { gameDisplay.w / 2 - 127, 300 };
 		Vector2i lastPoint;
@@ -29,13 +29,13 @@ namespace RoninEngine
 
 		group_mainmenu_screen = gui->Create_Group();
 		{
-			mmb_start_game = gui->Push_Button("Начать игру", point, group_mainmenu_screen);
+			mmb_start_game = gui->Push_Button("РќР°С‡Р°С‚СЊ РёРіСЂСѓ", point, group_mainmenu_screen);
 			point.y += _OFSET;
-			mmb_setting = gui->Push_Button("Настройки", point, group_mainmenu_screen);
+			mmb_setting = gui->Push_Button("РќР°СЃС‚СЂРѕР№РєРё", point, group_mainmenu_screen);
 			point.y += _OFSET;
-			mmb_aboutus = gui->Push_Button("О игре", point, group_mainmenu_screen);
+			mmb_aboutus = gui->Push_Button("Рћ РёРіСЂРµ", point, group_mainmenu_screen);
 			point.y += _OFSET;
-			mmb_quit = gui->Push_Button("Выйти", point, group_mainmenu_screen);
+			mmb_quit = gui->Push_Button("Р’С‹Р№С‚Рё", point, group_mainmenu_screen);
 
 			gui->Push_TextureAnimator(*ResourceManager::LoadTextures("gameLogo"), 0.15f, TimelineOptions::LinearReverse, { 250, 20 });
 		}
@@ -44,21 +44,21 @@ namespace RoninEngine
 		//Start game screen
 		group_startgame_screen = gui->Create_Group();
 		{
-			sgb_playgame = gui->Push_Button("Играть", point, group_startgame_screen);
+			sgb_playgame = gui->Push_Button("РРіСЂР°С‚СЊ", point, group_startgame_screen);
 			point.y += _OFSET;
-			sgb_backmenu = gui->Push_Button("< Назад", lastPoint, group_startgame_screen);
+			sgb_backmenu = gui->Push_Button("< РќР°Р·Р°Рґ", lastPoint, group_startgame_screen);
 		}
 		//Setting screen
 		group_setting_screen = gui->Create_Group();
 		{
-			gui->Push_Label("Графика", { gameDisplay.w / 2 - 127, 300 }, FONT_WIDTH, group_setting_screen);
-			ssb_backmenu = gui->Push_Button("< Назад", lastPoint, group_setting_screen);
+            gui->Push_Label("Р“СЂР°С„РёРєР°", { gameDisplay.w / 2 - 127, 300 }, fontWidth, group_setting_screen);
+			ssb_backmenu = gui->Push_Button("< РќР°Р·Р°Рґ", lastPoint, group_setting_screen);
 		}
 		//Author & About US
 		group_author_screen = gui->Create_Group();
 		{
-			gui->Push_Label("Night Fear\n\nLight Mister (~^Y^~)\nИ ваш любимый котик {^_^}", { gameDisplay.w / 2 - 127, 300 }, FONT_WIDTH, group_author_screen);
-			sab_backmenu = gui->Push_Button("< Назад", lastPoint, group_author_screen);
+            gui->Push_Label("Night Fear\n\nLight Mister (~^Y^~)\nР РІР°С€ Р»СЋР±РёРјС‹Р№ РєРѕС‚РёРє {^_^}", { gameDisplay.w / 2 - 127, 300 }, fontWidth, group_author_screen);
+			sab_backmenu = gui->Push_Button("< РќР°Р·Р°Рґ", lastPoint, group_author_screen);
 		}
 
 		//random text
@@ -72,7 +72,7 @@ namespace RoninEngine
 
 	void controlEvent(const uint8_t& id, void* userData)
 	{
-		//Эти определения просто сравнивают ID :)
+		//Р­С‚Рё РѕРїСЂРµРґРµР»РµРЅРёСЏ РїСЂРѕСЃС‚Рѕ СЃСЂР°РІРЅРёРІР°СЋС‚ ID :)
 #define e(ID)				ID==id
 #define e2(ID1,ID2)			ID1==id || ID2==id
 #define e3(ID1,ID2, ID3)	ID1==id || ID2==id || ID3==id
@@ -92,12 +92,12 @@ namespace RoninEngine
 		}
 		else if (e(mmb_quit))
 		{
-			RoninApplication::instance()->quit();
+			RoninApplication::quit();
 		}
 		//start game menu events
 		else if (e(sgb_playgame))
 		{
-			RoninApplication::instance()->LoadScene(allocate_class<GameScene>());
+			RoninApplication::LoadScene(allocate_class<GameScene>());
 		}
 		//setting menu events
 
@@ -109,12 +109,12 @@ namespace RoninEngine
 #undef e4
 	}
 
-	//Запуск до первого кадра
+	//Р—Р°РїСѓСЃРє РґРѕ РїРµСЂРІРѕРіРѕ РєР°РґСЂР°
 	void MainMenu::start()
 	{
 
 	}
-	//Обновляет все что происходит внутри сцены (игры) до кадра
+	//РћР±РЅРѕРІР»СЏРµС‚ РІСЃРµ С‡С‚Рѕ РїСЂРѕРёСЃС…РѕРґРёС‚ РІРЅСѓС‚СЂРё СЃС†РµРЅС‹ (РёРіСЂС‹) РґРѕ РєР°РґСЂР°
 	void MainMenu::update()
 	{
 	}

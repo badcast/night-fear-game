@@ -17,7 +17,7 @@ namespace RoninEngine::Runtime
 	}
 
 	void Light::GetLightSource(Render_info* renderer_info) {
-		auto display = RoninApplication::instance()->display();
+		auto display = RoninApplication::display();
 		SDL_Texture* _target = NULL;
 		int cRes;
 

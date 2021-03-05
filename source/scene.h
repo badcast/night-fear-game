@@ -1,77 +1,69 @@
 #pragma once
 #include "framework.h"
-#include "Application.h"
-#include "Renderer.h"
-#include "GameObject.h"
-#include "Camera.h"
 #include "Object.h"
-#include "Behaviour.h"
-#include "Light.h"
 #include "ui.h"
 
-namespace RoninEngine
-{
-	class Scene
-	{
-        friend class Runtime::Object;
-        friend class RoninApplication;
-        friend class ui::GUI;
-        friend class Runtime::GameObject;
-        friend class Runtime::Renderer;
-        friend class Runtime::Camera;
+namespace RoninEngine {
+   class Scene {
+         friend class RoninApplication;
+         friend class UI::GUI;
+         friend class Runtime::Object;
+         friend class Runtime::GameObject;
+         friend class Runtime::Renderer;
+         friend class Runtime::Camera;
 
+         friend bool Runtime::instanced(Runtime::Object* obj);
+         friend void Runtime::Destroy(Runtime::Object* obj);
+         friend void Runtime::Destroy(Runtime::Object* obj, float t);
+         friend void Runtime::Destroy_Immediate(Runtime::Object* obj);
 
-		friend bool Runtime::existObject(Object* obj);
-		friend void Runtime::Destroy(Object* obj);
-		friend void Runtime::Destroy(Object* obj, float t);
-		friend void Runtime::Destroy_Immediate(Object* obj);
+      private:
+         int globalID;
+         bool m_isUnload;
+         string m_name;
+         std::list<Runtime::Behaviour*>* _firstRunScripts;
+         std::list<Runtime::Behaviour*>* _realtimeScripts;
+         std::list<pair<Runtime::Object*, float>>* _destructions;
 
-	private:
-		int globalID;
-		bool m_isUnload;
-		string m_name;
-		list<Behaviour*>* _firstRunScripts;
-		list<Behaviour*>* _realtimeScripts;
-		list<pair<Object*, float>>* _destructions;
+         std::list<Runtime::Renderer*> _assoc_renderers;
+         std::list<Runtime::Light*> _assoc_lightings;
 
-		list<Renderer*> _assoc_renderers;
-		list<Light*> _assoc_lightings;
+         std::map<Runtime::Object*, float> _objects;
 
-		std::map<Object*, float> _objects;
+         void PinScript(Runtime::Behaviour* obj);
+         void CC_Render_Push(Runtime::Renderer* rend);
+         void CC_Light_Push(Runtime::Light* light);
+         void ObjectPush(Runtime::Object* obj);
 
-		void PinScript(Behaviour* obj);
-		void CC_Render_Push(Renderer* rend);
-		void CC_Light_Push(Light* light);
-		void ObjectPush(Object* obj);
+      protected:
+         UI::GUI* ui;
+         virtual void RenderScene(SDL_Renderer* renderer);
+         virtual void RenderUI(SDL_Renderer* renderer);
+         virtual void RenderSceneLate(SDL_Renderer* renderer);
 
-	protected:
-		ui::GUI* ui;
-		virtual void RenderScene(SDL_Renderer* renderer);
-		virtual void RenderUI(SDL_Renderer* renderer);
-		virtual void RenderSceneLate(SDL_Renderer* renderer);
-	public:
-		static Scene* currentScene;
-		//Main or Root object
-		GameObject* main_object;
-		SDL_Renderer* renderer;
+      public:
+         // Main or Root object
+         Runtime::GameObject* main_object;
+         SDL_Renderer* renderer;
 
-		Scene();
-		Scene(const string& name);
+         Scene();
+         Scene(const std::string& name);
 
-		virtual ~Scene();
+         virtual ~Scene();
 
-		string& name();
+         std::string& name();
 
-		ui::GUI* Get_GUI();
-		void Unload();
+         UI::GUI* Get_GUI();
+         void Unload();
 
+         virtual void awake() = 0;
+         virtual void start() = 0;
+         virtual void update() = 0;
+         virtual void lateUpdate() = 0;
+         virtual void onDrawGizmos() = 0;
+         virtual void onUnloading() = 0;
 
-		virtual void awake() = 0;
-		virtual void start() = 0;
-		virtual void update() = 0;
-		virtual void lateUpdate() = 0;
-		virtual void onDrawGizmos() = 0;
-		virtual void onUnloading() = 0;
-	};
+         static Scene* getScene();
+   };
 
-}
+}  // namespace RoninEngine

@@ -3,13 +3,16 @@
 
 namespace RoninEngine
 {
-	Scene* Scene::currentScene;
+    Scene* pCurrentScene;
 
 	Scene::Scene() :Scene("Untitled scene") {
 	}
 	Scene::Scene(const string& name)
 	{
-		currentScene = this;
+        if(pCurrentScene != nullptr){
+           static_assert("pCurrentScene is and replaced by new" );
+        }
+        pCurrentScene = this;
 		_firstRunScripts = NULL;
 		_realtimeScripts = NULL;
 		_destructions = NULL;
@@ -25,8 +28,11 @@ namespace RoninEngine
 	}
 	Scene::~Scene()
 	{
-		if (currentScene == this)
-			currentScene = NULL;
+        if (pCurrentScene == this)
+        {
+            static_assert("pCurrentScene set to null");
+            pCurrentScene = nullptr;
+        }
 
 		if (_firstRunScripts)
 		{
@@ -108,22 +114,22 @@ namespace RoninEngine
 			});
             free_variable(_firstRunScripts);
 		}
-		//todo: Ïîñëå âûïîëíåíèÿ OnStart ñðàçó âûïîëíÿåòñÿ OnUpdate èñïðàâèòü.
+		//todo: ÐŸÐ¾ÑÐ»Ðµ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ OnStart ÑÑ€Ð°Ð·Ñƒ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ÑÑ OnUpdate Ð¸ÑÐ¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ.
 		if (_realtimeScripts)
 		{
 			Foreach(*_realtimeScripts, [](Behaviour* n) {
 				n->OnUpdate();
-			});
+            });
 		}
 
 		//Render on main camera
-		Camera* cam = Camera::mainCamera(); // Ðèñóåì ñöåíó 
+		Camera* cam = Camera::mainCamera(); // Ð Ð¸ÑÑƒÐµÐ¼ ÑÑ†ÐµÐ½Ñƒ 
 		if (cam) {
-			SDL_DisplayMode display = RoninApplication::instance()->display();
+            SDL_DisplayMode display = RoninApplication::display();
 			//FlushCache last result
 			if (cam->targetClear)
 				cam->__rendererOutResults.clear();
-			// Ðèñóåì â ñîîòíîøåíèå îêíà...
+			// Ð Ð¸ÑÑƒÐµÐ¼ Ð² ÑÐ¾Ð¾Ñ‚Ð½Ð¾ÑˆÐµÐ½Ð¸Ðµ Ð¾ÐºÐ½Ð°...
 			cam->render(renderer, { 0, 0, display.w, display.h }, main_object);
 		}
 
@@ -167,10 +173,13 @@ namespace RoninEngine
 	std::string& Scene::name() {
 		return this->m_name;
 	}
-	ui::GUI* Scene::Get_GUI() {
+	UI::GUI* Scene::Get_GUI() {
 		return this->ui;
 	}
 	void Scene::Unload() {
 		this->m_isUnload = true;
 	}
+    Scene* Scene::getScene(){
+       return pCurrentScene;
+    }
 }

@@ -1,117 +1,132 @@
 #pragma once
 #include "framework.h"
-#include "scene.h"
 
-namespace RoninEngine::Runtime
-{
-	class GameObject;
-	class Object;
+namespace RoninEngine {
 
-	//create object
+   namespace Runtime {
+      class GameObject;
+      class Object;
 
+      // create object
 
-	template<typename T>
-    [[deprecated]]
-    class Instancer {
-	public:
-		Instancer() {
-            instance = allocate_class<T>();
-            throw std::bad_cast();
-            /*
-            if (Scene::currentScene->main_object != nullptr && typeid(T) == typeid(GameObject)) {
-				auto root = RoninEngine::Scene::currentScene->main_object->transform();
-				Transform* tr = ((GameObject*)instance)->transform();
-				root->child_append(tr);
-            }*/
-		}
-		Instancer(const string& name) {
-			instance = allocate_class< T>(name);
-            throw std::bad_cast();
-            /*
-            if (Scene::currentScene->main_object != nullptr && typeid(T) == typeid(GameObject)) {
-                auto root = RoninEngine::Scene::currentScene->main_object->transform();
-                Transform* tr = ((GameObject*)instance)->transform();
-                root->child_append(tr);
-            }*/
-		}
-		Instancer(T* val) {
-			instance = allocate_class< T>(*val);
-            throw std::bad_cast();
-            /*
-            if (Scene::currentScene->main_object != nullptr && typeid(T) == typeid(GameObject)) {
-                auto root = RoninEngine::Scene::currentScene->main_object->transform();
-                Transform* tr = ((GameObject*)instance)->transform();
-                root->child_append(tr);
-            }*/
-		}
-		Instancer(Instancer&) = delete;
-	public:
-		T* instance;
-	};
+      // Instancer
+      template <typename T>
+      class Instancer {
+         public:
+            Instancer(){
+               instance = allocate_class<T>(); /*
+               if (RoninEngine::Scene::getScene()->main_object != nullptr &&
+                   typeid(T) == typeid(GameObject)) {
+                  auto root = RoninEngine::Scene::getScene()->main_object->transform();
+                  Transform* tr = ((GameObject*)instance)->transform();
+                  root->child_append(tr);
+               }*/
+            }
+            Instancer(const string& name){
+               instance = allocate_class<T>(name);
+/*
+               if (RoninEngine::Scene::getScene()->main_object != nullptr &&
+                   typeid(T) == typeid(GameObject)) {
+                  auto root = RoninEngine::Scene::getScene()->main_object->transform();
+                  Transform* tr = ((GameObject*)instance)->transform();
+                  root->child_append(tr);
+               }*/
+            }
+            Instancer(T* val){
+               instance = allocate_class<T>(*val);
+               Transform* root;
+/*
+               if (RoninEngine::Scene::getScene()->main_object != nullptr &&
+                   typeid(T) == typeid(GameObject)) {
+                  root = ::RoninEngine::Scene::getCurrentScene->main_object->transform();
+                  Transform* tr = ((GameObject*)instance)->transform();
+                  root->child_append(tr);
+               }*/
+            }
+            Instancer(Instancer&) = delete;
 
-	template<typename T>
-	constexpr T* CreateObject() {
-		return Instancer<T>().instance;
-	}
+         public:
+            T* instance;
+      };
 
-	template<typename T>
-	constexpr T* CreateObject(const string& name) {
-		return Instancer<T>(name).instance;
-	}
+      template <typename T>
+      T* CreateObject() {
+         return Instancer<T>().instance;
+      }
 
-	template<typename T>
-	constexpr T* CreateObject(T* ref) {
-		return Instancer<T>(ref).instance;
-	}
+      template <typename T>
+      T* CreateObject(const string& name) {
+         return Instancer<T>(name).instance;
+      }
 
-	//Уничтожает объект после рендера. 
-	void Destroy(Object* obj);
+      template <typename T>
+      T* CreateObject(T* ref) {
+         return Instancer<T>(ref).instance;
+      }
 
-    // Уничтожает объект после прошедшего времени.
-	void Destroy(Object* obj, float t);
+      ///РЈРЅРёС‡С‚РѕР¶Р°РµС‚ РѕР±СЉРµРєС‚ РїРѕСЃР»Рµ СЂРµРЅРґРµСЂР°.
+      void Destroy(Object* obj);
 
-	//Уничтожает объект принудительно игнорируя все условия его существования.
-	void Destroy_Immediate(Object* obj);
+      /// РЈРЅРёС‡С‚РѕР¶Р°РµС‚ РѕР±СЉРµРєС‚ РїРѕСЃР»Рµ РїСЂРѕС€РµРґС€РµРіРѕ РІСЂРµРјРµРЅРё.
+      void Destroy(Object* obj, float t);
 
-	//Проверка на существование объекта
-	bool existObject(Object* obj);
+      ///РЈРЅРёС‡С‚РѕР¶Р°РµС‚ РѕР±СЉРµРєС‚ РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ РёРіРЅРѕСЂРёСЂСѓСЏ РІСЃРµ СѓСЃР»РѕРІРёСЏ РµРіРѕ СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ.
+      void Destroy_Immediate(Object* obj);
 
-	template<typename ObjectType>
-	ObjectType* Instantiate(ObjectType* obj);
-	GameObject* Instantiate(GameObject* obj);
-	GameObject* Instantiate(GameObject* obj, Vec2 position, float angle = 0);
-	GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent, bool worldPositionState = true);
+      ///РџСЂРѕРІРµСЂРєР° РЅР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ РѕР±СЉРµРєС‚Р°
+      bool instanced(Object* obj);
 
-	class Object
-	{
-		template<typename ObjectType>
-		friend ObjectType* Instantiate(ObjectType* obj);
-		friend GameObject* Instantiate(GameObject* obj);
-		friend GameObject* Instantiate(GameObject* obj, Vec2 position, float angle);
-		friend GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent, bool worldPositionState);
+      ///РљР»РѕРЅРёСЂСѓРµС‚ РѕР±СЉРµРєС‚
+      template <typename ObjectType>
+      ObjectType* Instantiate(ObjectType* obj);
+      ///РљР»РѕРЅРёСЂСѓРµС‚ РѕР±СЉРµРєС‚
+      GameObject* Instantiate(GameObject* obj);
+      ///РљР»РѕРЅРёСЂСѓРµС‚ РѕР±СЉРµРєС‚
+      GameObject* Instantiate(GameObject* obj, Vec2 position, float angle = 0);
+      ///РљР»РѕРЅРёСЂСѓРµС‚ РѕР±СЉРµРєС‚
+      GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent,
+                              bool worldPositionState = true);
 
-		friend void Destroy(Object* obj);
-		friend void Destroy(Object* obj, float t);
-		friend void Destroy_Immediate(Object* obj);
-		string m_name;
-		int id;
-	public:
-		string& name();
+      class Object {
+            template <typename ObjectType>
+            friend ObjectType* Instantiate(ObjectType* obj);
+            friend GameObject* Instantiate(GameObject* obj);
+            friend GameObject* Instantiate(GameObject* obj, Vec2 position, float angle);
+            friend GameObject* Instantiate(GameObject* obj, Vec2 position,
+                                           Transform* parent, bool worldPositionState);
 
-		Object();
-		Object(const string& nameobj);
-		virtual ~Object() = default;
+            friend void Destroy(Object* obj);
+            friend void Destroy(Object* obj, float t);
+            friend void Destroy_Immediate(Object* obj);
+            string m_name;
+            std::size_t id;
 
-		void Destroy();
+         public:
+            string& name();
 
-		// Проверка на существования объекта
-		operator bool();
-	};
+            Object();
+            Object(const string& nameobj);
+            virtual ~Object() = default;
 
-	// "ref" as shared_ptr<Object base type> 
-	template<typename To, typename From = Object>
-	auto* Ref_to(From* from) {
-		return dynamic_cast<To*>(from);
-	}
-}
+            void Destroy();
 
+            /// РџСЂРѕРІРµСЂРєР° РЅР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ РѕР±СЉРµРєС‚Р°
+            operator bool();
+      };
+
+      template <typename To, typename From = Object>
+      auto* Ref_to(From* from) {
+         return dynamic_cast<To*>(from);
+      }
+
+      template <typename _based, typename _derived>
+      constexpr bool object_base_of() {
+         return std::is_base_of<_based, _derived>();
+      }
+
+      template <typename _based, typename _derived>
+      constexpr bool object_base_of(_based* obj, _derived* compare) {
+         return std::is_base_of<_based, _derived>();
+      }
+   }  // namespace Runtime
+}  // namespace RoninEngine

@@ -3,42 +3,103 @@
 
 #pragma warning(disable : 26812)
 
-namespace RoninEngine::ui
+namespace RoninEngine::UI
 {
-	Font_t* pFont = NULL;
+    Font_t* pfont = NULL;
 	uint8_t VH[]{ 0,32,16,2,34,18,1,33,17 };
 
-	SDL_Texture* fontTexture = NULL;
-	SDL_Texture* fontTextureHilight = NULL;
+    SDL_Texture* pfontTexture = NULL;
+    SDL_Texture* pfontTextureHilight = NULL;
 
-	void Initialize_Fonts(Font_t* fontData, bool optimizeDeffects)
+    void Initialize_Fonts(bool optimizeDeffects)
 	{
-		pFont = fontData;
 
-		if (fontTexture)
+        if (pfontTexture)
 		{
-			SDL_DestroyTexture(fontTexture);
-			SDL_DestroyTexture(fontTextureHilight);
+           throw std::runtime_error("Re initialization fail");
 		}
 
-		//convert texture to texture
-		fontTexture = SDL_CreateTextureFromSurface(RoninApplication::instance()->GetRenderer(), pFont->texture);
-		fontTextureHilight = SDL_CreateTextureFromSurface(RoninApplication::instance()->GetRenderer(), pFont->surfaceHilight);
+        if (allocate_variable(pfont) == NULL)
+            RoninApplication::fail_OutOfMemory();
+
+        auto ptr = ResourceManager::GetTexture("font-arealike");
+
+        if((pfont ->surfNormal = ResourceManager::GetSurface("font-arealike")) == nullptr)
+            throw std::bad_alloc();
+
+        if((pfont ->surfHilight = ResourceManager::GetSurface("font-arealike-hi")) == nullptr)
+              throw std::bad_alloc();
+
+        pfont->fontSize = {fontWidth, fontHeight};
+
+        //Структурирование шрифта
+        {
+            uint8_t target;
+            uint8_t i;
+            int deltay;
+            Rect_t* p;
+            int maxWidth = pfont->surfNormal->w;
+            int maxHeight = pfont->surfNormal->h;
+            //set unknown symbols
+            for (i = 0; i < 32; ++i)
+            {
+                p = pfont->data + i;
+                //to unknown '?'
+                p->x = 195;
+                p->y = 17;
+                p->w = pfont->fontSize.x;
+                p->h = pfont->fontSize.y;
+            }
+
+            //load Eng & other chars
+            maxWidth /= pfont->fontSize.x;
+            target = 32;
+            deltay = 0;
+            for (i = 0; target != 127;)
+            {
+                p = pfont->data + target++;
+                p->x = pfont->fontSize.x * i;
+                p->y = deltay;
+                p->w = pfont->fontSize.x;
+                p->h = pfont->fontSize.y;
+                ++i;
+                if (!(i = i % maxWidth) || target == 127)
+                    deltay += pfont->fontSize.y;
+            }
+
+            // load Rus
+            target = 192;
+            for (i = 0; target != 0;)
+            {
+                p = pfont->data + target++;
+                p->x = pfont->fontSize.x * i;
+                p->y = deltay;
+                p->w = pfont->fontSize.x;
+                p->h = pfont->fontSize.y;
+                ++i;
+                if (!(i = i % maxWidth))
+                    deltay += pfont->fontSize.y;
+            }
+        }
+
+        //convert surface to texture
+        pfontTexture = SDL_CreateTextureFromSurface(RoninApplication::GetRenderer(), pfont->surfNormal);
+        pfontTextureHilight = SDL_CreateTextureFromSurface(RoninApplication::GetRenderer(), pfont->surfHilight);
 
 		if (optimizeDeffects)
 		{
-			SDL_Surface* model = fontData->texture;
+            SDL_Surface* model = pfont->surfNormal;
 			int i, x, y, cx, cy;
 			Rect_t rect_point;
 			SDL_Color* pixel;
 			for (i = 33; i != 255; ++i)
 			{
 				//todo: оптимизация прямоугольника
-				rect_point = fontData->data[i];
+                rect_point = pfont->data[i];
 				uint8_t flagBreaker = 0;
 				//pitch это строка (ширина с объеденением в байтах) то есть x по оси
 				//если умножить pitch * на h-высоту то можно получить последний пиксель
-				for (x = 0; x < fontData->data[i].w / 2; ++x)
+                for (x = 0; x < pfont->data[i].w / 2; ++x)
 				{
 					//оптимизация с левой до правой 
 					if (!(flagBreaker & 1))
@@ -48,7 +109,7 @@ namespace RoninEngine::ui
 							cx = rect_point.x + x;
 							cy = rect_point.y + y;
 							//Формула Y Offset * (Pitch/BytesPerPixel) + X Offset
-							pixel = (SDL_Color*)fontData->texture->pixels + cy * (model->pitch / model->format->BytesPerPixel) + cx;
+                            pixel = (SDL_Color*)pfont->surfNormal->pixels + cy * (model->pitch / model->format->BytesPerPixel) + cx;
 							if (pixel->a) // isn't transparent
 								break;
 						}
@@ -63,9 +124,9 @@ namespace RoninEngine::ui
 						for (y = rect_point.h - 1; y >= 0; --y)
 						{
 							//Формула Y Offset * (Pitch/BytesPerPixel) + X Offset
-							cx = rect_point.x + fontData->data[i].w - 1 - x;
+                            cx = rect_point.x + pfont->data[i].w - 1 - x;
 							cy = rect_point.y + y;
-							pixel = (SDL_Color*)fontData->texture->pixels + cy * (model->pitch / model->format->BytesPerPixel) + cx;
+                            pixel = (SDL_Color*)pfont->surfNormal->pixels + cy * (model->pitch / model->format->BytesPerPixel) + cx;
 							if (pixel->a) // isn't transparent
 								break;
 						}
@@ -78,22 +139,22 @@ namespace RoninEngine::ui
 					if (flagBreaker == 3)
 						break;
 				}
-				fontData->data[i] = rect_point;
+                pfont->data[i] = rect_point;
 
 			}
 		}
 	}
 
-	int Single_TextWidth_WithCyrilic(const string& text, int fontSize)
+    int Single_TextWidth_WithCyrilic(const string& text, int fontSize)
 	{
 		int width = 0;
 		for (auto iter = begin(text); iter != end(text); ++iter)
-			//todo: Учитывать размер шрифта (fontSize)
-			width += pFont->data[(unsigned char)*iter].w;
+            //todo: Учитывать размер шрифта (fontSize)
+            width += pfont->data[(unsigned char)*iter].w;
 		return width;
 	}
 
-	Rect_t Multiline_TextWidth_WithCyrilic(const string& text, int fontSize)
+    Rect_t Multiline_TextWidth_WithCyrilic(const string& text, int fontSize)
 	{
 		//todo: вычисление мультистрок
 		Rect_t rect;
@@ -101,25 +162,25 @@ namespace RoninEngine::ui
 		return rect;
 	}
 
-	void Render_String(SDL_Renderer* renderer, Rect_t rect, const char* text, int len, int fontWidth, TextAlign textAlign, bool textWrap, bool hilight)
+    void Render_String(SDL_Renderer* renderer, Rect_t rect, const char* text, int len, int pfontWidth, TextAlign textAlign, bool textWrap, bool hilight)
 	{
-		if (len <= 0 || !fontTexture || hilight && !fontTextureHilight)
+        if (len <= 0 || !pfontTexture || hilight && !pfontTextureHilight)
 			return;
 
 		uint8_t temp;
 		Rect_t* src;
 		uint16_t pos;
 		SDL_Rect dst = *(SDL_Rect*)&rect;
-		Vector2i fontSize = pFont->fontSize + Vector2i(1, 1) * (fontWidth - FONT_WIDTH);
-		SDL_Texture* targetFont = NULL;
-		int textWidth = Single_TextWidth_WithCyrilic(text, fontWidth);
+        Vector2i fontSize = pfont->fontSize + Vector2i(1, 1) * (pfontWidth - fontWidth);
+        SDL_Texture* targetpfont = NULL;
+        int textWidth = Single_TextWidth_WithCyrilic(text, pfontWidth);
 
 		if (!rect.w)
 			rect.w = textWidth;
 		if (!rect.h)
-			rect.h = pFont->fontSize.y; // todo: для мультий строк требуется вычислить h высоту
+            rect.h = pfont->fontSize.y; // todo: для мультий строк требуется вычислить h высоту
 
-		targetFont = hilight ? fontTextureHilight : fontTexture;
+        targetpfont = hilight ? pfontTextureHilight : pfontTexture;
 
 		//x
 		temp = (VH[textAlign] >> 4 & 15);
@@ -135,7 +196,7 @@ namespace RoninEngine::ui
 		temp = (VH[textAlign] & 15);
 		if (temp)
 		{
-			dst.y += rect.h / temp - fontSize.y / 2;
+            dst.y += rect.h / temp - fontSize.y / 2;
 			if (temp == 1)
 				dst.y += -textWidth / 2;
 		}
@@ -145,7 +206,7 @@ namespace RoninEngine::ui
 		for (pos = 0; pos < len; ++pos)
 		{
 			temp = *(uint8_t*)(text + pos);
-			src = (pFont->data + temp);
+            src = (pfont->data + temp);
 			if (temp != '\n')
 			{
 				dst.w = src->w;
@@ -169,7 +230,7 @@ namespace RoninEngine::ui
 				//отрисовываем остаток входящую в область 
 				dst.w = Mathf::Max(0, Mathf::Min(deltax - dst.x, dst.w));
 				//if (dst.x <= src.x + src.w && dst.y <= src.y + src.h)
-				SDL_RenderCopy(renderer, targetFont, (SDL_Rect*)src, &dst);
+                SDL_RenderCopy(renderer, targetpfont, (SDL_Rect*)src, &dst);
 				dst.x += src->w;
 			}
 			else

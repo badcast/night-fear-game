@@ -96,7 +96,7 @@ namespace RoninEngine {
 	public:
 		ObjectParser();
 		ObjectParser(const ObjectParser&) = delete;
-		~ObjectParser() = default;
+        ~ObjectParser() = default;
 
 		void Deserialize(const char* filename);
 		void Deserialize(const std::string& source);

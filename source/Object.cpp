@@ -1,157 +1,180 @@
-#include "pch.h"
 #include "Object.h"
+
+#include "Camera2D.h"
 #include "Component.h"
 #include "SpriteRenderer.h"
-#include "Camera2D.h"
+#include "pch.h"
 
-namespace RoninEngine::Runtime {
+using namespace RoninEngine;
 
-	void Destroy(Object* obj) {
-		Destroy(obj, 0);
-	}
+namespace RoninEngine {
+   namespace Runtime {
+      /*
+      template <typename T>
+      Instancer<T>::Instancer() {
+         instance = allocate_class<T>();
+         if (RoninEngine::Scene::currentScene->main_object != nullptr &&
+             typeid(T) == typeid(GameObject)) {
+            auto root = RoninEngine::Scene::currentScene->main_object->transform();
+            Transform* tr = ((GameObject*)instance)->transform();
+            root->child_append(tr);
+         }
+      }
+      template <typename T>
+      Instancer<T>::Instancer(const string& name) {
+         instance = allocate_class<T>(name);
 
-	void Destroy(Object* obj, float t) {
-		if (!obj || !Scene::currentScene)
-			throw std::bad_exception();
-		if (!Scene::currentScene->_destructions)
-		{
-			Scene::currentScene->_destructions = allocate_class<remove_pointer<decltype(Scene::currentScene->_destructions)>::type>();
-		}
+         if (RoninEngine::Scene::currentScene->main_object != nullptr &&
+             typeid(T) == typeid(GameObject)) {
+            auto root = RoninEngine::Scene::currentScene->main_object->transform();
+            Transform* tr = ((GameObject*)instance)->transform();
+            root->child_append(tr);
+         }
+      }
+      template <typename T>
+      Instancer<T>::Instancer(T* val) {
+         instance = allocate_class<T>(*val);
+         Transform* root = nullptr;
 
-		auto ref = Scene::currentScene->_destructions;
+         if (RoninEngine::Scene::currentScene->main_object != nullptr &&
+             typeid(T) == typeid(GameObject)) {
+            root = RoninEngine::Scene::currentScene->main_object->transform();
+            Transform* tr = ((GameObject*)instance)->transform();
+            root->child_append(tr);
+         }
+      }
+*/
 
-		auto iter = std::find_if(std::begin(*ref), std::end(*ref), [obj](pair<Object*, float> x) {
-			return obj == x.first;
-		});
+      void Destroy(Object* obj) { Destroy(obj, 0); }
 
-		if (iter != std::end(*ref))
-			std::bad_exception();
+      void Destroy(Object* obj, float t) {
+         if (!obj || !Scene::getScene()) throw std::bad_exception();
+         if (!Scene::getScene()->_destructions) {
+            Scene::getScene()->_destructions =
+                  allocate_class<std::remove_pointer<decltype(
+                     Scene::getScene()->_destructions)>::type>();
+         }
 
-		ref->push_back(make_pair(const_cast<Object*>(obj), Time::time() + t));
-	}
+         auto ref = Scene::getScene()->_destructions;
 
-	void Destroy_Immediate(Object* obj) {
-		if (!obj)
-			throw std::runtime_error("Object is null");
+         auto iter =
+               std::find_if(std::begin(*ref), std::end(*ref),
+                            [obj](pair<Object*, float> x) { return obj == x.first; });
 
-		GameObject* gObj;
-		if (gObj = dynamic_cast<GameObject*>(obj))
-		{
-			if (Scene::currentScene->_firstRunScripts) {
-                Scene::currentScene->_firstRunScripts->remove_if([gObj](Behaviour* x) {
+         if (iter != std::end(*ref)) std::bad_exception();
 
-					auto iter = find_if(std::begin(gObj->m_components), std::end(gObj->m_components), [x](Component* c) {
-						return (Component*)x == c;
-					});
+         ref->push_back(make_pair(const_cast<Object*>(obj), Time::time() + t));
+      }
 
-					return iter != end(gObj->m_components);
-				});
-			}
-			else if (Scene::currentScene->_realtimeScripts)
-			{
-				Scene::currentScene->_realtimeScripts->remove_if([gObj](Behaviour* x) {
-					auto iter = find_if(std::begin(gObj->m_components), std::end(gObj->m_components), [x](Component* c) {
-						return (Component*)x == c;
-					});
+      void Destroy_Immediate(Object* obj) {
+         if (!obj) throw std::runtime_error("Object is null");
 
-					return iter != end(gObj->m_components);
-				});
-			}
-		}
+         GameObject* gObj;
+         if (gObj = dynamic_cast<GameObject*>(obj)) {
+            if (Scene::getScene()->_firstRunScripts) {
+               Scene::getScene()->_firstRunScripts->remove_if(
+                        [gObj](Behaviour* x) {
+                  auto iter = find_if(
+                           std::begin(gObj->m_components),
+                           std::end(gObj->m_components),
+                           [x](Component* c) { return (Component*)x == c; });
 
-		//todo: деструктор для этого объекта
-		SDL_Log("Object destroyed id: %d", obj->id);
+                  return iter != end(gObj->m_components);
+               });
+            } else if (Scene::getScene()->_realtimeScripts) {
+               Scene::getScene()->_realtimeScripts->remove_if(
+                        [gObj](Behaviour* x) {
+                  auto iter = find_if(
+                           std::begin(gObj->m_components),
+                           std::end(gObj->m_components),
+                           [x](Component* c) { return (Component*)x == c; });
 
-		Scene::currentScene->_objects.erase(obj);
-        free_variable(obj);
-	}
+                  return iter != end(gObj->m_components);
+               });
+            }
+         }
 
-	bool existObject(Object* obj) {
+         // todo: РґРµСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
+         SDL_Log("Object destroyed id: %d", obj->id);
 
-		if (!obj || !Scene::currentScene)
-			throw std::bad_exception();
-		auto iter = Scene::currentScene->_objects.find(obj);
-		return iter != end(Scene::currentScene->_objects);
-	}
+         Scene::getScene()->_objects.erase(obj);
+         free_variable(obj);
+      }
 
-	//Instantaite clone
-	template<typename ObjectType>
-	ObjectType* Instantiate(ObjectType* obj) {
-        throw std::bad_cast();
-        //ObjectType* CreateObject<ObjectType>();
-		return NULL;
-	}
+      bool instanced(Object* obj) {
+         if (!obj || !Scene::getScene()) throw std::bad_exception();
+         auto iter = Scene::getScene()->_objects.find(obj);
+         return iter != end(Scene::getScene()->_objects);
+      }
 
-	GameObject* Instantiate(GameObject* obj) {
-		const char _cloneStr[] = " (clone)";
+      // Instantaite clone
+      template <typename ObjectType>
+      ObjectType* Instantiate(ObjectType* obj) {
+         return CreateObject<ObjectType>();
+      }
 
-		GameObject* clone = CreateObject<GameObject>();
-		clone->name() = obj->name();
-		if (clone->m_name.find(_cloneStr)==std::string::npos)
-			clone->m_name += _cloneStr;
-		
-		for (auto iter = begin(obj->m_components); iter != end(obj->m_components); ++iter)
-		{
-			Component* c = iter.operator*();
-			if (dynamic_cast<Transform*>(c)){
-				Transform* t = ((Transform*)clone->m_components.front());
-				//TODO: сомнительно для Transform
-				*t = *dynamic_cast<Transform*>(c);
-				t->_derivedObject = clone;
-				t->setParent(NULL);
+      GameObject* Instantiate(GameObject* obj) {
+         const char _cloneStr[] = " (clone)";
 
-				//Clone childs
-				Foreach(((Transform*)c)->hierarchy, [t](Transform* y) {
-					//recursive
-					GameObject* yClone = Instantiate(y->gameObject());
-					y->setParent(t);
-					yClone->name() = t->gameObject()->name(); // put " (clone)" name
-					yClone->name().shrink_to_fit();
-				});
-				continue;
-			}
-			else if (dynamic_cast<SpriteRenderer*>(c)) {
-				c = CreateObject<SpriteRenderer>((SpriteRenderer*)c);
-			}
-			else if (dynamic_cast<Camera2D*>(c)) {
-				c = CreateObject<Camera2D>(dynamic_cast<Camera2D*>(c));
-			}
+         GameObject* clone = CreateObject<GameObject>();
+         clone->name() = obj->name();
+         if (clone->m_name.find(_cloneStr) == std::string::npos)
+            clone->m_name += _cloneStr;
 
-			c->_derivedObject = NULL;
-			clone->Add_Component(c);
-		}
+         for (auto iter = begin(obj->m_components); iter != end(obj->m_components);
+              ++iter) {
+            Component* c = iter.operator*();
+            if (dynamic_cast<Transform*>(c)) {
+               Transform* t = ((Transform*)clone->m_components.front());
+               // TODO: СЃРѕРјРЅРёС‚РµР»СЊРЅРѕ РґР»СЏ Transform
+               *t = *dynamic_cast<Transform*>(c);
+               t->_derivedObject = clone;
+               t->setParent(nullptr);
 
-		return clone;
-	}
-	GameObject* Instantiate(GameObject* obj, Vec2 position, float angle) {
-		return NULL;
-	}
-	GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent, bool worldPositionState) {
-		return NULL;
-	}
+               // Clone childs
+               Foreach(((Transform*)c)->hierarchy, [t](Transform* y) {
+                  // recursive
+                  GameObject* yClone = Instantiate(y->gameObject());
+                  y->setParent(t);
+                  yClone->name() =
+                        t->gameObject()->name();  // put " (clone)" name
+                  yClone->name().shrink_to_fit();
+               });
+               continue;
+            } else if (dynamic_cast<SpriteRenderer*>(c)) {
+               c = CreateObject<SpriteRenderer>((SpriteRenderer*)c);
+            } else if (dynamic_cast<Camera2D*>(c)) {
+               c = CreateObject<Camera2D>(dynamic_cast<Camera2D*>(c));
+            }
 
-	//base class
+            c->_derivedObject = nullptr;
+            clone->Add_Component(c);
+         }
 
-	Object::Object() : Object(typeid(Object).name())
-	{}
+         return clone;
+      }
+      GameObject* Instantiate(GameObject* obj, Vec2 position, float angle) {
+         return nullptr;
+      }
+      GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent,
+                              bool worldPositionState) {
+         return nullptr;
+      }
 
-	Object::Object(const string& nameobj) : m_name(nameobj){
-		m_name.shrink_to_fit();
-		id = Scene::currentScene->globalID++;
-		Scene::currentScene->ObjectPush(this);
-	}
+      // base class
 
-	string& Object::name()
-	{
-		return m_name;
-	}
+      Object::Object() : Object(typeid(Object).name()) {}
 
-	void Object::Destroy()
-	{
-		RoninEngine::Runtime::Destroy(this);
-	}
+      Object::Object(const string& nameobj) : m_name(nameobj) {
+         m_name.shrink_to_fit();
+         id = Scene::getScene()->globalID++;
+         Scene::getScene()->ObjectPush(this);
+      }
 
-	Object::operator bool() {
-		return existObject(this);
-	}
-}
+      string& Object::name() { return m_name; }
+
+      void Object::Destroy() { RoninEngine::Runtime::Destroy(this); }
+
+      Object::operator bool() { return instanced(this); }
+   }  // namespace Runtime
+}  // namespace RoninEngine

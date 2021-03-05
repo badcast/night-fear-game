@@ -11,7 +11,7 @@ namespace RoninEngine::Runtime {
 			return;
 		Vec2 p = Camera::mainCamera()->transform()->position();
 		Vec2 dst;
-		auto display = RoninApplication::instance()->display();
+		auto display = RoninApplication::display();
 
 		//dst.x = ((rect.w - dst.w) / 2.0f - (point->x + sourcePoint->x) * squarePerPixels);
 		//dst.y = ((rect.h - dst.h) / 2.0f + (point->y - sourcePoint->y) * squarePerPixels);
@@ -25,8 +25,8 @@ namespace RoninEngine::Runtime {
 		b.x = dst.x - (p.x - b.x) * squarePerPixels;
 		b.y = dst.y + (p.y - b.y) * squarePerPixels;
 
-		SDL_SetRenderDrawColor(RoninApplication::instance()->GetRenderer(), color.r, color.g, color.b, color.a);
-		SDL_RenderDrawLineF(RoninApplication::instance()->GetRenderer(), a.x, a.y, b.x, b.y);
+		SDL_SetRenderDrawColor(RoninApplication::GetRenderer(), color.r, color.g, color.b, color.a);
+		SDL_RenderDrawLineF(RoninApplication::GetRenderer(), a.x, a.y, b.x, b.y);
 	}
 	void drawBox() {
 		Vec2 a, b;
@@ -97,7 +97,7 @@ namespace RoninEngine::Runtime {
 		Vec2 a, b;
 		AIPathFinder::Neuron* p;
         AIPathFinder::Disposition p1, p2;
-		auto display = RoninApplication::instance()->display();
+		auto display = RoninApplication::display();
 
 		color.r = 53;
 		color.g = 0;

@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Player.h"
 #include "GameObject.h"
 
 using namespace RoninEngine::Runtime;
@@ -38,16 +39,29 @@ Component* GameObject::Add_Component(Component* component) {
 
 		Behaviour* behav = dynamic_cast<Behaviour*>(component);
 		if (behav) {
-			Scene::currentScene->PinScript(behav);
+			Scene::getScene()->PinScript(behav);
 			behav->OnAwake();
 		}
 		else if (Renderer* rend = dynamic_cast<Renderer*>(component)) {
-			Scene::currentScene->CC_Render_Push(rend);
+			Scene::getScene()->CC_Render_Push(rend);
 		}
 		else if (Light* light = dynamic_cast<Light*>(component)) {
-			Scene::currentScene->CC_Light_Push(light);
+			Scene::getScene()->CC_Light_Push(light);
 		}
 	}
 
 	return component;
+}
+
+template<typename T>
+T* GameObject::Add_Component() {
+    T* component = nullptr;
+    if constexpr (std::is_base_of<Component, T>::value){
+        component = CreateObject<T>();
+        Add_Component(reinterpret_cast<Component*>(component));
+
+    } else {
+        throw std::bad_cast();
+    }
+    return component;
 }

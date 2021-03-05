@@ -8,12 +8,10 @@ namespace RoninEngine {
 		//base component 
 		Component::Component() : Component(typeid(Component).name()) {}
 
-		Component::Component(const string& name) : Object(name) {
-			_derivedObject = NULL;
-		}
+        Component::Component(const string& name) : Object(name), _derivedObject(nullptr) {}
 
 		const bool Component::isBind() {
-			return _derivedObject != NULL;
+            return _derivedObject != nullptr;
 		}
 
 		GameObject* Component::gameObject() {

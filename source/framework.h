@@ -13,6 +13,7 @@
 #include <map>
 #include <stdexcept>
 #include <typeinfo>
+#include <cassert>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -36,6 +37,7 @@ template<typename T>
 [[deprecated]]
 constexpr void free_variable(T* var)
 {
+    static_assert("free_variable");
     var->~T();
     SDL_free(var);
 }
@@ -44,6 +46,7 @@ template<typename T>
 [[deprecated]]
 constexpr void deallocate_class(T* var)
 {
+   static_assert("deallocated_class");
    if constexpr (!std::is_same<T*, void*>::value)
    {
      var->~T();
@@ -55,6 +58,7 @@ template<typename T>
 [[deprecated]]
 constexpr void deallocate_variable(T*& var)
 {
+   static_assert("deallocate_variable");
     var->~T();
     SDL_free(var);
     var = nullptr;
@@ -63,6 +67,7 @@ constexpr void deallocate_variable(T*& var)
 template<typename T, typename... Types>
 [[deprecated]]
 constexpr T* allocate_class(Types&&... _Args) {
+   static_assert("allocate_class+_Args...");
     T* allocated = (T*)SDL_malloc(sizeof(T));
     SDL_memset(allocated, 0, sizeof(T));
     new(allocated)T(std::forward<Types>(_Args)...);
@@ -72,6 +77,7 @@ constexpr T* allocate_class(Types&&... _Args) {
 template<typename T>
 [[deprecated]]
 constexpr T* allocate_class() {
+    static_assert("allocate_class");
     T* allocated = (T*)SDL_malloc(sizeof(T));
     SDL_memset(allocated, 0, sizeof(T));
     new(allocated)T();
@@ -81,19 +87,21 @@ constexpr T* allocate_class() {
 template<typename T>
 [[deprecated]]
 constexpr T*& allocate_variable(T*& var) {
+    static_assert("allocate_variable+var");
     return var = allocate_class<T>();
 }
 
 template<typename T, typename... Types>
 [[deprecated]]
 constexpr T*& allocate_variable(T*& var, Types&&... _Args) {
-   throw std::bad_cast();
-    //return var = allocate_class<std::remove_reference<T>::type>(std::forward<Types>(_Args)...);
+     static_assert("allocate_variable+var+_Args...");
+    return var = allocate_class<std::remove_reference_t<T>>(std::forward<Types>(_Args)...);
 }
 
 template<typename T>
 [[deprecated]]
 constexpr T*& reset_variable(T*& var) {
+     static_assert("reset_variable+var");
     free_variable(var);
     return allocate_variable(var);
 }
@@ -102,6 +110,7 @@ template<typename T, typename... Types>
 [[deprecated]]
 constexpr T*& reset_variable(T*& var, Types&&... vars)
 {
+     static_assert("reset_variable+var+vars...");
     free_variable(var);
     throw std::bad_exception();
     return (NULL);//allocate_variable(var, vars);
@@ -111,6 +120,7 @@ template <typename _Container, typename _Pred>
 [[deprecated]]
 constexpr void Foreach(_Container& _cont, _Pred _Fn)
 {
+    static_assert("Foreach+fucked...");
 	for (auto iter = begin(_cont); iter != end(_cont); ++iter)
 		_Fn(*iter);
 }
@@ -119,7 +129,7 @@ namespace RoninEngine {
 	class RoninApplication;
 	class Scene;
 
-	//Pre declaration
+    //Pre declaration
 	namespace Runtime
 	{
 		class Object;
@@ -133,6 +143,10 @@ namespace RoninEngine {
 		class Texture;
 		class Atlas;
 		class Sprite;
+
+        class Light;
+
+        class Behaviour;
 
 		struct Color;
 	}

@@ -10,7 +10,7 @@ namespace RoninEngine::Runtime {
 		uint8_t a;
 
 		Color() {
-			memset(this, NULL, sizeof(Color));
+            memset(this, 0, sizeof(Color));
 		}
 
 		explicit Color(const int32_t rgba) {

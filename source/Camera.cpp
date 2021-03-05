@@ -34,13 +34,13 @@ namespace RoninEngine::Runtime
 
 		if (__rendererOutResults.empty())
 		{
-			auto display = RoninApplication::instance()->display();
+            auto display = RoninApplication::display();
 			Vec2 topLeft, rightBottom, rSz;
 			topLeft = this->ScreenToWorldPoint(Vec2::zero);
 			rightBottom = this->ScreenToWorldPoint(Vec2(display.w, display.h));
 
-			//todo: collect 
-			for (auto render : Scene::currentScene->_assoc_renderers)
+            //todo: collect
+			for (auto render : Scene::getScene()->_assoc_renderers)
 			{
 				if (render->zOrder >= Nz)
 					throw std::out_of_range("N z range");
@@ -75,7 +75,7 @@ namespace RoninEngine::Runtime
 
 		if (__lightsOutResults.empty())
 		{
-			__lightsOutResults.assign(Scene::currentScene->_assoc_lightings.begin(), Scene::currentScene->_assoc_lightings.end());
+			__lightsOutResults.assign(Scene::getScene()->_assoc_lightings.begin(), Scene::getScene()->_assoc_lightings.end());
 		}
 
 		return make_tuple(&__rendererOutResults, &__lightsOutResults);
@@ -86,7 +86,7 @@ namespace RoninEngine::Runtime
 		//dst.x = ((rect.w - dst.w) / 2.0f - (point->x + sourcePoint->x) * squarePerPixels);
 		//dst.y = ((rect.h - dst.h) / 2.0f + (point->y - sourcePoint->y) * squarePerPixels);
 
-		auto display = RoninApplication::instance()->display();
+        auto display = RoninApplication::display();
 		screenPoint.x = display.w / 2.f - (screenPoint.x);
 		screenPoint.x *= -1;
 		screenPoint.y = display.h / 2.f - (screenPoint.y);
@@ -97,10 +97,10 @@ namespace RoninEngine::Runtime
 	const Vec2 Camera::WorldToScreenPoint(Vec2 worldPoint) {
 		Vec2* point = &transform()->point;
 		Vec2 dst;
-		auto display = RoninApplication::instance()->display();
-		//Положение по горизонтале 
+        auto display = RoninApplication::display();
+		//РџРѕР»РѕР¶РµРЅРёРµ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рµ 
 		dst.x = ((display.w ) / 2.0f - (point->x - worldPoint.x) * squarePerPixels);
-		//Положение по вертикале 
+		//РџРѕР»РѕР¶РµРЅРёРµ РїРѕ РІРµСЂС‚РёРєР°Р»Рµ 
 		dst.y = ((display.h) / 2.0f + (point->y - worldPoint.y) * squarePerPixels);
 		return dst;
 	}

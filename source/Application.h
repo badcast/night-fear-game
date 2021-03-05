@@ -8,36 +8,25 @@ namespace RoninEngine
 {
 	class RoninApplication
 	{
-		SDL_Renderer* renderer;
-		SDL_Window* window;
-		bool m_inited;
-		bool m_sceneAccept;
-		Scene* m_scene;
-		bool m_sceneLoaded;
-
-		void LoadGame();
-		void LoadedScene();
+        static void LoadGame();
+        static void LoadedScene();
 	public:
-		RoninApplication();
-		~RoninApplication();
+        static void Init();
+        static void Free();
 
-		void init();
+        static void LoadScene(Scene* m_scene);
+        static void Update_Game();
+        static void translate(SDL_Event* e);
+        static void ScreenShot(const char* filename);
+        static SDL_Surface* ScreenShot();
+        static SDL_DisplayMode display();
+        static void quit();
+        static SDL_Window* GetWindow();
+        static SDL_Renderer* GetRenderer();
 
-		void LoadScene(Scene* m_scene);
-		void Update_Game();
-		void translate(SDL_Event* e);
-		void ScreenShot(const char* filename);
-		SDL_Surface* ScreenShot();
-		SDL_DisplayMode display();
-		void quit();
-		SDL_Window* GetWindow();
-		SDL_Renderer* GetRenderer();
-
-		void back_fail(void);
-		void fail(const std::string& message);
-		void fail_OutOfMemory();
-
-		static RoninApplication* instance();
+        static void back_fail(void);
+        static void fail(const std::string& message);
+        static void fail_OutOfMemory();
 	};
 
 }

@@ -5,15 +5,15 @@ constexpr int _mEnabled = 1;
 constexpr int _mVisibled = 2;
 constexpr int _mGroup = 4;
 
-namespace RoninEngine::ui
+namespace RoninEngine::UI
 {
-	GUI* guiInstance;
+    GUI* guiInstance;
 
 	GUI::GUI(Scene* m_scene)
 	{
 		this->m_scene = m_scene;
 		hitCast = true;
-		renderer = NULL;
+        renderer = NULL;
 		guiInstance = this;
 		callback = NULL;
 		callbackData = NULL;
@@ -169,7 +169,7 @@ namespace RoninEngine::ui
 		timeline->SetOptions(option);
 		ResourceManager::GoMemoryCache(timeline);
 
-		//todo: wBest и hBest - вычисляется даже когда rect.w != 0 
+		//todo: wBest Рё hBest - РІС‹С‡РёСЃР»СЏРµС‚СЃСЏ РґР°Р¶Рµ РєРѕРіРґР° rect.w != 0 
 		int wBest = 0;
 		int hBest = 0;
 		for (auto i = begin(roads); i != end(roads); ++i)
@@ -282,7 +282,7 @@ namespace RoninEngine::ui
 		this->callbackData = userData;
 	}
 	bool GUI::Remove(const UIID& id) {
-		//todo: мда. Тут проблема. ID которое удаляется может задеть так же и другие. Нужно исправить и найти способ! T``T
+		//todo: РјРґР°. РўСѓС‚ РїСЂРѕР±Р»РµРјР°. ID РєРѕС‚РѕСЂРѕРµ СѓРґР°Р»СЏРµС‚СЃСЏ РјРѕР¶РµС‚ Р·Р°РґРµС‚СЊ С‚Р°Рє Р¶Рµ Рё РґСЂСѓРіРёРµ. РќСѓР¶РЅРѕ РёСЃРїСЂР°РІРёС‚СЊ Рё РЅР°Р№С‚Рё СЃРїРѕСЃРѕР±! T``T
 		return false;
 	}
 	void GUI::RemoveAll() {
@@ -313,12 +313,12 @@ namespace RoninEngine::ui
 					if (x->prototype->render_control(this, *x, renderer, &targetFocus) && hitCast)
 					{
 						_focusedUI = true;
-						//Избавляемся от перекликов в UI
+						//РР·Р±Р°РІР»СЏРµРјСЃСЏ РѕС‚ РїРµСЂРµРєР»РёРєРѕРІ РІ UI
 						input::event->type = SDL_FIRSTEVENT;
 
 						if (x->options & _mEnabled && callback)
 						{
-							//Отправка сообщения о действий.
+							//РћС‚РїСЂР°РІРєР° СЃРѕРѕР±С‰РµРЅРёСЏ Рѕ РґРµР№СЃС‚РІРёР№.
 							callback(id, callbackData);
 						}
 					}

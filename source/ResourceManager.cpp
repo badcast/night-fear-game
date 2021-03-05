@@ -178,7 +178,7 @@ namespace RoninEngine::Runtime
 		if (!filesystem::exists(p))
 		{
 			strcat(membuf, "\"Data\" is not found");
-			RoninApplication::instance()->fail(membuf);
+			RoninApplication::fail(membuf);
 		}
 		SDL_free(membuf);
 	}
@@ -232,7 +232,7 @@ namespace RoninEngine::Runtime
 		{
 			allocate_variable(_textures);
 			for (auto i = begin(*surfaces); i != end(*surfaces); ++i)
-				_textures->emplace_back(allocate_class<Texture>(SDL_CreateTextureFromSurface(RoninEngine::ui::guiInstance->renderer, *i)));
+				_textures->emplace_back(allocate_class<Texture>(SDL_CreateTextureFromSurface(RoninEngine::UI::guiInstance->renderer, *i)));
 			_assocMultiCacheTextures->emplace(make_pair(surfaces, _textures));
 		}
 		else
@@ -299,7 +299,7 @@ namespace RoninEngine::Runtime
 		auto cache = _assocCacheTextures->find(surf);
 		if (cache == end(*_assocCacheTextures))
 		{
-			auto i = _assocCacheTextures->insert(make_pair(surf, (texture = allocate_class<Texture>(SDL_CreateTextureFromSurface(RoninApplication::instance()->GetRenderer(), surf)))));
+			auto i = _assocCacheTextures->insert(make_pair(surf, (texture = allocate_class<Texture>(SDL_CreateTextureFromSurface(RoninApplication::GetRenderer(), surf)))));
 			texture->raw_namePtr = (char*)SDL_malloc(resourceName.size() + 1);
 			strcpy(texture->raw_namePtr, resourceName.data());
 		}

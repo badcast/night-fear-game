@@ -50,7 +50,7 @@ namespace RoninEngine
 
 		type normalized()
 		{
-			//todo: написать нормализацию
+			//todo: РЅР°РїРёСЃР°С‚СЊ РЅРѕСЂРјР°Р»РёР·Р°С†РёСЋ
 			return zero;
 		}
 
@@ -302,7 +302,7 @@ namespace RoninEngine
 			for (int i = 3; i != ~0; --i)
 				result[i] = static_cast<_To>(value[i]);
 			return result;
-		}
+        }
 
 
 		static const_classX zero() { return classX(); }

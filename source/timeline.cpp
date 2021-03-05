@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "framework.h"
 
-namespace RoninEngine::ui
+namespace RoninEngine::UI
 {
 	Timeline::Timeline() {
 
@@ -52,12 +52,12 @@ namespace RoninEngine::ui
 			{
 				switch (_option)
 				{
-				case RoninEngine::ui::TimelineOptions::Linear:
+				case RoninEngine::UI::TimelineOptions::Linear:
 					++iter;
 					if (iter == end(_roads))
 						Reset();
 					break;
-				case RoninEngine::ui::TimelineOptions::LinearReverse:
+				case RoninEngine::UI::TimelineOptions::LinearReverse:
 				{
 					static bool isReversing = false;
 
