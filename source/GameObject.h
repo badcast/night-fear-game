@@ -9,7 +9,7 @@ namespace RoninEngine {
       template <typename T>
       class AttribGetTypeHelper {
          public:
-            T* getType(list<Component*>& container) {
+            static T* getType(list<Component*>& container) {
                decltype(end(container)) iter =
                      find_if(begin(container), end(container),
                              [](Component* c) { return dynamic_cast<T*>(c) != 0; });
@@ -17,6 +17,19 @@ namespace RoninEngine {
                if (iter != end(container)) return dynamic_cast<T*>(*iter);
 
                return NULL;
+            }
+
+            static T* getComponent(GameObject* obj);
+            static T* createEmptyComponent(GameObject *hier){
+               T* component = nullptr;
+               if constexpr (std::is_base_of<Component, T>::value) {
+                   component = CreateObject<T>();
+                   hier->Add_Component(reinterpret_cast<Component*>(component));
+               } else {
+                  static_assert(string("error: this type is not component: ")+ typeid(T).name());
+                   throw std::bad_cast();
+               }
+               return component;
             }
       };
 
@@ -45,11 +58,13 @@ namespace RoninEngine {
             Component* Add_Component(Component* component);
 
             template <typename T>
-            T* Add_Component();
+            T* Add_Component(){
+               return AttribGetTypeHelper<T>::createEmptyComponent(this);
+            }
 
             template <typename T>
             T* Get_Component() {
-               return AttribGetTypeHelper<T>().getType(this->m_components);
+               return AttribGetTypeHelper<T>::getType(this->m_components);
             }
       };
    }  // namespace Runtime
