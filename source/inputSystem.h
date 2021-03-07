@@ -14,23 +14,23 @@ namespace RoninEngine
 
 	enum KeyboardState
 	{
-		//The CAPS LOCK light is on.
-		CapsLock_On,
-		//The key is enhanced.
+        ///The CAPS LOCK light is on.
+        CapsLock_On,
+        ///The key is enhanced.
 		Enchanced_Key,
-		//The left ALT key is pressed.
+        ///The left ALT key is pressed.
 		LeftAlt_Pressed,
-		//The left CTRL key is pressed.
+        ///The left CTRL key is pressed.
 		LeftCtrl_Pressed,
-		//The NUM LOCK light is on.
+        ///The NUM LOCK light is on.
 		NumLock_On,
-		//The right ALT key is pressed.
+        ///The right ALT key is pressed.
 		RightAlt_Pressed,
-		//The right CTRL key is pressed.
+        ///The right CTRL key is pressed.
 		RightCtrl_Pressed,
-		//The SCROLL LOCK light is on.
+        ///The SCROLL LOCK light is on.
 		ScrollLock_On,
-		//The SHIFT key is pressed.
+        ///The SHIFT key is pressed.
 		Shift_Pressed,
 	};
 	class input

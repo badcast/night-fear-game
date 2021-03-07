@@ -11,57 +11,36 @@ namespace RoninEngine {
 
       // Instancer
       template <typename T>
-      class Instancer {
+      class Instancer{
          public:
-            Instancer(){
-               instance = allocate_class<T>(); /*
-               if (RoninEngine::Scene::getScene()->main_object != nullptr &&
-                   typeid(T) == typeid(GameObject)) {
-                  auto root = RoninEngine::Scene::getScene()->main_object->transform();
-                  Transform* tr = ((GameObject*)instance)->transform();
-                  root->child_append(tr);
-               }*/
-            }
-            Instancer(const string& name){
-               instance = allocate_class<T>(name);
-/*
-               if (RoninEngine::Scene::getScene()->main_object != nullptr &&
-                   typeid(T) == typeid(GameObject)) {
-                  auto root = RoninEngine::Scene::getScene()->main_object->transform();
-                  Transform* tr = ((GameObject*)instance)->transform();
-                  root->child_append(tr);
-               }*/
-            }
-            Instancer(T* val){
-               instance = allocate_class<T>(*val);
-               Transform* root;
-/*
-               if (RoninEngine::Scene::getScene()->main_object != nullptr &&
-                   typeid(T) == typeid(GameObject)) {
-                  root = ::RoninEngine::Scene::getCurrentScene->main_object->transform();
-                  Transform* tr = ((GameObject*)instance)->transform();
-                  root->child_append(tr);
-               }*/
-            }
+            Instancer() = delete;
             Instancer(Instancer&) = delete;
 
-         public:
-            T* instance;
+            static T* factory();
+            static T* factoryx()
+            {
+               //factory();
+               return 0;
+            }
+
+            static T* factory(const string& name);
+            static T* factory(T* val);
       };
 
       template <typename T>
       T* CreateObject() {
-         return Instancer<T>().instance;
+         return Instancer<T>::factoryx();
       }
 
       template <typename T>
       T* CreateObject(const string& name) {
-         return Instancer<T>(name).instance;
+         return 0;
+         //return Instancer<T>::factory(name);
       }
 
       template <typename T>
-      T* CreateObject(T* ref) {
-         return Instancer<T>(ref).instance;
+      T* CreateObject(T* clone) {
+         return Instancer<T>::factory(clone);
       }
 
       ///Уничтожает объект после рендера.
@@ -77,8 +56,8 @@ namespace RoninEngine {
       bool instanced(Object* obj);
 
       ///Клонирует объект
-      template <typename ObjectType>
-      ObjectType* Instantiate(ObjectType* obj);
+      template <typename T>
+      T* Instantiate(T* obj);
       ///Клонирует объект
       GameObject* Instantiate(GameObject* obj);
       ///Клонирует объект
@@ -105,7 +84,7 @@ namespace RoninEngine {
             string& name();
 
             Object();
-            Object(const string& nameobj);
+            Object(const string& name);
             virtual ~Object() = default;
 
             void Destroy();

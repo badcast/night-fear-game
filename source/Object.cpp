@@ -9,41 +9,48 @@ using namespace RoninEngine;
 
 namespace RoninEngine {
    namespace Runtime {
-      /*
       template <typename T>
-      Instancer<T>::Instancer() {
-         instance = allocate_class<T>();
-         if (RoninEngine::Scene::currentScene->main_object != nullptr &&
-             typeid(T) == typeid(GameObject)) {
-            auto root = RoninEngine::Scene::currentScene->main_object->transform();
-            Transform* tr = ((GameObject*)instance)->transform();
-            root->child_append(tr);
+       T* factory_base(bool initInHierarchy, T* instance = nullptr,
+                      const string& name = {}) {
+         using _T = std::remove_pointer_t<T>;
+         if (instance == nullptr) {
+            if (name.empty())
+               instance = allocate_class<_T>();
+            else
+               instance = allocate_class<_T>(name);
+         } else {
+            instance = allocate_class<_T>(instance);
          }
-      }
-      template <typename T>
-      Instancer<T>::Instancer(const string& name) {
-         instance = allocate_class<T>(name);
 
-         if (RoninEngine::Scene::currentScene->main_object != nullptr &&
-             typeid(T) == typeid(GameObject)) {
-            auto root = RoninEngine::Scene::currentScene->main_object->transform();
-            Transform* tr = ((GameObject*)instance)->transform();
-            root->child_append(tr);
+         if (initInHierarchy) {
+            if (Scene::getScene() == nullptr)
+               throw std::runtime_error("var pCurrentScene is null");
+
+            if (Scene::getScene()->main_object == nullptr)
+               throw std::runtime_error("var pCurrentScene->mainObject is null");
+
+            if (std::is_same<T, GameObject>::value) {
+               auto root = Scene::getScene()->main_object->transform();
+               Transform* tr = ((GameObject*)instance)->transform();
+               root->child_append(tr);
+            }
          }
+
+         return instance;
+      }
+
+      template <typename T>
+      T* Instancer<T>::factory() {
+         return nullptr;//factory_base<T>(true);
       }
       template <typename T>
-      Instancer<T>::Instancer(T* val) {
-         instance = allocate_class<T>(*val);
-         Transform* root = nullptr;
-
-         if (RoninEngine::Scene::currentScene->main_object != nullptr &&
-             typeid(T) == typeid(GameObject)) {
-            root = RoninEngine::Scene::currentScene->main_object->transform();
-            Transform* tr = ((GameObject*)instance)->transform();
-            root->child_append(tr);
-         }
+      T* Instancer<T>::factory(const string& name) {
+         return factory_base<T>(true, nullptr, name);
       }
-*/
+      template <typename T>
+      T* Instancer<T>::factory(T* clone) {
+         return factory_base<T>(true, clone);
+      }
 
       void Destroy(Object* obj) { Destroy(obj, 0); }
 
@@ -51,8 +58,7 @@ namespace RoninEngine {
          if (!obj || !Scene::getScene()) throw std::bad_exception();
          if (!Scene::getScene()->_destructions) {
             Scene::getScene()->_destructions =
-                  allocate_class<std::remove_pointer<decltype(
-                     Scene::getScene()->_destructions)>::type>();
+                  allocate_class<std::remove_pointer<decltype(Scene::getScene()->_destructions)>::type>();
          }
 
          auto ref = Scene::getScene()->_destructions;
@@ -142,9 +148,14 @@ namespace RoninEngine {
                });
                continue;
             } else if (dynamic_cast<SpriteRenderer*>(c)) {
-               c = CreateObject<SpriteRenderer>((SpriteRenderer*)c);
+               c = CreateObject<SpriteRenderer>(reinterpret_cast<SpriteRenderer*>(c));
             } else if (dynamic_cast<Camera2D*>(c)) {
                c = CreateObject<Camera2D>(dynamic_cast<Camera2D*>(c));
+            }
+            else
+            {
+               static_assert ("undefined type");
+               return nullptr;
             }
 
             c->_derivedObject = nullptr;

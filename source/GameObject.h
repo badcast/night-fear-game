@@ -20,6 +20,7 @@ namespace RoninEngine {
             }
 
             static T* getComponent(GameObject* obj);
+
             static T* createEmptyComponent(GameObject *hier){
                T* component = nullptr;
                if constexpr (std::is_base_of<Component, T>::value) {

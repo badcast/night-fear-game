@@ -20,7 +20,7 @@ namespace RoninEngine::Runtime
 		this->visibleGrids = ref.visibleBorders;
 	}
 
-	void Camera2D::render(SDL_Renderer* renderer, Rect_t rect, GameObject* root) {
+    void Camera2D::render(SDL_Renderer* renderer, Rect_t rect, GameObject* rootDraw) {
 		Render_info renderInfo;
 		Rectf_t dst;
 

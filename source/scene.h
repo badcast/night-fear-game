@@ -56,6 +56,8 @@ namespace RoninEngine {
          UI::GUI* Get_GUI();
          void Unload();
 
+         bool is_hierarchy();
+
          virtual void awake() = 0;
          virtual void start() = 0;
          virtual void update() = 0;
@@ -64,6 +66,8 @@ namespace RoninEngine {
          virtual void onUnloading() = 0;
 
          static Scene* getScene();
+         ///Assign hierarhy base
+         static void assign_hierarchy(Scene *scene);
    };
 
 }  // namespace RoninEngine
