@@ -8,6 +8,7 @@ namespace RoninEngine {
       class Object;
 
       // create object
+
       template <typename T>
       T* factory_base(bool initInHierarchy, T* instance, const char* name);
 
@@ -19,7 +20,6 @@ namespace RoninEngine {
             Instancer() = delete;
             Instancer(Instancer&) = delete;
 
-
             static T* factory() { return factory_base<T>(true, nullptr, nullptr); }
 
             static T* factory(const string& name) {
@@ -27,7 +27,6 @@ namespace RoninEngine {
             }
 
             static T* factory(T* copy) { return factory_base<T>(true, copy, 0); }
-
       };
 
       template <typename T>
