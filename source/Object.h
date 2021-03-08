@@ -2,7 +2,6 @@
 #include "framework.h"
 
 namespace RoninEngine {
-
    namespace Runtime {
       class GameObject;
       class Object;
