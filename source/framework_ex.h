@@ -10,6 +10,8 @@
 #include "types.h"
 #include "time.h"
 #include "scene.h"
+
+//scenes
 #include "MainMenu.h"
 #include "GameScene.h"
 
@@ -22,3 +24,5 @@
 #include "Transform.h"
 #include "Behaviour.h"
 #include "SpriteRenderer.h"
+#include "Terrain2D.h"
+
