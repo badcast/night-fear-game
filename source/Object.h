@@ -8,29 +8,23 @@ namespace RoninEngine {
       class Object;
 
       // create object
-      template <typename _X, typename T = std::remove_pointer_t<_X>>
-      extern T* factory_base(bool initInHierarchy, T* instance = nullptr,
-                      const std::string& name = {});
+      template <typename T>
+      T* factory_base(bool initInHierarchy, T* instance, const char* name);
 
       // Instancer
       template <typename T>
-      class Instancer{
+      class Instancer {
          public:
             Instancer() = delete;
             Instancer(Instancer&) = delete;
 
-            static T* factory() {
-                return factory_base<T>(true);
-            }
+            static T* factory() { return factory_base<T>(true, nullptr, nullptr); }
 
             static T* factory(const string& name) {
-                return factory_base<T>(true, nullptr, name);
+               return factory_base<T>(true, nullptr, name.data());
             }
 
-            static T*  factory(T* copy) {
-                return factory_base<T>(true, copy);
-            }
-
+            static T* factory(T* copy) { return factory_base<T>(true, copy, 0); }
       };
 
       template <typename T>
