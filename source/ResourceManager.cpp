@@ -256,7 +256,7 @@ namespace RoninEngine::Runtime
 			auto iBitsource = _assocSingleFile->find(hash);
 
 			if (iBitsource == end(*_assocSingleFile))
-				return NULL;
+                return nullptr;
 
 			cat = path + iBitsource->second;
 

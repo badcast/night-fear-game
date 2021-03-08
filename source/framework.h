@@ -74,23 +74,6 @@ constexpr T* allocate_class(Types&&... _Args) {
     return allocated;
 }
 
-template<typename T>
-[[deprecated]]
-constexpr T* allocate_class() {
-    static_assert("allocate_class");
-    T* allocated = reinterpret_cast<T*>(SDL_malloc(sizeof(T)));
-    SDL_memset(allocated, 0, sizeof(T));
-    new(allocated)T();
-    return allocated;
-}
-
-template<typename T>
-[[deprecated]]
-constexpr T*& allocate_variable(T*& var) {
-    static_assert("allocate_variable+var");
-    return var = allocate_class<T>();
-}
-
 template<typename T, typename... Types>
 [[deprecated]]
 constexpr T*& allocate_variable(T*& var, Types&&... _Args) {
@@ -113,7 +96,7 @@ constexpr T*& reset_variable(T*& var, Types&&... vars)
      static_assert("reset_variable+var+vars...");
     free_variable(var);
     throw std::bad_exception();
-    return (NULL);//allocate_variable(var, vars);
+    return 0;//allocate_variable(var, std::forward(vars));
 }
 
 template <typename _Container, typename _Pred>

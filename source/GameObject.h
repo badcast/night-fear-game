@@ -51,7 +51,7 @@ namespace RoninEngine {
             GameObject();
 
             GameObject(const string&);
-            GameObject(const GameObject&) = delete;
+           // GameObject(const GameObject&) = delete;
             virtual ~GameObject();
 
             Transform* transform();

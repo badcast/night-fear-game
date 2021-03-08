@@ -17,30 +17,23 @@ namespace RoninEngine {
             Instancer(Instancer&) = delete;
 
             static T* factory();
-            static T* factoryx()
-            {
-               //factory();
-               return 0;
-            }
-
             static T* factory(const string& name);
-            static T* factory(T* val);
+            static T* factory(T* copy);
       };
 
       template <typename T>
       T* CreateObject() {
-         return Instancer<T>::factoryx();
+         return Instancer<T>::factory();
       }
 
       template <typename T>
       T* CreateObject(const string& name) {
-         return 0;
-         //return Instancer<T>::factory(name);
+         return 0;//return Instancer<T>::factory(name);
       }
 
       template <typename T>
-      T* CreateObject(T* clone) {
-         return Instancer<T>::factory(clone);
+      T* CreateObject(T* copy) {
+         return 0;//Instancer<T>::factory(copy);
       }
 
       ///Уничтожает объект после рендера.
@@ -58,8 +51,6 @@ namespace RoninEngine {
       ///Клонирует объект
       template <typename T>
       T* Instantiate(T* obj);
-      ///Клонирует объект
-      GameObject* Instantiate(GameObject* obj);
       ///Клонирует объект
       GameObject* Instantiate(GameObject* obj, Vec2 position, float angle = 0);
       ///Клонирует объект
@@ -81,6 +72,7 @@ namespace RoninEngine {
             std::size_t id;
 
          public:
+            const string name() const;
             string& name();
 
             Object();

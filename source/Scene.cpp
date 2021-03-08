@@ -21,8 +21,12 @@ namespace RoninEngine
 
 		allocate_variable(ui, this);
 
-		main_object = NULL;
-		main_object = CreateObject<GameObject>("Root Object");
+        //todo: Секция hierarhy требует перемены
+        if(!this->is_hierarchy())
+            main_object = CreateObject<GameObject>("Root Object");
+
+        if(main_object == nullptr)
+           throw std::bad_exception();
 		main_object->transform()->name() = "Root Transform";
 	}
 	Scene::~Scene()

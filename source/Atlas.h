@@ -4,16 +4,19 @@
 
 namespace RoninEngine::Runtime {
 
-	class Atlas
-	{
-		Texture* texture;
-		std::map<string, Sprite*> _sprites;
-	public:
-		Atlas() = default;
-		Atlas(const Atlas&) = default;
-		~Atlas() = default;
-		
-		Sprite* Get_Sprite(const string& spriteName);
-	};
+   class Atlas {
+         friend ResourceManager;
+         Texture* texture;
+         std::map<string, Sprite*> _sprites;
 
-}
+      public:
+         Atlas() = default;
+         Atlas(const Atlas&) = default;
+         ~Atlas() = default;
+
+         Sprite* get(int pos);
+
+         Sprite* Get_Sprite(const string& spriteName);
+   };
+
+}  // namespace RoninEngine::Runtime
