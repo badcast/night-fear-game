@@ -15,8 +15,10 @@ namespace RoninEngine {
       template <typename T>
       class Instancer {
          public:
+
             Instancer() = delete;
             Instancer(Instancer&) = delete;
+
 
             static T* factory() { return factory_base<T>(true, nullptr, nullptr); }
 
@@ -25,11 +27,14 @@ namespace RoninEngine {
             }
 
             static T* factory(T* copy) { return factory_base<T>(true, copy, 0); }
+
       };
 
       template <typename T>
       T* CreateObject() {
+
          return Instancer<T>::factory();
+
       }
 
       template <typename T>
@@ -55,8 +60,8 @@ namespace RoninEngine {
       bool instanced(Object* obj);
 
       ///Клонирует объект
-      template <typename T>
-      T* Instantiate(T* obj);
+      template <typename ObjectType>
+      ObjectType* Instantiate(ObjectType* obj);
       ///Клонирует объект
       GameObject* Instantiate(GameObject* obj, Vec2 position, float angle = 0);
       ///Клонирует объект
@@ -82,7 +87,7 @@ namespace RoninEngine {
             string& name();
 
             Object();
-            Object(const string& name);
+            Object(const string& nameobj);
             virtual ~Object() = default;
 
             void Destroy();

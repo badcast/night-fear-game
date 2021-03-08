@@ -4,10 +4,10 @@
 #include "Renderer.h"
 #include "NavMesh.h"
 
-using namespace RoninEngine::AIPathFinder;
+using namespace AIPathFinder;
 namespace RoninEngine::Runtime {
 
-    class Terrain2D : public Renderer
+	class Terrain2D : public Renderer
 	{
 		NavMesh* nav;
 	public:

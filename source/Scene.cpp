@@ -3,7 +3,8 @@
 
 namespace RoninEngine
 {
-    extern Scene *pCurrentScene;
+    Scene* pCurrentScene;
+
 	Scene::Scene() :Scene("Untitled scene") {
 	}
 	Scene::Scene(const string& name)
@@ -11,7 +12,7 @@ namespace RoninEngine
         if(pCurrentScene != nullptr){
            static_assert("pCurrentScene is and replaced by new" );
         }
-
+        pCurrentScene = this;
 		_firstRunScripts = NULL;
 		_realtimeScripts = NULL;
 		_destructions = NULL;
@@ -173,6 +174,10 @@ namespace RoninEngine
 			});
 		}
 	}
+    bool Scene::is_hierarchy(){
+       throw std::bad_cast();
+       return false;
+    }
 	std::string& Scene::name() {
 		return this->m_name;
 	}
@@ -184,8 +189,5 @@ namespace RoninEngine
 	}
     Scene* Scene::getScene(){
        return pCurrentScene;
-    }
-    bool Scene::is_hierarchy(){
-      return main_object != nullptr;
     }
 }

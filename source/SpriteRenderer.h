@@ -6,14 +6,14 @@
 
 namespace RoninEngine::Runtime
 {
-	enum class SpriteRenderTile {
+    enum class SpriteRenderTile : char{
 		Fixed,
 		Place
 	};
-	enum class SpriteRenderType {
-		//Обычное отрисовка спрайта с учетом его параметров. 
+    enum class SpriteRenderType : char {
+        ///Обычное отрисовка спрайта с учетом его параметров.
 		Simple,
-		//Отрисовка спрайта с учетом его параметров и черепиция от size
+        ///Отрисовка спрайта с учетом его параметров и черепиция от size
 		Tile
 	};
 

@@ -68,11 +68,28 @@ constexpr void deallocate_variable(T*& var)
 template<typename T, typename... Types>
 [[deprecated]]
 constexpr T* allocate_class(Types&&... _Args) {
-    static_assert("allocate_class+_Args...");
-    T* allocated = reinterpret_cast<T*>(SDL_malloc(sizeof(T)));
+   static_assert("allocate_class+_Args...");
+    T* allocated = (T*)SDL_malloc(sizeof(T));
     SDL_memset(allocated, 0, sizeof(T));
     new(allocated)T(std::forward<Types>(_Args)...);
     return allocated;
+}
+
+template<typename T>
+[[deprecated]]
+constexpr T* allocate_class() {
+    static_assert("allocate_class");
+    T* allocated = (T*)SDL_malloc(sizeof(T));
+    SDL_memset(allocated, 0, sizeof(T));
+    new(allocated)T();
+    return allocated;
+}
+
+template<typename T>
+[[deprecated]]
+constexpr T*& allocate_variable(T*& var) {
+    static_assert("allocate_variable+var");
+    return var = allocate_class<T>();
 }
 
 template<typename T, typename... Types>

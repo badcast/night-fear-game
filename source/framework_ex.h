@@ -21,3 +21,4 @@
 #include "Camera2D.h"
 #include "Transform.h"
 #include "Behaviour.h"
+#include "SpriteRenderer.h"
