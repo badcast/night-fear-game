@@ -8,6 +8,9 @@ namespace RoninEngine {
       class Object;
 
       // create object
+      template <typename _X, typename T = std::remove_pointer_t<_X>>
+      extern T* factory_base(bool initInHierarchy, T* instance = nullptr,
+                      const std::string& name = {});
 
       // Instancer
       template <typename T>
@@ -16,9 +19,18 @@ namespace RoninEngine {
             Instancer() = delete;
             Instancer(Instancer&) = delete;
 
-            static T* factory();
-            static T* factory(const string& name);
-            static T* factory(T* copy);
+            static T* factory() {
+                return factory_base<T>(true);
+            }
+
+            static T* factory(const string& name) {
+                return factory_base<T>(true, nullptr, name);
+            }
+
+            static T*  factory(T* copy) {
+                return factory_base<T>(true, copy);
+            }
+
       };
 
       template <typename T>
@@ -28,12 +40,12 @@ namespace RoninEngine {
 
       template <typename T>
       T* CreateObject(const string& name) {
-         return 0;//return Instancer<T>::factory(name);
+         return Instancer<T>::factory(name);
       }
 
       template <typename T>
       T* CreateObject(T* copy) {
-         return 0;//Instancer<T>::factory(copy);
+         return Instancer<T>::factory(copy);
       }
 
       ///Уничтожает объект после рендера.

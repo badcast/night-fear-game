@@ -37,19 +37,6 @@ T* factory_base(bool initInHierarchy, T* instance = nullptr,
     return instance;
 }
 
-template <typename T>
-T* Instancer<T>::factory() {
-    return factory_base<T>(true);
-}
-template <typename T>
-T* Instancer<T>::factory(const string& name) {
-    return factory_base<T>(true, nullptr, name);
-}
-template <typename T>
-T* Instancer<T>::factory(T* copy) {
-    return factory_base<T>(true, copy);
-}
-
 void Destroy(Object* obj) { Destroy(obj, 0); }
 
 void Destroy(Object* obj, float t) {

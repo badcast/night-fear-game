@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <typeinfo>
 #include <cassert>
+#include <tuple>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
