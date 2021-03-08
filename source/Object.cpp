@@ -32,7 +32,6 @@ namespace RoninEngine {
 
          return instance;
       }
-
       void Destroy(Object* obj) { Destroy(obj, 0); }
 
       void Destroy(Object* obj, float t) {

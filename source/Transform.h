@@ -1,12 +1,9 @@
 #pragma once
-
 #include "framework.h"
-#include "Object.h"
 #include "Component.h"
 
 namespace RoninEngine::Runtime
 {
-
 	class Transform : public Component 
 	{
         friend class RoninEngine::Scene;
@@ -57,11 +54,11 @@ namespace RoninEngine::Runtime
 
 		const Vec2 rotate(Vec2 vec, Vec2 normal);
 
-		//Точка в мировых кординатах
+        //РўРѕС‡РєР° РІ РјРёСЂРѕРІС‹С… РєРѕСЂРґРёРЅР°С‚Р°С…
 		Vec2 position();
-		void position(const Vec2& value);
+        void position(const Vec2& value);
 
-		//Точка относительно в кординатах родителя
+		//РўРѕС‡РєР° РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РІ РєРѕСЂРґРёРЅР°С‚Р°С… СЂРѕРґРёС‚РµР»СЏ
 		Vec2 localPosition();
 		void localPosition(const Vec2& value);
 

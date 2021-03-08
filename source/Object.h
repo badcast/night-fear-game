@@ -3,9 +3,6 @@
 
 namespace RoninEngine {
    namespace Runtime {
-      class GameObject;
-      class Object;
-
       // create object
 
       template <typename T>
