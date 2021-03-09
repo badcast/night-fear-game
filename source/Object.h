@@ -4,43 +4,27 @@
 namespace RoninEngine {
    namespace Runtime {
       // create object
-
-      template <typename T>
-      T* factory_base(bool initInHierarchy, T* instance, const char* name);
-
+   /*
       // Instancer
       template <typename T>
-      class Instancer {
+      class Instancer{
          public:
+            static T* factory();
+            static T* factory(const string& name) ;
+            static T* factory(T* copy);
+      };*/
 
-            Instancer() = delete;
-            Instancer(Instancer&) = delete;
-
-            static T* factory() { return factory_base<T>(true, nullptr, nullptr); }
-
-            static T* factory(const string& name) {
-               return factory_base<T>(true, nullptr, name.data());
-            }
-
-            static T* factory(T* copy) { return factory_base<T>(true, copy, 0); }
-      };
+      extern Transform* create_empty_transform();
+      extern GameObject* create_empty();
 
       template <typename T>
-      T* CreateObject() {
-
-         return Instancer<T>::factory();
-
-      }
+      T* CreateObject();
 
       template <typename T>
-      T* CreateObject(const string& name) {
-         return Instancer<T>::factory(name);
-      }
+      T* CreateObject(const string& name);
 
       template <typename T>
-      T* CreateObject(T* copy) {
-         return Instancer<T>::factory(copy);
-      }
+      T* CreateObject(T* copy);
 
       ///Уничтожает объект после рендера.
       void Destroy(Object* obj);

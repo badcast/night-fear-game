@@ -51,8 +51,8 @@ namespace RoninEngine::UI
 		data.options = _mVisibled | _mEnabled;
 		m_Sticks.controls.emplace_back(data);
 		data.id = m_Sticks.controls.size();
+        //add the child
 		if (parent)
-			//add the child
 			m_Sticks.controls[parent - 1].childs.emplace_back(m_Sticks.controls.size() - 1);
 		else
 			m_Sticks._rendering.push_back(data.id);
@@ -71,7 +71,7 @@ namespace RoninEngine::UI
 	{
 		return m_Sticks.controls.size() >= id;
 	}
-	UIID GUI::Create_Group(const Rect_t& rect) {
+    UIID GUI::Create_Group(const Rect_t& rect) {
 		UIID id = register_ui();
 		auto& data = ID(id);
 		data.rect = rect;
@@ -79,7 +79,7 @@ namespace RoninEngine::UI
 		return id;
 	}
 	UIID GUI::Create_Group() {
-		return Create_Group(Rect_t::zero());
+       return Create_Group(Rect_t::zero());
 	}
 
 	UIID GUI::Push_Label(const string& text, const Rect_t& rect, const int& fontWidth, const UIID& parent) {

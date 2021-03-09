@@ -1,10 +1,10 @@
 #include "Object.h"
+
 #include "pch.h"
 
 using namespace RoninEngine;
 namespace RoninEngine {
    namespace Runtime {
-
       template <typename T>
       T* factory_base(bool initInHierarchy, T* instance, const char* name) {
          if (instance == nullptr) {
@@ -16,11 +16,13 @@ namespace RoninEngine {
             instance = allocate_class<T>();
          }
 
+         if (instance == nullptr) throw std::bad_alloc();
+
          if (initInHierarchy) {
             if (RoninEngine::Scene::getScene() == nullptr)
                throw std::runtime_error("var pCurrentScene is null");
 
-            if (RoninEngine::Scene::getScene()->main_object == nullptr)
+            if (!RoninEngine::Scene::getScene()->is_hierarchy())
                throw std::runtime_error("var pCurrentScene->mainObject is null");
 
             if (std::is_same<T, GameObject>::value) {
@@ -32,6 +34,62 @@ namespace RoninEngine {
 
          return instance;
       }
+
+      Transform* create_empty_transform(){
+         return factory_base<Transform>(false, nullptr, nullptr);
+      }
+      GameObject* create_empty(){
+         return factory_base<GameObject>(false, nullptr, nullptr);
+      }
+
+
+      // WoW: Здесь профиксина 6 месячная проблема
+      /*    template class Instancer<GameObject>;
+      template class Instancer<Transform>;
+      template class Instancer<Player>;
+      template class Instancer<Camera2D>;
+      template class Instancer<Spotlight>;
+      template class Instancer<SpriteRenderer>;
+*/
+      /*
+template <typename T>
+T* Instancer<T>::factory() {
+   return factory_base<T>(true, nullptr, nullptr);
+}
+template <typename T>
+T* Instancer<T>::factory(const string& name) {
+   return factory_base<T>(true, nullptr, name.data());
+}
+template <typename T>
+T* Instancer<T>::factory(T* copy) {
+   return factory_base<T>(true, copy, 0);
+}
+*/
+      template GameObject* CreateObject<GameObject>();
+      template Transform* CreateObject<Transform>();
+      template Player* CreateObject<Player>();
+      template Camera2D* CreateObject<Camera2D>();
+      template Spotlight* CreateObject<Spotlight>();
+      template SpriteRenderer* CreateObject<SpriteRenderer>();
+
+      template <typename T>
+      T* CreateObject() {
+         return factory_base<T>(true, nullptr, nullptr);
+      }
+
+      template GameObject* CreateObject<GameObject>(const string& name);
+
+
+      template <typename T>
+      T* CreateObject(const string& name) {
+         return factory_base<T>(true, nullptr, name.data());
+      }
+
+      template <typename T>
+      T* CreateObject(T* copy) {
+         return factory_base<T>(true, copy, nullptr);
+      }
+
       void Destroy(Object* obj) { Destroy(obj, 0); }
 
       void Destroy(Object* obj, float t) {

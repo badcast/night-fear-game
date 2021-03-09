@@ -138,7 +138,7 @@ namespace RoninEngine
 	{
 	public:
 		using classX = xRect<_Ty>;
-		using const_classX = const xRect<_Ty>&;
+        using const_classX = const xRect<_Ty>;
 		using type_link = _Ty&;
 		using const_type_link = const _Ty&;
 

@@ -13,6 +13,8 @@ namespace RoninEngine::Runtime {
 		SpriteRenderer* spriteRenderer;
 		Spotlight* spotlight;
 	public:
+        Player() : Player(typeid(*this).name()){}
+        Player(const string& name) : Behaviour(name){}
 		float speed = 0.05f;
 
 		void OnAwake() override;

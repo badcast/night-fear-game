@@ -44,7 +44,7 @@ namespace RoninEngine::Runtime {
 		if (m_native)
 		{
 			SDL_DestroyTexture(m_native);
-			m_native = NULL;
+            m_native = nullptr;
 		}
 	}
 

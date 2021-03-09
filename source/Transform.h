@@ -24,6 +24,7 @@ namespace RoninEngine::Runtime
 		static void hierarchy_sibiling(Transform* from, int index);
 	public:
 		Transform();
+        Transform(const string& name);
 		~Transform();
 
 		Transform* parent();

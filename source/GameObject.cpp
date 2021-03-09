@@ -8,7 +8,7 @@ using namespace RoninEngine::Runtime;
 GameObject::GameObject() : GameObject("GameObject") {}
 
 GameObject::GameObject(const string& name) : Object(name) {
-    m_components.push_back(CreateObject<Transform>());
+    m_components.push_back(create_empty_transform());
     m_components.front()->_derivedObject = this;
 }
 
