@@ -1,5 +1,6 @@
 #include "inputSystem.h"
 #include "pch.h"
+#include "controls.h"
 
 namespace RoninEngine::UI {
    std::list<UC*> m_controls;
@@ -27,9 +28,9 @@ namespace RoninEngine::UI {
       m_controls.clear();
    }
 
-   UC* findControl(const char* name) {
-      auto iter = find_if(begin(m_controls), end(m_controls), [name](UC* ref) {
-            return !SDL_strcmp(ref->class_name(), name);
+   UC* findControl(ControlType control) {
+      auto iter = find_if(begin(m_controls), end(m_controls), [control](UC* ref) {
+            return control==ref->id();
    });
 
       if (iter == end(m_controls)) return NULL;
@@ -38,8 +39,6 @@ namespace RoninEngine::UI {
    }
 
    void ResetControls() { _controlId = 0; }
-
-   UC::UC() {}
 
    bool UC::render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                            bool* hover) {

@@ -14,8 +14,7 @@ GameObject::GameObject(const string& name) : Object(name) {
 
 GameObject::~GameObject() {
     Foreach(m_components, [](Component* cmp) {
-        throw std::bad_cast();
-        // free_variable(cmp);
+        free_variable(cmp);
     });
 }
 

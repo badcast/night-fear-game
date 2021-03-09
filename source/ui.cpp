@@ -88,7 +88,7 @@ namespace RoninEngine::UI
 		auto& data = ID(id);
 		data.text = text;
 		data.rect = rect;
-		data.prototype = findControl("text");
+        data.prototype = findControl(CTEXT);
 		return id;
 	}
 	UIID GUI::Push_Label(const string& text, const Vector2i& point, const int& fontWidth, const UIID& parent) {
@@ -98,7 +98,7 @@ namespace RoninEngine::UI
 	UIID GUI::Push_Button(const string& text, const Rect_t& rect, const UIID& parent) {
 		int id = register_ui(parent);
 		auto& data = ID(id);
-		data.prototype = findControl("button");
+        data.prototype = findControl(CBUTTON);
 		data.rect = rect;
 		data.text = text;
 		return id;
@@ -113,7 +113,7 @@ namespace RoninEngine::UI
 
 		auto& data = ID(id);
 
-		data.prototype = findControl("textRandom");
+        data.prototype = findControl(CTEXTRAND);
 		data.resources = (void*)format;
 		return id;
 	}
@@ -136,7 +136,7 @@ namespace RoninEngine::UI
 		UIID id = register_ui(parent);
 
 		auto& data = ID(id);
-		data.prototype = findControl("image");
+        data.prototype = findControl(CIMAGE);
 		data.rect = rect;
 		data.resources = texture;
 		return id;
@@ -150,7 +150,7 @@ namespace RoninEngine::UI
 		UIID id = register_ui(parent);
 
 		auto& data = ID(id);
-		data.prototype = findControl("image");
+        data.prototype = findControl(CIMAGE);
 		data.rect = rect;
 		data.resources = timeline;
 		return id;
@@ -163,7 +163,7 @@ namespace RoninEngine::UI
 		Timeline* timeline = NULL;
 		UIID id = register_ui(parent);
 		auto& data = ID(id);
-		data.prototype = findControl("textureAnimator");
+        data.prototype = findControl(CIMAGEANIMATOR);
 		data.rect = rect;
 		allocate_variable(timeline);
 		timeline->SetOptions(option);

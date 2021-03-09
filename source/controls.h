@@ -14,6 +14,18 @@ namespace RoninEngine::UI {
 
    typedef void (*ui_callback)(const uint8_t& id, void* userdata);
 
+
+   enum ControlType : std::uint8_t {
+      _UC,
+      CTEXT,
+      CBUTTON,
+      CEDIT,
+      CHSLIDER,
+      CVSLIDER,
+      CIMAGEANIMATOR,
+      CTEXTRAND,
+      CIMAGE
+   };
    struct RenderData {
          Rect_t rect;
          uint8_t options;
@@ -30,14 +42,12 @@ namespace RoninEngine::UI {
 
    list<UC*> nativeControls();
 
-   UC* findControl(const char* name);
+   UC* findControl(ControlType control);
+
 
    class UC {
       public:
-         UC();
-         [[deprecated]] virtual const char* class_name() {
-            return typeid(this).name();
-         }
+         virtual const ControlType id() const{ return ControlType::_UC; }
          virtual bool render_control(GUI* gui, RenderData& data,
                                      SDL_Renderer* render, bool* hover);
          virtual void destructor(void* resources);
@@ -45,7 +55,7 @@ namespace RoninEngine::UI {
 
    class CText : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const{ return CTEXT; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
@@ -53,7 +63,7 @@ namespace RoninEngine::UI {
 
    class CButton : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const{ return CBUTTON; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
@@ -61,7 +71,7 @@ namespace RoninEngine::UI {
 
    class CEdit : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const{ return CEDIT; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
@@ -69,7 +79,7 @@ namespace RoninEngine::UI {
 
    class CHorizontalSlider : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const{ return CHSLIDER; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
@@ -77,7 +87,7 @@ namespace RoninEngine::UI {
 
    class CVerticalSlider : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const{ return CVSLIDER; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
@@ -85,7 +95,7 @@ namespace RoninEngine::UI {
 
    class CImage : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const{ return CIMAGE; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
@@ -93,7 +103,7 @@ namespace RoninEngine::UI {
 
    class CImageAnimator : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const { return CIMAGEANIMATOR; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
@@ -101,7 +111,7 @@ namespace RoninEngine::UI {
 
    class CTextRandomizerDisplay : public UC {
       public:
-         [[deprecated]] const char* class_name() { return typeid(this).name(); }
+         const ControlType id() const{ return CTEXTRAND; }
          bool render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                              bool* hover);
          void destructor(void* resources);
