@@ -128,6 +128,7 @@ namespace RoninEngine::UI
 	}
 	UIID GUI::Push_DisplayRanomizer_Number(const int& min, const int& max, TextAlign textAlign, const UIID& parent) {
 		UIID id = Push_DisplayRandomizer(OnlyNumber, parent);
+        //TODO: min and max не реализованы.
 		return id;
 	}
 

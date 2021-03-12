@@ -13,7 +13,7 @@ namespace RoninEngine::Runtime {
             memset(this, 0, sizeof(Color));
 		}
 
-		explicit Color(const int32_t rgba) {
+        Color(const int32_t rgba) {
 			memcpy(this, &rgba, sizeof(Color));
 		}
 
@@ -22,16 +22,19 @@ namespace RoninEngine::Runtime {
 		}
 
 		explicit Color(const char* colorHex) {
-			//todo: hex to int
+
 		}
 
-		Color(const uint8_t r, const  uint8_t g, const  uint8_t b, const uint8_t a) {
+        explicit Color(const uint8_t r, const  uint8_t g, const  uint8_t b, const uint8_t a) {
 			this->r = r;
 			this->g = g;
 			this->b = b;
 			this->a = a;
 		}
 
+        operator int(){
+           return *reinterpret_cast<int*>(this);
+        }
 	};
 
 }

@@ -4,7 +4,9 @@
 namespace RoninEngine::Runtime {
 	float maxWorldScalar = 10000;
 
-	SDL_Color Gizmos::color;
+    Color Gizmos::color;
+    Vec2 Gizmos::offset;
+    float Gizmos::angle;
 
 	void Gizmos::DrawLine(Vec2 a, Vec2 b) {
 		if (!Camera::mainCamera())
@@ -133,4 +135,22 @@ namespace RoninEngine::Runtime {
 			++x;
 		}
 	}
+
+    void Gizmos::DrawTriangle(Vec2 pos, float base, float height){
+         Vec2 a, b;
+         a = b = pos;
+       //  base /= 2.f;
+         a.x -= base;
+         b.x += base;
+         pos.y += height;
+
+         //draw base
+         DrawLine(a, b);
+
+         //draw left side
+         DrawLine(a, pos);
+
+         //draw right side
+         DrawLine(b, pos);
+    }
 }

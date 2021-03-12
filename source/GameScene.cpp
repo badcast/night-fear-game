@@ -66,14 +66,14 @@ namespace RoninEngine
 		b_clearNav = this->ui->Push_Button("Очистить Nav Mesh", { 550, 25 }, g_buttons);
 		t_infoblock = this->ui->Push_Label("", { display.w / 2 - 130, display.h / 2 + 25 }, 5);
 		t_speedLabel = this->ui->Push_Label("", { 0, 70 }, 5);
-		gui->Register_Callback(ui_event_handler, NULL);
+        gui->Register_Callback(ui_event_handler, nullptr);
 	}
 
 
 	SpriteRenderer* target;
-	GameObject* testObj;
+    GameObject* testObj;
 	vector<tuple<Transform*, float, list<Neuron*>>> ais;
-	void GameScene::start() {
+    void GameScene::start() {
 		SpriteRenderer* spriteRenderer;
 		Sprite* spr;
 		GameObject* floor = CreateObject<GameObject>("Floor");
@@ -97,19 +97,6 @@ namespace RoninEngine
 		allocate_variable(navMesh, NavMeshMagnitude, NavMeshMagnitude);
 		navMesh->worldScale = Vec2::one * NavMeshWorldScale;
 
-		//navMesh->randomGenerate();
-		//auto a = navMesh->neuron(0, 0);
-		//a->lock(false);
-		//auto b = navMesh->neuron(NavMeshMagnitude - 1, NavMeshMagnitude - 1);
-		//b->lock(false);
-
-		//astar.SearchPath(navMesh, NavMethodRule::PlusMethod, a, b, &paths);
-		//navMesh->clear();
-		//astar.SearchPath(navMesh, NavMethodRule::SquareMethod, a, b, &paths);
-		//navMesh->clear();
-		//astar.SearchPath(navMesh, NavMethodRule::NavigationIntelegency, a, b, &paths);
-		//navMesh->clear();
-		
 		changeDrawPointPer = 0;
 		target = CreateObject<GameObject>()->Add_Component<SpriteRenderer>();
 		spr = ResourceManager::GetSprite(ResourceManager::GetTexture("target", FolderKind::GFX));
@@ -142,7 +129,7 @@ namespace RoninEngine
 		{
 
 			string s = input::get_key(SDL_SCANCODE_LSHIFT) ? "Speed x2" : "Speed x1";
-			s.push_back('; ');
+            s.push_back(';');
 			s += "Count ";
 			s += to_string(ais.size());
 			s += " Active ";
@@ -333,7 +320,8 @@ namespace RoninEngine
 			}
 		}
 
-
+        Gizmos::color = 0xff00ff00;
+        Gizmos::DrawTriangle(testObj->transform()->position(), 1.f, 1.f);
 		//Gizmos::DrawLine(testObj->transform()->position(), testObj->transform()->position() + testObj->transform()->forward() * 2);
 	}
 

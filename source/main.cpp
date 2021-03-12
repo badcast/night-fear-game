@@ -121,12 +121,6 @@ int main(int /*argc*/, char** /*argv[]*/) {
    init_graphics();
    init_audio();
 
-   int sizeN = std::pow(1024, 3) * 4;  // GiB
-   void* ptr = SDL_malloc(sizeN);
-   SDL_memset(ptr, 0xff, sizeN);
-   std::memset(ptr, 0, sizeN);
-   //
-   SDL_free(ptr);
    goGame();
    quit();
    return 0;

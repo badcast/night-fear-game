@@ -15,7 +15,6 @@ namespace RoninEngine::Runtime
 	private:
 		int flag;
 		::SDL_Texture* m_native;
-		void destroyNative();
 		char* raw_namePtr;
 	public:
 
@@ -46,9 +45,7 @@ namespace RoninEngine::Runtime
 		const void color(const Color value);
 
 		void lockTexture(const SDL_Rect* rect, void** pixels, int* pitch);
-		void unlockTexture();
-
-		void destroy();
+        void unlockTexture();
 
 		SDL_Texture* native();
 		const SDL_Texture* cnative();

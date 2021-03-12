@@ -68,20 +68,20 @@ class ResourceManager {
     [[deprecate]] static void Unload(SDL_Cursor* unload);
     [[deprecate]] static void Unload(SDL_Surface* unload);
 
-    static int load_atlas(Atlas* source);
 
+    template<typename T>
+    static T* load(string name, int *id);
+
+    static int load_atlas(Atlas** source);
+    static int load_texture(Texture **texture);
     static Atlas* get_atlas(int id);
     static Sprite get_sprite(int id);
-
-    static string& get_string(int id);
-    static std::int64_t& get_number(int id);
-    static double& get_real(int id);
-    static SDL_Cursor* get_cursor(int id);
-    static Texture* get_texture(int id);
 
     static SDL_Surface* get_surface(int id);
 
     static void* get_pointer(int id);
+
+    static int free_resource(int id);
 
     static int totaln();
     static int total_memory();

@@ -33,19 +33,16 @@ namespace RoninEngine::Runtime {
 	}
 
 	Texture::~Texture() {
+       if (raw_namePtr)
+           SDL_free(raw_namePtr);
+
 		if (flag == 0x1)
-			destroyNative();
+           if (m_native)
+           {
+               SDL_DestroyTexture(m_native);
+               m_native = nullptr;
+           }
 
-		if (raw_namePtr)
-			SDL_free(raw_namePtr);
-	}
-
-	void Texture::destroyNative() {
-		if (m_native)
-		{
-			SDL_DestroyTexture(m_native);
-            m_native = nullptr;
-		}
 	}
 
 	const bool Texture::valid() {
@@ -73,7 +70,7 @@ namespace RoninEngine::Runtime {
 	}
 
 	const SDL_BlendMode Texture::blendMode() {
-		::SDL_BlendMode bmode;
+        SDL_BlendMode bmode;
 
 		if (SDL_GetTextureBlendMode(m_native, &bmode))
 			RoninApplication::back_fail();
@@ -117,16 +114,11 @@ namespace RoninEngine::Runtime {
 	}
 
 	void Texture::lockTexture(const SDL_Rect* rect, void** pixels, int* pitch) {
-
+      SDL_LockTexture(m_native, rect, pixels, pitch);
 	}
 	void Texture::unlockTexture() {
-
+      SDL_UnlockTexture(m_native);
 	}
-
-	void Texture::destroy() {
-		destroyNative();
-	}
-
 
 	SDL_Texture* Texture::native() {
 		return m_native;

@@ -345,7 +345,7 @@ namespace RoninEngine::AIPathFinder
 		case RoninEngine::AIPathFinder::NavigationIntelegency:
 		{
 			// TODO: Написать интелектуальный пойск путей для достижения лучших результатов. 
-			// TODO: Приводить вектор направление для хорошего достижения.
+            // TODO: Приводить вектор направление для лучшего достижения.
 			// TODO: Выводить оптимальный результат, чтобы было меньше итерации
 			// TODO: Вывести итог и анализ скорости.
 			c = GetMatrixMethod(NavMethodRule::SquareMethod, &matrixH, &matrixV);

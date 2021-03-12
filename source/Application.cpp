@@ -65,7 +65,7 @@ namespace RoninEngine {
       SDL_SetCursor(ResourceManager::GetCursor("cursor", {1, 1}));
 
       //Загружаем главное меню
-      LoadScene(allocate_class<MainMenu>());
+      LoadScene(allocate_class<GameScene>());
 
       Levels::Level_Init();
    }
