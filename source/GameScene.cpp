@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Gizmos.h"
 #include "NavMesh.h"
+#include "GameScene.h"
 
 using namespace RoninEngine::Runtime;
 using namespace RoninEngine::AIPathFinder;
@@ -92,7 +93,7 @@ namespace RoninEngine
 		spriteRenderer->tileRenderPresent = SpriteRenderTile::Place;
 		spriteRenderer->size = { NavMeshMagnitude, NavMeshMagnitude };
 		spriteRenderer->size *= NavMeshWorldScale;
-		spriteRenderer->setSprite(spr = allocate_class<Sprite>(ResourceManager::GetTexture("concrete", FolderKind::TEXTURES)));
+        spriteRenderer->setSprite(spr = ResourceManager::GetSprite(ResourceManager::GetTexture("concrete", FolderKind::TEXTURES)));
 
 		allocate_variable(navMesh, NavMeshMagnitude, NavMeshMagnitude);
 		navMesh->worldScale = Vec2::one * NavMeshWorldScale;
@@ -103,11 +104,13 @@ namespace RoninEngine
 		target->setSprite(spr);
 		target->zOrder = 1;
 		list<Neuron*> c;
-		for (size_t i = 0; i < InitPopuplation; ++i)
+
+        for (size_t i = 0; i < Mathf::Min(MaxPopulation,InitPopuplation); ++i)
 		{
 			auto t = Instantiate(testObj)->transform();
 			t->position(navMesh->PointToWorldPosition(Random::range(0, NavMeshMagnitude), Random::range(0, NavMeshMagnitude)));
-			ais.emplace_back(tuple(t, 0, c));
+
+            ais.emplace_back(std::make_tuple(t, 0, c));
 		}
 	}
 
@@ -282,7 +285,7 @@ namespace RoninEngine
 			}
 		}
 
-		//player->transform()->position(Vec2::MoveTowards(player->transform()->position(), from, 0.085f));
+        player->transform()->position(Vec2::MoveTowards(player->transform()->position(), from, 0.085f));
 	}
 
 	void GameScene::lateUpdate() {

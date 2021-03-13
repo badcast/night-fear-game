@@ -37,7 +37,7 @@ namespace RoninEngine::Runtime {
    }
    void Transform::LookAt(Vec2 target) { LookAt(target, Vec2::up); }
    void Transform::LookAt(Vec2 target, Vec2 axis) {
-      _angle = Vec2::Angle(axis, target - this->point) * Rad2Deg;
+      _angle = Vec2::Angle(axis, target - this->point) * Mathf::Rad2Deg;
       // normalize
       if (axis.x == 1) {
          if (point.y < target.y) _angle = -_angle;
@@ -55,7 +55,7 @@ namespace RoninEngine::Runtime {
 
    void Transform::LookAtLerp(Vec2 target, float t) {
       Vec2 axis = Vec2::up;
-      float a = Vec2::Angle(axis, target - this->point) * Rad2Deg;
+      float a = Vec2::Angle(axis, target - this->point) * Mathf::Rad2Deg;
       // normalize
       if (axis.x == 1) {
          if (point.y < target.y) a = -a;
@@ -79,7 +79,15 @@ namespace RoninEngine::Runtime {
       LookAt(target->point, axis);
    }
 
-   void Transform::child_has(Transform* child) {}
+   void Transform::as_first_child(){
+      if(this->_parent == nullptr)
+         return;
+      hierarchy_sibiling(_parent, 0); // 0 is first
+   }
+
+   void Transform::child_has(Transform* child) {
+
+   }
    void Transform::child_append(Transform* child) {
       Transform* t = this;
       hierarchy_append(t, child);
@@ -91,7 +99,7 @@ namespace RoninEngine::Runtime {
 
    const Vec2 Transform::forward() {
       static Vec2 axis = Vec2::up;
-      Vec2 result = Vec2::RotateUp(_angle * Deg2Rad, axis);
+      Vec2 result = Vec2::RotateUp(_angle * Mathf::Deg2Rad, axis);
       result.Normalize();
       return result;
    }
@@ -113,7 +121,7 @@ namespace RoninEngine::Runtime {
    }
 
    const Vec2 Transform::transformDirection(Vec2 direction) {
-      return Vec2::RotateUp(_angle * Deg2Rad, direction);
+      return Vec2::RotateUp(_angle * Mathf::Deg2Rad, direction);
    }
 
    const Vec2 Transform::transformDirection(float x, float y) {
@@ -121,7 +129,7 @@ namespace RoninEngine::Runtime {
    }
 
    const Vec2 Transform::rotate(Vec2 vec, Vec2 normal) {
-      normal = Vec2::RotateUp(_angle * Deg2Rad, normal);
+      normal = Vec2::RotateUp(_angle * Mathf::Deg2Rad, normal);
       normal.x *= vec.x;
       normal.y *= vec.y;
       return normal;
@@ -181,11 +189,13 @@ namespace RoninEngine::Runtime {
    }
    void Transform::hierarchy_append(Transform* from, Transform* off) {
       auto iter = find_if(begin(from->hierarchy), end(from->hierarchy),
-                          [&off](Transform* of) { return of == off; });
+                          [off](Transform* of) { return of == off; });
       if (iter == end(from->hierarchy)) {
          off->_parent = from;
-         from->hierarchy.push_back(off);
+         from->hierarchy.emplace_back(off);
       }
    }
-   void Transform::hierarchy_sibiling(Transform* from, int index) {}
+   void Transform::hierarchy_sibiling(Transform* from, int index) {
+
+   }
 }  // namespace RoninEngine::Runtime

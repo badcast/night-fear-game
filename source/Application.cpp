@@ -41,7 +41,10 @@ namespace RoninEngine {
    }
 
    void RoninApplication::LoadGame() {
+      ResourceManager::system_capture();
+
       //Загружаем данные и готовим программу к запуску
+
       ResourceManager::CheckResources();
 
       ResourceManager::ResourcesInitialize();
@@ -78,6 +81,10 @@ namespace RoninEngine {
       }
 
       m_sceneLoaded = true;
+
+      //capture memory as GC
+      ResourceManager::gc_capture();
+
       m_scene->awake();
    }
 
@@ -110,6 +117,7 @@ namespace RoninEngine {
    void RoninApplication::ScreenShot(const char* filename) {
       SDL_Surface* surf = ScreenShot();
       IMG_SavePNG(surf, filename);
+      SDL_FreeSurface(surf);
    }
 
    SDL_DisplayMode RoninApplication::display() {

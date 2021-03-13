@@ -40,6 +40,8 @@ namespace RoninEngine::Runtime
 		void LookAtLerp(Vec2 target, float t);
 		void LookAtLerp(Transform* target, float t);
 
+        void as_first_child();
+
 		void child_has(Transform* child);
 		void child_append(Transform* child);
 		void child_remove(Transform* child);

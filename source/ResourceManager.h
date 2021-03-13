@@ -5,18 +5,6 @@
 using namespace std;
 
 namespace RoninEngine::Runtime {
-   enum Resourceid : std::uint8_t{
-      RESERVED0,
-      RESERVED1,
-      RESERVED2,
-      RESERVED3,
-      RESERVED4,
-      RESERVED5,
-      RESERVED6,
-      RESERVED7,
-      RID_LOCALE_RU,
-      RID_LOCALE_EN
-   };
 
 class ResourceManager {
     friend class ::RoninEngine::RoninApplication;
@@ -69,13 +57,16 @@ class ResourceManager {
     [[deprecate]] static void Unload(SDL_Surface* unload);
 
 
+    static void system_capture();
+    static void gc_capture();
+
     template<typename T>
-    static T* load(string name, int *id);
+    static T* load(string && name, int *id);
 
     static int load_atlas(Atlas** source);
-    static int load_texture(Texture **texture);
+    static int load_texture(Texture **texture, string && textureName);
     static Atlas* get_atlas(int id);
-    static Sprite get_sprite(int id);
+    static Sprite* get_sprite(int id);
 
     static SDL_Surface* get_surface(int id);
 

@@ -16,7 +16,7 @@ namespace RoninEngine {
 
                if (iter != end(container)) return dynamic_cast<T*>(*iter);
 
-               return NULL;
+               return nullptr;
             }
 
             static T* getComponent(GameObject* obj);

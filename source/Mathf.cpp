@@ -4,21 +4,6 @@
 using namespace std;
 
 namespace RoninEngine {
-
-	float FloatMinNormal = 1.175494E-38;
-	float FloatMinDenormal = 1.401298E-45;
-	bool IsFlushToZeroEnabled = FloatMinNormal == 0;
-	float Epsilon = (!IsFlushToZeroEnabled) ? FloatMinDenormal : FloatMinNormal;
-	long double LongPI = 3.14159265358979323846264338327950288;
-	float PI = static_cast<float>(LongPI);
-	float Infinity = 1e+300 * 1e+300;
-	float NegativeInfinity = -Infinity;
-	float Deg2Rad = 0.01745329;
-	float Rad2Deg = 180 / PI;
-	constexpr int RLevelDigits = 10000;
-
-	static int _rseed = 0;
-
 	//get random value
 	int getRVal() {
 		int value;
@@ -35,22 +20,17 @@ namespace RoninEngine {
 	}
 
 	int Random::range(int min, int max) {
-
-		if (min > max)
-			return 0;
 		int result = Mathf::number(value() * (max - min)) + min;
 		return result;
 	}
 
 	float Random::range(float min, float max) {
-		if (min > max)
-			return 0;
 		float result = value() * (max - min) + min;
 		return result;
 	}
 
 	float Random::value() {
-		float result = getRVal() * 4.6566128752458E-10;
+        float result = getRVal() * static_cast<float>(4.6566128752458E-10);
 		return result;
 	}
 
@@ -164,6 +144,14 @@ namespace RoninEngine {
 	float Mathf::exp(float x) {
 		return ::expf(x);
 	}
+
+    float Mathf::pow2(float x){
+         return ::powf(x, 2);
+    }
+
+    int Mathf::pow2(int x){
+      return ::pow(x, 2);
+    }
 
 	int Mathf::pow(int x, int y) {
 		return ::pow(x, y);

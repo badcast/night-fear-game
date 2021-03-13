@@ -19,14 +19,25 @@ map<string, Mix_Music*>* _assocLoadedMusic;
 vector<Texture*>* _unusedTextures;
 vector<Sprite*>* _usedSprites;
 
+enum MemoryCapture : std::int8_t { SystemManagement, SceneManagement };
+
+struct MemoryBlock {
+    int memoryType;
+    void* memory;
+};
+
+MemoryCapture memoryCapture = SystemManagement;
+
+list<MemoryBlock> gc_memory[2];
+
 namespace RoninEngine::Runtime {
 template <typename T>
-constexpr T* _paste_init(T* m) {
+[[deprecated]] constexpr T* _paste_init(T* m) {
     return new (m) T();
 }
 
 template <typename T>
-constexpr T* _deinit(T* m) {
+[[deprecated]] constexpr T* _deinit(T* m) {
     m->~T();
     return m;
 }
@@ -88,16 +99,8 @@ void ResourceManager::ResourcesRelease() {
     SDL_free(reinterpret_cast<void*>(_assocMultiFiles));
 }
 
-template GameObject* ResourceManager::load<GameObject>(string,int*);
-
-template<typename T>
-T* ResourceManager::load(string name, int *id){
-
-}
-
 void ResourceManager::LoadImages(const char* filename) {
     ObjectParser parser;
-    SDL_Surface* surf;
 
     parser.Deserialize(filename);
     auto data = parser.GetContainer();
@@ -123,7 +126,7 @@ void ResourceManager::LoadImages(const char* filename) {
 }
 void ResourceManager::UnloadUnused() { UnloadAll(false); }
 void ResourceManager::UnloadAll(bool immediate) {
-    // TODO: реализовать очистку _assocSingleFile и других
+    // TO-DO: реализовать очистку _assocSingleFile и других
 
     for (auto xx = begin(*_assocMultiCacheTextures);
          xx != end(*_assocMultiCacheTextures); ++xx) {
@@ -399,4 +402,11 @@ void ResourceManager::Unload(SDL_Cursor* unload) {
     // todo: для курсоров
 }
 void ResourceManager::Unload(SDL_Surface* unload) { --unload->refcount; }
+
+void ResourceManager::system_capture() {
+    memoryCapture = MemoryCapture::SystemManagement;
+}
+void ResourceManager::gc_capture() {
+    memoryCapture = MemoryCapture::SystemManagement;
+}
 }  // namespace RoninEngine::Runtime

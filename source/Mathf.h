@@ -8,18 +8,6 @@ namespace RoninEngine {
 
 	struct Vec2;
 
-	extern float FloatMinNormal;
-	extern float FloatMinDenormal;
-	extern bool IsFlushToZeroEnabled;
-	extern float Epsilon;
-
-	extern long double LongPI;
-	extern float PI;
-	extern float Infinity;
-	extern float NegativeInfinity;
-	extern float Deg2Rad;
-	extern float Rad2Deg;
-
 	class Random {
 	public:
 		static void srand(int seed);
@@ -38,6 +26,18 @@ namespace RoninEngine {
 	class Mathf
 	{
 	public:
+        static constexpr float FloatMinNormal = 1.175494E-38;
+        static constexpr float FloatMinDenormal = 1.401298E-45;
+        static constexpr bool IsFlushToZeroEnabled = FloatMinNormal == 0;
+        static constexpr float Epsilon = (!IsFlushToZeroEnabled) ? FloatMinDenormal : FloatMinNormal;
+        static constexpr long double LongPI = 3.14159265358979323846264338327950288;
+        static constexpr float PI = static_cast<float>(LongPI); // calc PI formula l / d (Length circle div diameter)
+        static constexpr float Infinity = 1e+600;
+        static constexpr float NegativeInfinity = -Infinity;
+        static constexpr float Deg2Rad = 0.01745329;
+        static constexpr float Rad2Deg = 180 / PI;
+        static constexpr int RLevelDigits = 10000;
+
 		static bool Approximately(float a, float b);
 
 		static float cos(float x);
@@ -88,6 +88,10 @@ namespace RoninEngine {
 		static int number(float x);
 
 		static float exp(float x);
+
+        static float pow2(float x);
+
+        static int pow2(int x);
 
 		static int pow(int x, int y);
 
