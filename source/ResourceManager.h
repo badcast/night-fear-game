@@ -48,17 +48,16 @@ class GC {
 
     template <typename T, typename... Args>
     static T *gc_push_lvalue(T *&lvalue_pointer, Args &&...arguments) {
-        return lvalue_pointer = reinterpret_cast<T *>(gc_push<T>(std::forward<Args>(arguments)...));
+        return lvalue_pointer = gc_push<T>(std::forward<Args&&>(arguments)...);
     }
 
-    template <typename T, typename... Args,
-              typename X = typename std::conditional<is_base_of<Object, T>::value, Object, T>::type>
-    static T *gc_push(Args &&...arguments);
+    template <typename T, typename... Args>
+    static T *gc_push(Args ...arguments);
 
     template <typename T>
     static bool valid_type();
 
-    static void gc_xfree(void *memory);
+    static void gc_free(void *memory);
 
     static void *gc_realloc(void *mem, std::size_t size);
 

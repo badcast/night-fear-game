@@ -79,7 +79,7 @@ NavMesh::NavMesh(size_t Width, size_t Height) {
 
 NavMesh::~NavMesh() {
   delete[] this->segments;
-  GC::gc_xfree(this->pmemory);
+  GC::gc_free(this->pmemory);
 }
 
 void NavMesh::randomGenerate() {

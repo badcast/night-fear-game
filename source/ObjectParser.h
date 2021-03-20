@@ -11,6 +11,7 @@ namespace RoninEngine {
 		char space = ' ';
 		char nodePathBreaker = '/';
 		char commentLine[3] = "//";
+        char left_seperator = '\\';
 		char eof_segment = '\n';
 		char format_string = '\"';
 		char true_string[5]{ "true" };

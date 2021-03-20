@@ -16,17 +16,17 @@ static int Get_FormatType(const char* c, void** mem, DataType& out) {
     if (*c == syntax.format_string) {
         ++temp;
         for (; c[temp] != syntax.format_string; ++temp)
-            if (c[temp] == '\\' && c[temp + 1] == syntax.format_string) ++temp;
+            if (c[temp] == syntax.left_seperator && c[temp + 1] == syntax.format_string) ++temp;
         --temp;
         if (temp) {
             if (mem) {
                 std::string str = std::string();
                 str.reserve(temp);
                 for (size_t i = 0; i < temp; ++i) {
-                    if (c[i + 1] == '\\') ++i;
+                    if (c[i + 1] == syntax.left_seperator) ++i;
                     str.push_back(c[i + 1]);
                 }
-                *mem = (void*)GC::gc_push<std::string>(str);
+                *mem = reinterpret_cast<void*>(GC::gc_push<std::string>(str));
             }
             out = DataType::String;
         } else

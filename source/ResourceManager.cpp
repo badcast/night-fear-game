@@ -11,16 +11,16 @@ using namespace RoninEngine::UI;
 using namespace RoninEngine::AIPathFinder;
 
 // Pre declaration
-#define DECL_OBJECT(X)                               \
-    template X *GC::gc_push<X>();                    \
-    template X *GC::gc_push<X>(const std::string &); \
-    template bool GC::gc_unload<X>(X *);             \
-    template std::list<X> *GC::gc_push<std::list<X>>();
+#define DECL_OBJECT(X)                                  \
+    template X *GC::gc_push<X>();                       \
+    template X *GC::gc_push<X>(const std::string &);    \
+    template std::list<X> *GC::gc_push<std::list<X>>(); \
+    template bool GC::gc_unload<X>(X *);
 
 template MainMenu *GC::gc_alloc_scene<MainMenu>();
 template GameScene *GC::gc_alloc_scene<GameScene>();
 
-//---------------------- GC PUSHING & UNLOADING
+//---------------------- GC PUSHING & UNLOADING ----------------------
 DECL_OBJECT(Object)
 DECL_OBJECT(GameObject)
 DECL_OBJECT(SpriteRenderer)
@@ -31,10 +31,21 @@ DECL_OBJECT(Player)
 DECL_OBJECT(Transform)
 DECL_OBJECT(Component)
 
+DECL_OBJECT(char)
+DECL_OBJECT(short)
+DECL_OBJECT(int)
+DECL_OBJECT(float)
+DECL_OBJECT(double)
+DECL_OBJECT(long double)
+DECL_OBJECT(long)
+DECL_OBJECT(long long)
+
 template NavMesh *GC::gc_push<NavMesh>();
 template NavMesh *GC::gc_push<NavMesh>(const int &, const int &);
+template NavMesh *GC::gc_push<NavMesh>(int, int);
 template std::list<std::pair<Object *, float>> *GC::gc_push<std::list<std::pair<Object *, float>>>();
-template GUI *GC::gc_push<GUI>();
+template GUI *GC::gc_push<GUI>(Scene*);
+template Font_t *GC::gc_push<Font_t>();
 
 template bool GC::gc_unload<Scene>(Scene *);
 template bool GC::gc_unload<NavMesh>(NavMesh *);
@@ -175,7 +186,7 @@ bool gc_native_free(MemoryStick *stick) {
             result = false;
     }
 
-    if (result && stick->memoryType > SDL_TYPE_MAX_INDEX) GC::gc_xfree(stick->memory);
+    if (result && stick->memoryType > SDL_TYPE_MAX_INDEX) GC::gc_free(stick->memory);
 
     stick->memoryType = 0;
 
@@ -319,7 +330,7 @@ void GC::CheckResources() {
         strcat(membuf, "\"Data\" is not found");
         RoninApplication::fail(membuf);
     }
-    GC::gc_xfree(membuf);
+    GC::gc_free(membuf);
 }
 
 void *GC::GoMemoryCache(void *cacheToFree) {
@@ -465,12 +476,12 @@ void GC::continue_gc() {
 
 void *GC::gc_malloc(std::size_t size) { return std::malloc(size); }
 
-template <typename T, typename... Args, typename X>
-T *GC::gc_push(Args &&...arguments) {
+template <typename T, typename... Args>
+T *GC::gc_push(Args ...arguments) {
     return nullptr;
 }
 
-void GC::gc_xfree(void *memory) { std::free(memory); }
+void GC::gc_free(void *memory) { std::free(memory); }
 
 void *GC::gc_realloc(void *mem, std::size_t size) { return std::realloc(mem, size); }
 

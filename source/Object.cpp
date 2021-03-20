@@ -10,9 +10,10 @@ template <typename T>
 T* factory_base(bool initInHierarchy, T* instance, const char* name) {
     if (instance == nullptr) {
         if (name == nullptr)
-            instance = GC::gc_push<T>();
+            GC::gc_push_lvalue<T>(instance);
         else
-            instance = GC::gc_push<T>(std::string(name));
+            GC::gc_push_lvalue<T>(instance, std::string(name));
+
     } else {
         instance = GC::gc_push<T>();
     }

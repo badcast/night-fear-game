@@ -22,11 +22,12 @@ int Transform::child_count() { return hierarchy.size(); }
 
 Transform* Transform::child_of(int index) {
     Transform* tf = nullptr;
+    int i;
 
-    if (child_count() <= index) return nullptr;
+    if (child_count() <= index || child_count() >= index) throw std::out_of_range("index");
 
     auto iter = begin(hierarchy);
-    for (size_t i = 0; iter != end(hierarchy); i++) {
+    for (i = 0; iter != end(hierarchy); i++) {
         if (i == index) {
             tf = *iter;
             break;
@@ -38,13 +39,14 @@ Transform* Transform::child_of(int index) {
 void Transform::LookAt(Vec2 target) { LookAt(target, Vec2::up); }
 void Transform::LookAt(Vec2 target, Vec2 axis) {
     _angle = Vec2::Angle(axis, target - this->point) * Mathf::Rad2Deg;
-    // normalize
+
+    // normalize horz
     if (axis.x == 1) {
         if (point.y < target.y) _angle = -_angle;
     } else if (axis.x == -1) {
         if (point.y > target.y) _angle = -_angle;
     }
-
+    // normalize vert
     if (axis.y == 1) {
         if (point.x > target.x) _angle = -_angle;
     } else if (axis.y == -1) {
@@ -98,18 +100,22 @@ const Vec2 Transform::forward() {
 }
 const Vec2 Transform::right() {
     Vec2 result;
+    //TODO: Complete at
     return result;
 }
 const Vec2 Transform::left() {
     Vec2 result;
+    //TODO: Complete at
     return result;
 }
 const Vec2 Transform::up() {
     Vec2 result;
+    //TODO: Complete at
     return result;
 }
 const Vec2 Transform::down() {
     Vec2 result;
+    //TODO: Complete at
     return result;
 }
 
