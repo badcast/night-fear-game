@@ -8,13 +8,13 @@ Neuron::Neuron(const Disposition &p) : Neuron(p.x, p.y) {}
 Neuron::Neuron(const int &x, const int &y) {
   this->x = x;
   this->y = y;
-  this->_data = NULL;
+  this->_data = nullptr;
   this->m_lock = false;
 
 #ifdef _DEBUG
-  this->p_flag = NULL;
-  this->p_h = NULL;
-  this->p_cost = NULL;
+  this->p_flag = nullptr;
+  this->p_h = nullptr;
+  this->p_cost = nullptr;
 #endif // _DEBUG
 }
 
@@ -79,7 +79,7 @@ NavMesh::NavMesh(size_t Width, size_t Height) {
 
 NavMesh::~NavMesh() {
   delete[] this->segments;
-  GC::gc_free(this->pmemory);
+  GC::gc_xfree(this->pmemory);
 }
 
 void NavMesh::randomGenerate() {
@@ -112,7 +112,7 @@ void NavMesh::clear(bool clearLockedData) {
 }
 
 Neuron *NavMesh::neuron(const int &x, const int &y) {
-  Neuron *result = NULL;
+  Neuron *result = nullptr;
   if (x >= 0 && x < widthSpace && y >= 0 && y < heightSpace)
     result = &segments[x * heightSpace + y];
   return result;
@@ -161,7 +161,7 @@ NavResult NavMesh::find(NavMethodRule method, Neuron *firstNeuron,
   pinfo.RelativePaths = result;
   pinfo.status = NavStatus::Undefined;
 
-  if (firstNeuron == NULL || lastNeuron == NULL || result == NULL)
+  if (firstNeuron == nullptr || lastNeuron == nullptr || result == nullptr)
     return pinfo;
 
   if (firstNeuron->locked() || lastNeuron->locked()) {
@@ -223,7 +223,7 @@ NavResult NavMesh::find(NavMethodRule method, Neuron *firstNeuron,
     finded.clear(); // clear data
   }
 
-  Neuron *pathIsNot = NULL;
+  Neuron *pathIsNot = nullptr;
   current = lastNeuron;
   result->clear();
   result->emplace_back(current);
@@ -307,7 +307,7 @@ void AlgorithmUtils::AvailPoints(NavMesh *map, NavMethodRule method,
                                  Neuron *arrange, Neuron *target,
                                  list<Neuron *> *pathTo, std::size_t maxCount,
                                  int filterFlag) {
-  Neuron *it = NULL;
+  Neuron *it = nullptr;
   int i = 0, c;
   int8_t *matrixH;
   int8_t *matrixV;

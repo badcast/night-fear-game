@@ -58,7 +58,7 @@ namespace RoninEngine::Runtime
 
 				//SDL_RenderCopyF(renderer, renderInfo.texture, (SDL_Rect*)&renderInfo.src, (SDL_FRect*)&dst);
 				SDL_RenderCopyExF(renderer, renderInfo.texture->native(), (SDL_Rect*)&renderInfo.src, (SDL_FRect*)&dst, renderSource->transform()->_angle,
-					NULL, SDL_RendererFlip::SDL_FLIP_NONE);
+					nullptr, SDL_RendererFlip::SDL_FLIP_NONE);
 			}
 		}
 		//Render Lights
@@ -86,7 +86,7 @@ namespace RoninEngine::Runtime
 
 				//SDL_RenderCopyF(renderer, renderInfo.texture, (SDL_Rect*)&renderInfo.src, (SDL_FRect*)&dst);
 				SDL_RenderCopyExF(renderer, renderInfo.texture->native(), (SDL_Rect*)&renderInfo.src, (SDL_FRect*)&dst, lightSource->transform()->_angle - transform()->_angle,
-					NULL, SDL_RendererFlip::SDL_FLIP_NONE);
+					nullptr, SDL_RendererFlip::SDL_FLIP_NONE);
 			}
 		}
 

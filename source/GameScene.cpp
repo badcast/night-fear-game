@@ -30,13 +30,13 @@ std::uint8_t b_add, b_sub;
 std::uint8_t t_infoblock;
 std::uint8_t t_speedLabel;
 RoninEngine::UI::GUI *gui;
-AIPathFinder::NavMesh *navMesh = NULL;
+AIPathFinder::NavMesh *navMesh = nullptr;
 list<AIPathFinder::Neuron *> paths;
 
 Vec2 from, to;
 bool showGizmosLayer = false;
 int arranged = 0;
-static Neuron *last = NULL;
+static Neuron *last = nullptr;
 float changeDrawPointPer;
 decltype(paths.end()) _endIter;
 Player *player;
@@ -123,7 +123,7 @@ void GameScene::start() {
   GC::gc_alloc_sprite_with(&spr, texture);
   spriteRenderer->setSprite(spr);
 
-  GC::gc_push(navMesh, NavMeshMagnitude, NavMeshMagnitude);
+  GC::gc_push_lvalue(navMesh, NavMeshMagnitude, NavMeshMagnitude);
   navMesh->worldScale = Vec2::one * NavMeshWorldScale;
 
   changeDrawPointPer = 0;
@@ -365,9 +365,9 @@ void GameScene::onDrawGizmos() {
 }
 
 void GameScene::onUnloading() {
-  testObj = NULL;
+  testObj = nullptr;
   to = Vec2::zero;
-  last = NULL;
+  last = nullptr;
   GC::gc_unload(navMesh);
   paths.clear();
   ais.clear();

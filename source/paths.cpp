@@ -1,7 +1,7 @@
 #include "pch.h"
 
-char* basePath = NULL;
-char* prefPath = NULL;
+char* basePath = nullptr;
+char* prefPath = nullptr;
 namespace RoninEngine {
 
 static const char seperator =

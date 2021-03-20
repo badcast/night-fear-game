@@ -45,7 +45,7 @@ void goGame() {
   /**/ char _title[128];
   SDL_WindowFlags wndFlags;
 
-  SDL_LogSetOutputFunction(log_handler, NULL);
+  SDL_LogSetOutputFunction(log_handler, nullptr);
 
   RoninApplication::Init();
   //Загружаем главное меню

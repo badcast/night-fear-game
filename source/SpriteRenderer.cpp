@@ -8,8 +8,8 @@ namespace RoninEngine::Runtime
 	SpriteRenderer::SpriteRenderer() : SpriteRenderer("Sprite Renderer") {}
 
 	SpriteRenderer::SpriteRenderer(const string& name) : Renderer(name) {
-		sprite = NULL;
-		texture = NULL;
+		sprite = nullptr;
+		texture = nullptr;
 		flip = Vec2::one;
 		SpriteRenderType renderType = SpriteRenderType::Simple;
 		SpriteRenderTile tileRenderPresent = SpriteRenderTile::Fixed;
@@ -36,7 +36,7 @@ namespace RoninEngine::Runtime
 	}
 
 	void SpriteRenderer::setSprite(Sprite* sprite) {
-		if (this->sprite == NULL && (!this->size.x || !this->size.y))
+		if (this->sprite == nullptr && (!this->size.x || !this->size.y))
 		{
 			this->size.x = sprite->width() / squarePerPixels;
 			this->size.y = sprite->height() / squarePerPixels;
@@ -90,7 +90,7 @@ namespace RoninEngine::Runtime
 				{
                     GC::gc_alloc_texture(&texture, _srcRect.w, _srcRect.h, SDL_PIXELFORMAT_RGBA8888, SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET);
 					
-					if (texture == NULL)
+					if (texture == nullptr)
 						RoninApplication::fail("Texture create fail");
 
 					SDL_SetRenderTarget(render->renderer, texture->native());
@@ -145,7 +145,7 @@ namespace RoninEngine::Runtime
 						break;
 					}
 					}
-					SDL_SetRenderTarget(render->renderer, NULL);
+					SDL_SetRenderTarget(render->renderer, nullptr);
 				}
 			}
 			break;

@@ -2,11 +2,11 @@
 #include <stdlib.h>
 
 namespace RoninEngine::UI {
-Font_t *pfont = NULL;
+Font_t *pfont = nullptr;
 uint8_t VH[]{0, 32, 16, 2, 34, 18, 1, 33, 17};
 
-SDL_Texture *pfontTexture = NULL;
-SDL_Texture *pfontTextureHilight = NULL;
+SDL_Texture *pfontTexture = nullptr;
+SDL_Texture *pfontTextureHilight = nullptr;
 
 void Initialize_Fonts(bool optimizeDeffects) {
 
@@ -14,7 +14,7 @@ void Initialize_Fonts(bool optimizeDeffects) {
     throw std::runtime_error("Re initialization fail");
   }
 
-  if (allocate_variable(pfont) == NULL)
+  if (GC::gc_push_lvalue(pfont) == nullptr)
     RoninApplication::fail_OutOfMemory();
 
   if ((pfont->surfNormal = GC::GetSurface("font-arealike")) == nullptr)
@@ -158,7 +158,7 @@ void Render_String(SDL_Renderer *renderer, Rect_t rect, const char *text,
   uint16_t pos;
   SDL_Rect dst = *(SDL_Rect *)&rect;
   point_t fontSize = pfont->fontSize + point_t(1, 1) * (pfontWidth - fontWidth);
-  SDL_Texture *targetpfont = NULL;
+  SDL_Texture *targetpfont = nullptr;
   int textWidth = Single_TextWidth_WithCyrilic(text, pfontWidth);
 
   if (!rect.w)

@@ -70,7 +70,7 @@ namespace RoninEngine::Runtime
 				if (zN)
 					target = &renderers[--zN];
 				else
-					target = NULL;
+                    target = nullptr;
 			}
 		}
 

@@ -120,7 +120,7 @@ namespace RoninEngine
 
 		static void Late_Update()
 		{
-			const uint8_t* s = SDL_GetKeyboardState(NULL);
+			const uint8_t* s = SDL_GetKeyboardState(nullptr);
 			if (s[SDL_SCANCODE_D] || s[SDL_SCANCODE_RIGHT])
 				m_axis.x = 1;
 			else if (s[SDL_SCANCODE_A] || s[SDL_SCANCODE_LEFT])
@@ -163,7 +163,7 @@ namespace RoninEngine
 		}
 
 		inline static const bool get_key(SDL_Scancode code) {
-			return static_cast<bool>(SDL_GetKeyboardState(NULL)[code]);
+			return static_cast<bool>(SDL_GetKeyboardState(nullptr)[code]);
 		}
 
 		inline static const bool get_key_down(SDL_Scancode code) {

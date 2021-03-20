@@ -4,7 +4,7 @@
 
 namespace RoninEngine::Runtime {
 Light::Light() : Light(typeid(Light).name()) {}
-Light::Light(const string &name) : Component(name) { fieldFogTexture = NULL; }
+Light::Light(const string &name) : Component(name) { fieldFogTexture = nullptr; }
 
 Light::~Light() {}
 

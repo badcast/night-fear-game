@@ -13,27 +13,23 @@ GameObject::GameObject(const string& name) : Object(name) {
 }
 
 GameObject::~GameObject() {
-    Foreach(m_components, [](Component* cmp) {
-        GC::gc_free(cmp);
-    });
+    for (auto x : m_components) {
+        GC::gc_unload(x);
+    }
 }
 
-Transform* GameObject::transform() {
-    return Ref_to<Transform>(m_components.front());
-}
+Transform* GameObject::transform() { return Ref_to<Transform>(m_components.front()); }
 
-template<typename T>
-T* AttribGetTypeHelper<T>::getComponent(GameObject* hier){
-   return nullptr;
+template <typename T>
+T* AttribGetTypeHelper<T>::getComponent(GameObject* hier) {
+    return nullptr;
 }
 
 Component* GameObject::Add_Component(Component* component) {
     if (!component) throw std::exception();
 
     if (end(m_components) ==
-        std::find_if(
-            begin(m_components), end(m_components),
-            [&component](Component* ref) { return component == ref; })) {
+        std::find_if(begin(m_components), end(m_components), [&component](Component* ref) { return component == ref; })) {
         this->m_components.emplace_back(component);
 
         if (component->_derivedObject) throw bad_exception();

@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 
-#undef NULL
-#define NULL 0
+#undef nullptr
+#define nullptr 0
 
 //#define _ref std::shared_ptr
 
@@ -18,7 +18,7 @@ public:
 	shared_ptr
 	//create empty
 	refin() {
-		_ptr = NULL; refCount = 0;
+		_ptr = nullptr; refCount = 0;
 	}
 
 	refin(refin& ref) {
@@ -28,7 +28,7 @@ public:
 
 	~refin() {
 		if (!--refCount)
-			deallocate_class(_ptr);
+			GC::gc_unload(_ptr);
 	}
 
 	bool isUnique() {
@@ -36,7 +36,7 @@ public:
 	}
 
 	void reset() {
-		_ptr = NULL;
+		_ptr = nullptr;
 	}
 
 	explicit bool operator() {

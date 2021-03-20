@@ -33,7 +33,7 @@ namespace RoninEngine::UI
 		static float __innertime = 0;
 
 		if (iter == end(_roads))
-			return NULL;
+			return nullptr;
 
 		if (isPause())
 		{

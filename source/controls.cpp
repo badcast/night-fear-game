@@ -24,7 +24,9 @@ namespace RoninEngine::UI {
    }
 
    void Free_Controls() {
-      Foreach(m_controls, [](auto& f) { GC::gc_unload(f); });
+      for (auto x : m_controls) {
+         GC::gc_unload(x);
+      }
       m_controls.clear();
    }
 
@@ -33,7 +35,7 @@ namespace RoninEngine::UI {
             return control==ref->id();
    });
 
-      if (iter == end(m_controls)) return NULL;
+      if (iter == end(m_controls)) return nullptr;
 
       return *iter;
    }
@@ -95,7 +97,7 @@ namespace RoninEngine::UI {
 
    bool CImage::render_control(GUI* gui, RenderData& data, SDL_Renderer* render,
                                bool* hover) {
-      SDL_RenderCopy(render, (SDL_Texture*)data.resources, NULL,
+      SDL_RenderCopy(render, (SDL_Texture*)data.resources, nullptr,
                      (SDL_Rect*)&data.rect);
       return false;
    }
@@ -104,7 +106,7 @@ namespace RoninEngine::UI {
                                        SDL_Renderer* render, bool* hover) {
       Timeline* timeline = (Timeline*)data.resources;
       Texture* texture = timeline->Evaluate(Time::time())->texture;
-      SDL_RenderCopy(render, texture->native(), NULL, (SDL_Rect*)&data.rect);
+      SDL_RenderCopy(render, texture->native(), nullptr, (SDL_Rect*)&data.rect);
       return false;
    }
 

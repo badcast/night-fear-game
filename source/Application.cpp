@@ -8,7 +8,7 @@
 using namespace UI;
 
 namespace RoninEngine {
-   Scene* _lastSceneToFree = NULL;
+   Scene* _lastSceneToFree = nullptr;
    SDL_Renderer* renderer = nullptr;
    SDL_Window* window = nullptr;
    bool m_inited = false;

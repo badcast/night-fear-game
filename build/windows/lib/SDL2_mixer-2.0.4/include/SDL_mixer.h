@@ -209,7 +209,7 @@ extern DECLSPEC const char * SDLCALL Mix_GetMusicDecoder(int index);
 extern DECLSPEC SDL_bool SDLCALL Mix_HasMusicDecoder(const char *name);
 
 /* Find out the music format of a mixer music, or the currently playing
-   music, if 'music' is NULL.
+   music, if 'music' is nullptr.
 */
 extern DECLSPEC Mix_MusicType SDLCALL Mix_GetMusicType(const Mix_Music *music);
 
@@ -220,7 +220,7 @@ extern DECLSPEC Mix_MusicType SDLCALL Mix_GetMusicType(const Mix_Music *music);
 extern DECLSPEC void SDLCALL Mix_SetPostMix(void (SDLCALL *mix_func)(void *udata, Uint8 *stream, int len), void *arg);
 
 /* Add your own music player or additional mixer function.
-   If 'mix_func' is NULL, the default music player is re-enabled.
+   If 'mix_func' is nullptr, the default music player is re-enabled.
  */
 extern DECLSPEC void SDLCALL Mix_HookMusic(void (SDLCALL *mix_func)(void *udata, Uint8 *stream, int len), void *arg);
 
@@ -233,7 +233,7 @@ extern DECLSPEC void SDLCALL Mix_HookMusicFinished(void (SDLCALL *music_finished
 extern DECLSPEC void * SDLCALL Mix_GetMusicHookData(void);
 
 /*
- * Add your own callback when a channel has finished playing. NULL
+ * Add your own callback when a channel has finished playing. nullptr
  *  to disable callback. The callback may be called from the mixer's audio
  *  callback or it could be called as a result of Mix_HaltChannel(), etc.
  *  do not call SDL_LockAudio() from this callback; you will either be
@@ -295,7 +295,7 @@ typedef void (SDLCALL *Mix_EffectDone_t)(int chan, void *udata);
  * You may also specify a callback (Mix_EffectDone_t) that is called when
  *  the channel finishes playing. This gives you a more fine-grained control
  *  than Mix_ChannelFinished(), in case you need to free effect-specific
- *  resources, etc. If you don't need this, you can specify NULL.
+ *  resources, etc. If you don't need this, you can specify nullptr.
  * You may set the callbacks before or after calling Mix_PlayChannel().
  * Things like Mix_SetPanning() are just internal special effect functions,
  *  so if you are using that, you've already incurred the overhead of a copy
@@ -628,7 +628,7 @@ extern DECLSPEC const char* SDLCALL Mix_GetSoundFonts(void);
 extern DECLSPEC int SDLCALL Mix_EachSoundFont(int (SDLCALL *function)(const char*, void*), void *data);
 
 /* Get the Mix_Chunk currently associated with a mixer channel
-    Returns NULL if it's an invalid channel, or there's no chunk associated.
+    Returns nullptr if it's an invalid channel, or there's no chunk associated.
 */
 extern DECLSPEC Mix_Chunk * SDLCALL Mix_GetChunk(int channel);
 

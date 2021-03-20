@@ -5,7 +5,7 @@ namespace RoninEngine::Runtime {
 
 	Terrain2D::Terrain2D() : Terrain2D(100, 100) {}
 	Terrain2D::Terrain2D(int width, int length) : Renderer("Terrain 2D") {
-        GC::gc_push(nav, width, length);
+        GC::gc_push_lvalue(nav, width, length);
 	}
     Terrain2D::~Terrain2D() {}
 	

@@ -3,7 +3,7 @@
 #include "Mathf.h"
 #include "Texture.h"
 
-Sprite* _empty = NULL;
+Sprite* _empty = nullptr;
 
 namespace RoninEngine::Runtime
 {

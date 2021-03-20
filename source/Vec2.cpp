@@ -350,7 +350,7 @@ bool AreaEnclosePoints(const Rectf_t* points, int count, const Rectf_t* clip,
             }
             if (!added) {
                 /* Special case: if no result was requested, we are done */
-                if (result == NULL) {
+                if (result == nullptr) {
                     return true;
                 }
 
@@ -376,7 +376,7 @@ bool AreaEnclosePoints(const Rectf_t* points, int count, const Rectf_t* clip,
         }
     } else {
         /* Special case: if no result was requested, we are done */
-        if (result == NULL) {
+        if (result == nullptr) {
             return true;
         }
 

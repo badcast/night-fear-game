@@ -67,7 +67,7 @@ namespace RoninEngine
 		//Show as First
 		gui->Show_GroupUnique(group_mainmenu_screen);
 		//Register main event
-		gui->Register_Callback((ui_callback)controlEvent, NULL);
+        gui->Register_Callback((ui_callback)controlEvent, nullptr);
 	}
 
 	void controlEvent(const uint8_t& id, void* userData)

@@ -56,9 +56,4 @@ struct Color;
 }  // namespace Runtime
 }  // namespace RoninEngine
 
-template <typename _Container, typename _Pred>
-[[deprecated]] constexpr void Foreach(_Container& _cont, _Pred _Fn) {
-    static_assert(true, "Foreach+fucked...");
-    for (auto iter = begin(_cont); iter != end(_cont); ++iter) _Fn(*iter);
-}
 #endif

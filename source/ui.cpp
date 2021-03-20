@@ -25,11 +25,11 @@ namespace RoninEngine::UI
 	{
         list<uid> __;
 
-		Foreach(m_Sticks.controls, [&__, this](auto& iter)
+        for(auto iter : m_Sticks.controls)
 		{
 			if (this->Is_Group(iter.id))
 				__.push_back(iter.id);
-		});
+        };
 
 		return __;
 	}
@@ -154,12 +154,12 @@ namespace RoninEngine::UI
 	}
     uid GUI::Push_TextureAnimator(const list<Texture*>& roads, float duration, TimelineOptions option, const Rect_t& rect, const uid& parent)
 	{
-		Timeline* timeline = NULL;
+        Timeline* timeline = nullptr;
         uid id = register_ui(parent);
 		auto& data = ID(id);
         data.prototype = findControl(CIMAGEANIMATOR);
 		data.rect = rect;
-		allocate_variable(timeline);
+        GC::gc_push_lvalue(timeline);
 		timeline->SetOptions(option);
 		GC::GoMemoryCache(timeline);
 

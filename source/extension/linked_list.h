@@ -79,17 +79,17 @@ private:
 			if (fPos == _first)
 			{
 				_first = fPos->right;
-				fPos->left = NULL;
+				fPos->left = nullptr;
 				if (!_first)
-					_last = NULL;
+					_last = nullptr;
 				return true;
 			}
 			else if (fPos == _last)
 			{
 				_last = fPos->left;
 				if (!_last)
-					_first = NULL;
-				_last->right = NULL;
+					_first = nullptr;
+				_last->right = nullptr;
 				return true;
 			}
 
@@ -112,7 +112,7 @@ private:
 	//вставляю значение в позицию 
 	inline SharedElementLink iterator_dolink(SharedElementLink fPos, const T& val, bool _offLeft = true)
 	{
-		SharedElementLink temp = make_shared<linkElement<T>>(linkElement<T>(val, NULL, NULL));
+		SharedElementLink temp = make_shared<linkElement<T>>(linkElement<T>(val, nullptr, nullptr));
 
 		//главный вход first
 		if (fPos == _first)
@@ -214,7 +214,7 @@ public:
 
 	void clear()
 	{
-		_last = _first = NULL;
+		_last = _first = nullptr;
 	}
 
 	int indexOf(const T& value)
@@ -257,13 +257,13 @@ public:
 	{
 		if (_first)
 			return _first->value;
-		else NULL;
+		else nullptr;
 	}
 	const T& last()
 	{
 		if (_last)
 			return _last->value;
-		else NULL;
+		else nullptr;
 	}
 
 	//индексатор

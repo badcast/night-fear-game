@@ -17,20 +17,20 @@ namespace RoninEngine::Runtime {
 
 	const int Texture::width() {
 		int w;
-		if (SDL_QueryTexture(m_native, NULL, NULL, &w, NULL))
+		if (SDL_QueryTexture(m_native, nullptr, nullptr, &w, nullptr))
 			RoninApplication::back_fail();
 		return w;
 	}
 	const int Texture::height() {
 		int h;
-		if (SDL_QueryTexture(m_native, NULL, NULL, NULL, &h))
+		if (SDL_QueryTexture(m_native, nullptr, nullptr, nullptr, &h))
 			RoninApplication::back_fail();
 		return h;
 	}
 
 	const SDL_PixelFormatEnum Texture::format() {
 		uint32_t f;
-		if (SDL_QueryTexture(m_native, &f, NULL, NULL, NULL))
+		if (SDL_QueryTexture(m_native, &f, nullptr, nullptr, nullptr))
 			RoninApplication::back_fail();
 		return static_cast<SDL_PixelFormatEnum>(f);
 	}
@@ -62,7 +62,7 @@ namespace RoninEngine::Runtime {
 
 	const SDL_TextureAccess Texture::access() {
 		int ac;
-		if (SDL_QueryTexture(m_native, NULL, &ac, NULL, NULL))
+		if (SDL_QueryTexture(m_native, nullptr, &ac, nullptr, nullptr))
 			RoninApplication::back_fail();
 		return static_cast<SDL_TextureAccess>(ac);
 	}
@@ -108,14 +108,14 @@ namespace RoninEngine::Runtime {
 		_n->blendMode(blendMode());
 		_n->scaleMode(scaleMode());
 		_n->color(color());
-		SDL_CreateTextureFromSurface(renderer, NULL);
+		SDL_CreateTextureFromSurface(renderer, nullptr);
 		SDL_SetRenderTarget(renderer, _n->m_native);
-		SDL_RenderCopy(renderer, m_native, NULL, NULL);
+		SDL_RenderCopy(renderer, m_native, nullptr, nullptr);
 		SDL_SetRenderTarget(renderer, __t);
 		return _n;
 	}
 
 	const string Texture::name() {
-		return string(raw_namePtr == NULL ? "Unknown" : raw_namePtr);
+		return string(raw_namePtr == nullptr ? "Unknown" : raw_namePtr);
 	}
 }
