@@ -1,5 +1,6 @@
 #include <time.h>
 
+
 #include "LevelEntity.h"
 #include "inputSystem.h"
 #include "pch.h"
@@ -18,6 +19,9 @@ namespace RoninEngine {
    void RoninApplication::Init() {
       if (m_inited) return;
 
+      //set locale
+      setlocale(0, "ru_RU.UTF8");
+
       window = SDL_CreateWindow("NightFear @lightmister", SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED, WindowWidth, WindowHeight,
                                 SDL_WINDOW_SHOWN);
@@ -30,33 +34,34 @@ namespace RoninEngine {
       Time::Init_TimeEngine();
 
       LoadGame();
+
       m_inited = true;
    }
 
    void RoninApplication::Free() {
-      ResourceManager::ResourcesRelease();
-      SDL_DestroyRenderer(renderer);
+      GC::gc_free();
+      //SDL_DestroyRenderer(renderer);
       SDL_DestroyWindow(window);
       Free_Controls();
    }
 
    void RoninApplication::LoadGame() {
-      ResourceManager::system_capture();
+      GC::gc_lock();
 
       //Загружаем данные и готовим программу к запуску
 
-      ResourceManager::CheckResources();
+      GC::CheckResources();
 
-      ResourceManager::ResourcesInitialize();
+      GC::gc_init();
 
       string path = dataAt(FolderKind::LOADER);
-      string temp = path + "graphics";
-      ResourceManager::LoadImages(temp.c_str());
+      string temp = path + "graphics.conf";
+      GC::LoadImages(temp.c_str());
 
       // load textures
-      path = dataAt(FolderKind::TEXTURES);
-      temp = path + "textures.set";
-      ResourceManager::LoadImages(temp.c_str());
+      path = dataAt(FolderKind::LOADER);
+      temp = path + "textures.conf";
+      GC::LoadImages(temp.c_str());
 
       //Загрузк шрифта и оптимизация дэффектов
       UI::Initialize_Fonts(true);
@@ -65,10 +70,7 @@ namespace RoninEngine {
       InitalizeControls();
 
       // Set cursor
-      SDL_SetCursor(ResourceManager::GetCursor("cursor", {1, 1}));
-
-      //Загружаем главное меню
-      LoadScene(allocate_class<GameScene>());
+      SDL_SetCursor(GC::GetCursor("cursor", {1, 1}));
 
       Levels::Level_Init();
    }
@@ -76,14 +78,18 @@ namespace RoninEngine {
    void RoninApplication::LoadedScene() {
       if (_lastSceneToFree) {
          _lastSceneToFree->onUnloading();
-         free_variable(_lastSceneToFree);
-         ResourceManager::UnloadUnused();
+         if(!GC::gc_unload(_lastSceneToFree))
+            static_assert (true, "Failed release ");
+
+          _lastSceneToFree = nullptr;
+         //GC::UnloadUnused();
+         GC::gc_free_source();
       }
 
       m_sceneLoaded = true;
 
       //capture memory as GC
-      ResourceManager::gc_capture();
+      GC::gc_unlock();
 
       m_scene->awake();
    }
@@ -106,13 +112,25 @@ namespace RoninEngine {
       }
 
       m_scene = scene;
-      m_scene->renderer = renderer;
-      m_scene->ui->renderer = renderer;
       m_sceneAccept = false;
       m_sceneLoaded = false;
    }
 
-   SDL_Surface* RoninApplication::ScreenShot() { return NULL; }
+   SDL_Surface* RoninApplication::ScreenShot() {
+      SDL_Rect rect;
+      void * pixels;
+      int pitch;
+
+      SDL_RenderGetViewport(renderer, &rect);
+      pitch = (rect.w - rect.x) * 4;
+      pixels = malloc(pitch * (rect.h - rect.y));
+      //read the Texture buffer
+      SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_RGBA8888, pixels, pitch);
+
+
+      SDL_Surface *su = SDL_CreateRGBSurfaceFrom(pixels, pitch / 4, rect.h - rect.y, 32, pitch, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+      return su;
+   }
 
    void RoninApplication::ScreenShot(const char* filename) {
       SDL_Surface* surf = ScreenShot();

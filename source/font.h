@@ -1,6 +1,9 @@
 #pragma once
 
 #include "framework.h"
+#include "types.h"
+
+using namespace RoninEngine;
 
 namespace RoninEngine::UI 
 {
@@ -24,7 +27,7 @@ namespace RoninEngine::UI
 	{
         SDL_Surface* surfNormal;
         SDL_Surface* surfHilight;
-		Vector2i fontSize;
+        point_t fontSize;
 		Rect_t data[255];
 	};
     void Initialize_Fonts(bool optimizeDeffects = true);

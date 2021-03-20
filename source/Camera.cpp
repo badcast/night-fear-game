@@ -14,6 +14,7 @@ namespace RoninEngine::Runtime
 		}
 		aspectRatio = Vec2::one;
 		targetClear = true;
+        enabled = true;
 	}
 	Camera::~Camera() {
 		if (_main == this)

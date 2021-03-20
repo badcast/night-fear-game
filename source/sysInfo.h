@@ -1,7 +1,9 @@
 #pragma once
 
-const size_t get_cpuCount();
+#include "framework.h"
 
-const size_t get_process_privateMemory();
+const std::size_t get_cpuCount();
 
-const size_t get_process_sizeMemory();
+const std::size_t get_process_privateMemory();
+
+const std::size_t get_process_sizeMemory();

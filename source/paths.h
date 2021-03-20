@@ -28,4 +28,6 @@ namespace RoninEngine
 	const std::string dataPath();
 
 	const std::string dataAt(FolderKind type);
+
+    void free_sdlurl();
 }

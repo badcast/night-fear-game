@@ -10,8 +10,8 @@ namespace RoninEngine::Runtime {
         static float angle;
 
         static void DrawLine(Vec2 a, Vec2 b);
-		static void DrawPosition(Vec2 origin);
-		static void Draw2DWorldSpace(Vec2 origin);
+        static void DrawPosition(const Vec2 & origin);
+        static void Draw2DWorldSpace(const Vec2 & origin, int depth = 32);
 		static void DrawNavMesh(AIPathFinder::NavMesh* map);
         static void DrawTriangle(Vec2 pos, float base, float height);
 

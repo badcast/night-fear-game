@@ -3,16 +3,6 @@
 
 namespace RoninEngine {
    namespace Runtime {
-      // create object
-   /*
-      // Instancer
-      template <typename T>
-      class Instancer{
-         public:
-            static T* factory();
-            static T* factory(const string& name) ;
-            static T* factory(T* copy);
-      };*/
 
       extern Transform* create_empty_transform();
       extern GameObject* create_empty();

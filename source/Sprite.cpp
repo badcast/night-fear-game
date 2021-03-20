@@ -7,14 +7,6 @@ Sprite* _empty = NULL;
 
 namespace RoninEngine::Runtime
 {
-	Sprite::Sprite(Texture* texture) : Sprite(texture, Vec2(0.5f, .5f)) {}
-	Sprite::Sprite(Texture* texture, Vec2 center) : Sprite(texture, Rect_t(0, 0, texture->width(), texture->height()), center) {}
-	Sprite::Sprite(Texture* texture, Rect_t rect, Vec2 center)  : m_rect(rect), m_center(center) {
-
-		this->texture = texture;
-	}
-
-
 	const Rect_t Sprite::Rect() {
 		return this->m_rect;
 	}

@@ -5,12 +5,9 @@ namespace RoninEngine::Runtime {
 
 	Terrain2D::Terrain2D() : Terrain2D(100, 100) {}
 	Terrain2D::Terrain2D(int width, int length) : Renderer("Terrain 2D") {
-		allocate_variable(nav, width, length);
+        GC::gc_push(nav, width, length);
 	}
-	Terrain2D::~Terrain2D() {
-		if (nav)
-			free_variable(nav);
-	}
+    Terrain2D::~Terrain2D() {}
 	
 	const bool Terrain2D::isCollider(const Vec2 destination) {
 		auto n = this->nav->neuron(destination);

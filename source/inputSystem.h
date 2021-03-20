@@ -37,7 +37,7 @@ namespace RoninEngine
 	{
 	private:
 		friend class RoninApplication;
-		static Vector2i m_mousePoint;
+		static point_t m_mousePoint;
 		static char mouseState;
 		static char lastMouseState;
 		static char mouseWheels;
@@ -147,7 +147,7 @@ namespace RoninEngine
 
 		inline static const char wheelRadix() { return mouseWheels; }
 
-		inline static const Vector2i getMousePoint()
+		inline static const point_t getMousePoint()
 		{
 			return m_mousePoint;
 		}

@@ -9,11 +9,11 @@ namespace RoninEngine {
       T* factory_base(bool initInHierarchy, T* instance, const char* name) {
          if (instance == nullptr) {
             if (name == nullptr)
-               instance = allocate_class<T>();
+               instance = GC::gc_push<T>();
             else
-               instance = allocate_class<T>(std::string(name));
+               instance = GC::gc_push<T>(std::string(name));
          } else {
-            instance = allocate_class<T>();
+            instance = GC::gc_push<T>();
          }
 
          if (instance == nullptr) throw std::bad_alloc();
@@ -42,29 +42,7 @@ namespace RoninEngine {
          return factory_base<GameObject>(false, nullptr, nullptr);
       }
 
-
-      // WoW: Здесь профиксина 6 месячная проблема
-      /*    template class Instancer<GameObject>;
-      template class Instancer<Transform>;
-      template class Instancer<Player>;
-      template class Instancer<Camera2D>;
-      template class Instancer<Spotlight>;
-      template class Instancer<SpriteRenderer>;
-*/
-      /*
-template <typename T>
-T* Instancer<T>::factory() {
-   return factory_base<T>(true, nullptr, nullptr);
-}
-template <typename T>
-T* Instancer<T>::factory(const string& name) {
-   return factory_base<T>(true, nullptr, name.data());
-}
-template <typename T>
-T* Instancer<T>::factory(T* copy) {
-   return factory_base<T>(true, copy, 0);
-}
-*/
+       // WoW: Здесь профиксина 6 месячная проблема
       template GameObject* CreateObject<GameObject>();
       template Transform* CreateObject<Transform>();
       template Player* CreateObject<Player>();
@@ -96,7 +74,7 @@ T* Instancer<T>::factory(T* copy) {
          if (!obj || !Scene::getScene()) throw std::bad_exception();
          if (!Scene::getScene()->_destructions) {
             Scene::getScene()->_destructions =
-                  allocate_class<std::remove_pointer<decltype(
+                  GC::gc_push<std::remove_pointer<decltype(
                      Scene::getScene()->_destructions)>::type>();
          }
 

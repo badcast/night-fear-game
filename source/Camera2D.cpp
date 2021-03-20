@@ -26,7 +26,7 @@ namespace RoninEngine::Runtime
 
 		if (visibleGrids)
 		{
-			Gizmos::Draw2DWorldSpace(Vec2::zero);
+            Gizmos::Draw2DWorldSpace(Vec2::zero);
 			Gizmos::color.r = 128;
 			Gizmos::DrawPosition(transform()->position());
 		}
@@ -91,7 +91,7 @@ namespace RoninEngine::Runtime
 		}
 
 
-		SDL_RenderSetScale(renderer, 1, 1);
+        SDL_RenderSetScale(renderer, 1, 1);
 		if (visibleBorders)
 		{
 			float offset = 25 * max(1 - Time::deltaTime(), 0.5f);

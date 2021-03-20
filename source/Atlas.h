@@ -5,7 +5,7 @@
 namespace RoninEngine::Runtime {
 
    class Atlas {
-         friend ResourceManager;
+         friend GC;
          Texture* texture;
          std::map<string, Sprite*> _sprites;
 

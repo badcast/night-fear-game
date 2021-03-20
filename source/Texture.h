@@ -5,26 +5,19 @@
 namespace RoninEngine::Runtime
 {
 	class Camera;
-	class ResourceManager;
+	class GC;
 
 	class Texture
 	{
 		friend class Camera;
-		friend class ResourceManager;
+		friend class GC;
 
 	private:
-		int flag;
 		::SDL_Texture* m_native;
 		char* raw_namePtr;
+
 	public:
-
-		Texture();
-		explicit Texture(::SDL_Surface* surface);
-		explicit Texture(::SDL_Texture* native, bool grub = true);
-		explicit Texture(const int w, const int h);
-		explicit Texture(const int w, const int h, const ::SDL_PixelFormatEnum format);
-		explicit Texture(const int w, const int h, const ::SDL_PixelFormatEnum format, ::SDL_TextureAccess access);
-
+         Texture();
 		~Texture();
 
 		const bool valid();
@@ -58,9 +51,6 @@ namespace RoninEngine::Runtime
 		const Texture* clone(SDL_Renderer* renderer);
 
 		const string name();
-
-		static Texture* Create_TargetTexture(const int w, const int h, const ::SDL_PixelFormatEnum format);
-		static Texture* Create_Texture(const int w, const int h, const ::SDL_PixelFormatEnum format, const ::SDL_TextureAccess access);
 	};
 }
 

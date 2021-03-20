@@ -10,8 +10,10 @@ float Gizmos::angle;
 
 void Gizmos::DrawLine(Vec2 a, Vec2 b) {
     if (!Camera::mainCamera()) return;
+
     Vec2 p = Camera::mainCamera()->transform()->position();
     Vec2 dst;
+
     auto display = RoninApplication::display();
 
     // dst.x = ((rect.w - dst.w) / 2.0f - (point->x + sourcePoint->x) *
@@ -38,59 +40,61 @@ void drawBox() {
     a.y = squarePerPixels;
     b.x = -squarePerPixels;
     b.y = squarePerPixels;
-    Gizmos::DrawLine(a, b);
+    Gizmos::DrawLine(std::move(a), std::move(b));
 
     a.x = squarePerPixels;
     a.y = -squarePerPixels;
     b.x = -squarePerPixels;
     b.y = -squarePerPixels;
-    Gizmos::DrawLine(a, b);
+    Gizmos::DrawLine(std::move(a), std::move(b));
 
     a.x = -squarePerPixels;
     a.y = squarePerPixels;
     b.x = -squarePerPixels;
     b.y = -squarePerPixels;
-    Gizmos::DrawLine(a, b);
+    Gizmos::DrawLine(std::move(a), std::move(b));
 
     a.x = squarePerPixels;
     a.y = squarePerPixels;
     b.x = squarePerPixels;
     b.y = -squarePerPixels;
-    Gizmos::DrawLine(a, b);
+    Gizmos::DrawLine(std::move(a), std::move(b));
 }
 
-void Gizmos::DrawPosition(Vec2 origin) {
+void Gizmos::DrawPosition(const Vec2 &origin){
     Vec2 a = Vec2::zero, b = Vec2::zero;
 
     // Draw Line H
     b = a = origin;
     a.x -= maxWorldScalar;
     b.x += maxWorldScalar;
-    DrawLine(a, b);
+    DrawLine(std::move(a), std::move(b));
 
     // Draw Line V
     b = a = origin;
     a.y -= maxWorldScalar;
     b.y += maxWorldScalar;
-    DrawLine(a, b);
+    DrawLine(std::move(a), std::move(b));
 }
 
-void Gizmos::Draw2DWorldSpace(Vec2 origin) {
+void Gizmos::Draw2DWorldSpace(const Vec2 & origin, int depth) {
+    int i;
+    Vec2 dest1, dest2;
+    dest1 = dest2 = origin;
     color.r = 0;
     color.g = 255;
     color.b = 0;
     color.a = 1;
 
     // Draw H and V position
-    DrawPosition(origin);
+    DrawPosition(std::move(origin));
 
-    Vec2 dest1 = origin, dest2 = origin;
-    for (size_t i = 0; i < 32; ++i) {
+    for (i = 0; i < depth; ++i) {
         dest1 += Vec2::one;
-        DrawPosition(dest1);
+        DrawPosition(std::move(dest1));
 
         dest2 += Vec2::minusOne;
-        DrawPosition(dest2);
+        DrawPosition(std::move(dest2));
     }
 }
 
@@ -99,7 +103,13 @@ void Gizmos::DrawNavMesh(AIPathFinder::NavMesh* navMesh) {
     Vec2 a, b;
     AIPathFinder::Neuron* p;
     AIPathFinder::Disposition p1, p2;
-    auto display = RoninApplication::display();
+    SDL_DisplayMode display;
+
+    if(Camera::mainCamera() == nullptr){
+         return;
+    }
+
+    display = RoninApplication::display();
 
     color.r = 53;
     color.g = 0;
@@ -122,13 +132,13 @@ void Gizmos::DrawNavMesh(AIPathFinder::NavMesh* navMesh) {
             b = a = lastPoint;
             a.x -= 0.03f;
             b.x += 0.03f;
-            DrawLine(a, b);
+            DrawLine(std::move(a), std::move(b));
 
             // Draw Line V
             b = a = lastPoint;
             a.y -= 0.03f;
             b.y += 0.03f;
-            DrawLine(a, b);
+            DrawLine(std::move(a), std::move(b));
             ++y;
         }
         y = p1.y;
@@ -138,7 +148,7 @@ void Gizmos::DrawNavMesh(AIPathFinder::NavMesh* navMesh) {
 
 void Gizmos::DrawTriangle(Vec2 pos, float base, float height) {
     Vec2 a, b;
-    pos.y -=height/2;
+    pos.y -= height / 2;
     a = b = pos;
     //  base /= 2.f;
     a.x -= base;
@@ -146,19 +156,19 @@ void Gizmos::DrawTriangle(Vec2 pos, float base, float height) {
     pos.y += height;
 
     // draw base
-    DrawLine(a, b);
+    DrawLine(std::move(a), std::move(b));
 
     // draw left side
-    DrawLine(a, pos);
+    DrawLine(std::move(a), std::move(pos));
 
     // draw right side
-    DrawLine(b, pos);
+    DrawLine(std::move(b), std::move(pos));
 }
 
 float Gizmos::square_triangle(float base, float height) {
-    return 0.5f * base * height;
+    return base * height / 2;
 }
-float Gizmos::square(float x) { return Mathf::pow2(x); }
+float Gizmos::square(float x) { return x * x; }
 float Gizmos::square_rectangle(float a, float b) { return a * b; }
 float Gizmos::square_circle(float radius) {
     /*
@@ -181,10 +191,10 @@ float Gizmos::square_mesh(list<Vec2>&& vecs) {
      *
      */
 
-   float S = -1;
+    float S = -1;
 
-   //TODO: написать алгоритм измерение площади произвольным фигурам
-   throw std::runtime_error("algorithm is not implemented");
-   return S;
+    // TODO: написать алгоритм измерение площади произвольным фигурам
+    throw std::runtime_error("algorithm is not implemented");
+    return S;
 }
 }  // namespace RoninEngine::Runtime

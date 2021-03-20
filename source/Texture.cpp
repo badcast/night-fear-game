@@ -2,47 +2,13 @@
 #include "Texture.h"
 
 namespace RoninEngine::Runtime {
-	Texture::Texture() : Texture(32, 32) {
-	}
-
-	Texture::Texture(SDL_Surface* surf) {
-		if (!surf || !(m_native = SDL_CreateTextureFromSurface(RoninEngine::RoninApplication::GetRenderer(), surf)))
-			RoninApplication::back_fail();
-		flag = 0x1;
-	}
-
-	Texture::Texture(SDL_Texture* native, bool grub) {
-		if (!native)
-			RoninApplication::back_fail();
-
-		flag = grub ? 0x1 : 0;
-		m_native = native;
-
-	}
-	Texture::Texture(const int w, const int h) : Texture(w, h, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888) {
-	}
-	Texture::Texture(const int w, const int h, const SDL_PixelFormatEnum format) : Texture(w, h, format, SDL_TextureAccess::SDL_TEXTUREACCESS_STATIC) {
-	}
-
-	Texture::Texture(const int w, const int h, const SDL_PixelFormatEnum format, const SDL_TextureAccess access) {
-		m_native = SDL_CreateTexture(RoninEngine::RoninApplication::GetRenderer(), format, access, w, h);
-		if (!m_native)
-			RoninApplication::back_fail();
-
-		flag = 0x1;
+    Texture::Texture(){
+       m_native = nullptr;
 	}
 
 	Texture::~Texture() {
        if (raw_namePtr)
            SDL_free(raw_namePtr);
-
-		if (flag == 0x1)
-           if (m_native)
-           {
-               SDL_DestroyTexture(m_native);
-               m_native = nullptr;
-           }
-
 	}
 
 	const bool Texture::valid() {
@@ -137,8 +103,8 @@ namespace RoninEngine::Runtime {
 	}
 	const Texture* Texture::clone(SDL_Renderer* renderer) {
 		SDL_Texture* __t = SDL_GetRenderTarget(renderer);
-		Texture* _n;
-		allocate_variable(_n, width(), height(), format(), access());
+        Texture* _n;
+        GC::gc_alloc_texture(&_n, width(), height(), format(), access());
 		_n->blendMode(blendMode());
 		_n->scaleMode(scaleMode());
 		_n->color(color());
@@ -151,14 +117,5 @@ namespace RoninEngine::Runtime {
 
 	const string Texture::name() {
 		return string(raw_namePtr == NULL ? "Unknown" : raw_namePtr);
-	}
-
-
-	Texture* Texture::Create_TargetTexture(const int w, const int h, const ::SDL_PixelFormatEnum format) {
-		return ResourceManager::GetTexture(w, h, format, SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET);
-	}
-	Texture* Texture::Create_Texture(const int w, const int h, const ::SDL_PixelFormatEnum format, const ::SDL_TextureAccess access) {
-		Texture* tex = ResourceManager::GetTexture(w, h, format, access);
-		return tex;
 	}
 }

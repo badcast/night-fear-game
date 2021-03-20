@@ -7,9 +7,9 @@ namespace RoninEngine::Runtime
 		public Light
 	{
 	public: 
-		//Диапозон 
+		//Р”РёР°РїРѕР·РѕРЅ 
 		float range;
-		//Интенсивность света
+		//РРЅС‚РµРЅСЃРёРІРЅРѕСЃС‚СЊ СЃРІРµС‚Р°
 		float intensity;
 
 		Spotlight();

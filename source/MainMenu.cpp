@@ -23,8 +23,8 @@ namespace RoninEngine
 		//Инициализация меню
 		SDL_DisplayMode gameDisplay = RoninApplication::display();
 
-		Vector2i point = { gameDisplay.w / 2 - 127, 300 };
-		Vector2i lastPoint;
+		point_t point = { gameDisplay.w / 2 - 127, 300 };
+		point_t lastPoint;
 		//Main menu screen
 
 		group_mainmenu_screen = gui->Create_Group();
@@ -37,7 +37,7 @@ namespace RoninEngine
 			point.y += _OFSET;
 			mmb_quit = gui->Push_Button("Выйти", point, group_mainmenu_screen);
 
-			gui->Push_TextureAnimator(*ResourceManager::LoadTextures("gameLogo"), 0.15f, TimelineOptions::LinearReverse, { 250, 20 });
+			gui->Push_TextureAnimator(*GC::LoadTextures("gameLogo"), 0.15f, TimelineOptions::LinearReverse, { 250, 20 });
 		}
 		lastPoint = point;
 		point = { gameDisplay.w / 2 - 127, 300 };
@@ -97,7 +97,7 @@ namespace RoninEngine
 		//start game menu events
 		else if (e(sgb_playgame))
 		{
-			RoninApplication::LoadScene(allocate_class<GameScene>());
+            RoninApplication::LoadScene(GC::gc_alloc_scene<GameScene>());
 		}
 		//setting menu events
 

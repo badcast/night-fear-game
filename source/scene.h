@@ -44,7 +44,6 @@ namespace RoninEngine {
       public:
          // Main or Root object
          Runtime::GameObject* main_object;
-         SDL_Renderer* renderer;
 
          Scene();
          Scene(const std::string& name);

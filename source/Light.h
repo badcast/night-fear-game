@@ -8,7 +8,7 @@ namespace RoninEngine::Runtime
 {
 	class Light : public Component
 	{
-		Texture* fieldFogTexture;
+        Texture* fieldFogTexture;
 	protected:
 		virtual void GetLight(SDL_Renderer* renderer) = 0;
 	public:

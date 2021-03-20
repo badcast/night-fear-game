@@ -15,19 +15,12 @@ namespace RoninEngine::Runtime
 		friend class Renderer;
 		friend class SpriteRenderer;
 		friend class Atlas;
-		friend class ResourceManager;
-		template<typename T, typename... Types>
-		friend constexpr T* ::allocate_class(Types&&... _Args);		
-		template<typename T, typename ... _Types>
-		friend constexpr T*& ::allocate_variable(T*& var, _Types&&... _Args);
+		friend class GC;
 
 	protected:
 		Vec2 m_center;
 		Rect_t m_rect;
 
-		Sprite(Texture* texture);
-		Sprite(Texture* texture, Vec2 center);
-		Sprite(Texture* texture, Rect_t m_rect, Vec2 center = Vec2(.5f, .5f));
 
 	public:
 		Texture* texture;

@@ -9,8 +9,8 @@ map
 	{
        
 		navScalePerNeuron 	0.18 // per nav scale 
-		//tbgound1 - это не обязательное название для грунта
-		tbgound1{
+		//tbground1 - это не обязательное название для грунта
+		tbground01{
 			texture		"concrete"
 			source		{}
 			destination	{0, 0, 100, 100}

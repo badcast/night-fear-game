@@ -9,6 +9,7 @@ namespace RoninEngine::Runtime {
       public:
          bool visibleBorders;
          bool visibleGrids;
+
          Camera2D();
          Camera2D(const string& name) : Camera(name){}
          Camera2D(const Camera2D&);

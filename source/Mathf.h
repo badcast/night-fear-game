@@ -1,12 +1,11 @@
 ﻿#pragma once
 
 #include "framework.h"
+#include "Vec2.h"
 
 using namespace std;
 
 namespace RoninEngine {
-
-	struct Vec2;
 
 	class Random {
 	public:

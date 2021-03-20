@@ -29,8 +29,6 @@ namespace RoninEngine::Runtime
 	}
 
 	SpriteRenderer::~SpriteRenderer() {
-		if (texture)
-			ResourceManager::UnloadTexture(texture);
 	}
 
 	Vec2 SpriteRenderer::GetSize() {
@@ -44,12 +42,6 @@ namespace RoninEngine::Runtime
 			this->size.y = sprite->height() / squarePerPixels;
 		}
 		this->sprite = sprite;
-
-		if (texture)
-		{
-			ResourceManager::UnloadTexture(texture);
-			texture = NULL;
-		}
 	}
 	Sprite* SpriteRenderer::getSprite() {
 		return this->sprite;
@@ -73,8 +65,6 @@ namespace RoninEngine::Runtime
 			case SpriteRenderType::Simple:
 				if (!texture)
 				{
-					uint32_t format;
-					int access;
 					texture = sprite->texture;
 				}
 				_srcRect.w = abs(this->size.x) * squarePerPixels;
@@ -98,7 +88,7 @@ namespace RoninEngine::Runtime
 
 				if (!texture)
 				{
-					texture = Texture::Create_Texture(_srcRect.w, _srcRect.h, SDL_PIXELFORMAT_RGBA8888, SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET);
+                    GC::gc_alloc_texture(&texture, _srcRect.w, _srcRect.h, SDL_PIXELFORMAT_RGBA8888, SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET);
 					
 					if (texture == NULL)
 						RoninApplication::fail("Texture create fail");

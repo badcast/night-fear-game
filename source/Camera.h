@@ -19,6 +19,7 @@ namespace RoninEngine::Runtime
 		virtual void render(SDL_Renderer* renderer, Rect_t rect, GameObject* root) = 0;
 	public:
 		Vec2 aspectRatio;
+        bool enabled;
 
 		Camera();
 		Camera(const string& name);

@@ -25,7 +25,7 @@ namespace RoninEngine {
                   if (c[i + 1] == '\\') ++i;
                   str.push_back(c[i + 1]);
                }
-               *mem = (void*)allocate_class<std::string>(str);
+               *mem = (void*)GC::gc_push<std::string>(str);
             }
             out = DataType::String;
          } else
@@ -33,14 +33,14 @@ namespace RoninEngine {
 
          temp += 2;
       } else if (config::is_real(c, &temp)) {
-         if (mem) *mem = allocate_class<double>(atof(c));
+         if (mem) *mem = GC::gc_push<double>(atof(c));
          out = DataType::Real;
       } else if (config::is_number(*c)) {
-         if (mem) *mem = allocate_class<int64_t>(atoll(c));
+         if (mem) *mem = GC::gc_push<int64_t>(atoll(c));
          out = DataType::Number;
       } else if (config::is_bool(c, &temp)) {
          if (mem)
-            *mem = allocate_class<bool>(temp == sizeof(syntax.true_string) - 1);
+            *mem = GC::gc_push<bool>(temp == sizeof(syntax.true_string) - 1);
          out = DataType::Boolean;
       } else
          temp = 0;
@@ -57,7 +57,7 @@ namespace RoninEngine {
    inline int trim(const char* c, int len = INT_MAX) {
       int i = 0, j;
       if (c != nullptr)
-         for (; i <= len && c[i];) {
+         for (; i < len && c[i];) {
             for (j = 0; j < static_cast<int>(sizeof(syntax.trim_segments));)
                if (c[i] == syntax.trim_segments[j])
                   break;
@@ -218,7 +218,7 @@ namespace RoninEngine {
    }
 
    int ObjectNode::incrementMemory() {
-      if (!uses) uses = allocate_class<int>();
+      if (!uses) uses = GC::gc_push<int>();
       return ++*uses;
    }
 
@@ -295,7 +295,7 @@ namespace RoninEngine {
       //Базовый случаи
       if (!len) return 0;
 
-      for (i = 0; source[i] && i < len;) {
+      for (i = 0; i < len && source[i];) {
          // has comment line
          j = i += ignoreComment(source + i, len - i);
          if (levels > 0 && source[i] == syntax.array_segments[1]) break;
@@ -329,21 +329,21 @@ namespace RoninEngine {
                            switch (arrayType) {
                            case DataType::String:
                               curNode.setMemory(
-                                       (void*)allocate_class<
+                                       (void*)GC::gc_push<
                                        std::vector<std::string>>());
                               break;
                            case DataType::Boolean:
-                              curNode.setMemory((void*)allocate_class<
+                              curNode.setMemory((void*)GC::gc_push<
                                                 std::vector<bool>>());
                               break;
                            case DataType::Real:
                               curNode.setMemory(
-                                       (void*)allocate_class<
+                                       (void*)GC::gc_push<
                                        std::vector<double>>());
                               break;
                            case DataType::Number:
                               curNode.setMemory(
-                                       (void*)allocate_class<
+                                       (void*)GC::gc_push<
                                        std::vector<std::int64_t>>());
                               break;
                            }
@@ -420,7 +420,7 @@ namespace RoninEngine {
                curNode.valueFlag |= (arrayType) << 2;
             } else {  // get the next node
                ++i;
-               _StructType* _nodes = allocate_class<_StructType>();
+               _StructType* _nodes = GC::gc_push<_StructType>();
                i += avail(*_nodes, source + i, len - i, levels);
                curNode.valueFlag = Node_StructFlag;
                curNode.setMemory(_nodes);

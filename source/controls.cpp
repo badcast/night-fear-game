@@ -10,13 +10,13 @@ namespace RoninEngine::UI {
    uint32_t _focusedId;
 
    void InitalizeControls() {
-      m_controls = {allocate_class<CText>(),
-                    allocate_class<CEdit>(),
-                    allocate_class<CButton>(),
-                    allocate_class<CVerticalSlider>(),
-                    allocate_class<CImage>(),
-                    allocate_class<CImageAnimator>(),
-                    allocate_class<CTextRandomizerDisplay>()};
+      m_controls = {GC::gc_push<CText>(),
+                    GC::gc_push<CEdit>(),
+                    GC::gc_push<CButton>(),
+                    GC::gc_push<CVerticalSlider>(),
+                    GC::gc_push<CImage>(),
+                    GC::gc_push<CImageAnimator>(),
+                    GC::gc_push<CTextRandomizerDisplay>()};
 
       for (auto i : m_controls) {
          if (i == nullptr) RoninApplication::fail_OutOfMemory();
@@ -24,7 +24,7 @@ namespace RoninEngine::UI {
    }
 
    void Free_Controls() {
-      Foreach(m_controls, [](auto& f) { deallocate_variable(f); });
+      Foreach(m_controls, [](auto& f) { GC::gc_unload(f); });
       m_controls.clear();
    }
 
@@ -136,7 +136,7 @@ namespace RoninEngine::UI {
          }
       }
 
-      Render_String(gui->renderer, data.rect, data.text.c_str(),
+      Render_String(RoninApplication::GetRenderer(), data.rect, data.text.c_str(),
                     data.text.size());
 
       return false;
