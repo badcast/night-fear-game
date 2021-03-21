@@ -42,7 +42,7 @@ const uint32_t Neuron::total() { return cost() + heuristic(); }
 
 const bool Neuron::empty() { return total() == 0; }
 
-NavMesh::NavMesh(size_t Width, size_t Height) {
+NavMesh::NavMesh(std::size_t Width, std::size_t Height) {
   if (!Width || !Height)
     throw std::out_of_range("Width or Height is zero!");
   this->widthSpace = Width;

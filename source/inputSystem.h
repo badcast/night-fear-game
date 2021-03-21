@@ -36,7 +36,7 @@ namespace RoninEngine
 	class input
 	{
 	private:
-		friend class RoninApplication;
+		friend class Application;
 		static point_t m_mousePoint;
 		static char mouseState;
 		static char lastMouseState;

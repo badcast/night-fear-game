@@ -9,7 +9,7 @@ Light::Light(const string &name) : Component(name) { fieldFogTexture = nullptr; 
 Light::~Light() {}
 
 void Light::GetLightSource(Render_info *render) {
-  auto display = RoninApplication::display();
+  auto display = Application::display();
   Color c;
   SDL_Texture *target, *lastTarget;
 

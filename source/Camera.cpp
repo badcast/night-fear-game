@@ -31,11 +31,11 @@ namespace RoninEngine::Runtime
 		list<Renderer*> renderers[Nz];
 		list<Renderer*>* target = &renderers[0];
 		int zN = Nz;
-		static int size = 0;
+        int size = 0;
 
 		if (__rendererOutResults.empty())
 		{
-            auto display = RoninApplication::display();
+            auto display = Application::display();
 			Vec2 topLeft, rightBottom, rSz;
 			topLeft = this->ScreenToWorldPoint(Vec2::zero);
 			rightBottom = this->ScreenToWorldPoint(Vec2(display.w, display.h));
@@ -87,7 +87,7 @@ namespace RoninEngine::Runtime
 		//dst.x = ((rect.w - dst.w) / 2.0f - (point->x + sourcePoint->x) * squarePerPixels);
 		//dst.y = ((rect.h - dst.h) / 2.0f + (point->y - sourcePoint->y) * squarePerPixels);
 
-        auto display = RoninApplication::display();
+        auto display = Application::display();
 		screenPoint.x = display.w / 2.f - (screenPoint.x);
 		screenPoint.x *= -1;
 		screenPoint.y = display.h / 2.f - (screenPoint.y);
@@ -98,7 +98,7 @@ namespace RoninEngine::Runtime
 	const Vec2 Camera::WorldToScreenPoint(Vec2 worldPoint) {
 		Vec2* point = &transform()->point;
 		Vec2 dst;
-        auto display = RoninApplication::display();
+        auto display = Application::display();
 		//Положение по горизонтале 
 		dst.x = ((display.w ) / 2.0f - (point->x - worldPoint.x) * squarePerPixels);
 		//Положение по вертикале 

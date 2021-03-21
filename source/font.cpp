@@ -15,7 +15,7 @@ void Initialize_Fonts(bool optimizeDeffects) {
   }
 
   if (GC::gc_push_lvalue(pfont) == nullptr)
-    RoninApplication::fail_OutOfMemory();
+    Application::fail_OutOfMemory();
 
   if ((pfont->surfNormal = GC::GetSurface("font-arealike")) == nullptr)
     throw std::bad_alloc();
@@ -77,7 +77,7 @@ void Initialize_Fonts(bool optimizeDeffects) {
   GC::gc_alloc_sdl_texture(&pfontTextureHilight, pfont->surfHilight);
 
   if (pfontTexture == nullptr || pfontTextureHilight == nullptr)
-    RoninApplication::fail("error initialization fonts");
+    Application::fail("error initialization fonts");
 
   if (optimizeDeffects) {
     SDL_Surface *model = pfont->surfNormal;

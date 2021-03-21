@@ -1,216 +1,272 @@
-#include <time.h>
-
-
 #include "LevelEntity.h"
 #include "inputSystem.h"
 #include "pch.h"
+#include "sysInfo.h"
 
 using namespace UI;
 
 namespace RoninEngine {
-   Scene* _lastSceneToFree = nullptr;
-   SDL_Renderer* renderer = nullptr;
-   SDL_Window* window = nullptr;
-   bool m_inited = false;
-   bool m_sceneAccept = false;
-   Scene* m_scene = nullptr;
-   bool m_sceneLoaded = false;
+Scene* _lastSceneToFree = nullptr;
+SDL_Renderer* renderer = nullptr;
+SDL_Window* window = nullptr;
+bool m_inited = false;
+bool m_sceneAccept = false;
+Scene* m_scene = nullptr;
+bool m_sceneLoaded = false;
 
-   void RoninApplication::Init() {
-      if (m_inited) return;
+void Application::Init(const int& width, const int& height) {
+    if (m_inited) return;
 
-      //set locale
-      setlocale(0, "ru_RU.UTF8");
+    // SDL main init
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_EVENTS | SDL_INIT_TIMER | SDL_INIT_VIDEO)) fail("Fail init main system.");
 
-      window = SDL_CreateWindow("NightFear @lightmister", SDL_WINDOWPOS_CENTERED,
-                                SDL_WINDOWPOS_CENTERED, WindowWidth, WindowHeight,
-                                SDL_WINDOW_SHOWN);
-      renderer = SDL_CreateRenderer(
-               window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    // init graphics
+    if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG)) fail("Fail init imageformats. zlib (libPNG, libJPG) not defined");
 
-      // Brightness - Яркость
-      SDL_SetWindowBrightness(window, 1);
+    // init Audio system
+    if (!Mix_Init(MIX_InitFlags::MIX_INIT_OGG | MIX_InitFlags::MIX_INIT_MP3)) fail("Fail init audio.");
 
-      Time::Init_TimeEngine();
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512)) fail("Fail open audio.");
 
-      LoadGame();
+    // set locale
+    setlocale(LC_ALL, "ru_RU.UTF8");
 
-      m_inited = true;
-   }
+    window = SDL_CreateWindow("NightFear@lightmister", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
+                              SDL_WINDOW_SHOWN);
 
-   void RoninApplication::Free() {
-      GC::gc_free();
-      //SDL_DestroyRenderer(renderer);
-      SDL_DestroyWindow(window);
-      Free_Controls();
-   }
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-   void RoninApplication::LoadGame() {
-      GC::gc_lock();
+    // Brightness - Яркость
+    SDL_SetWindowBrightness(window, 1);
 
-      //Загружаем данные и готовим программу к запуску
+    Time::Init_TimeEngine();
 
-      GC::CheckResources();
+    LoadGame();
 
-      GC::gc_init();
+    m_inited = true;
+}
 
-      string path = dataAt(FolderKind::LOADER);
-      string temp = path + "graphics.conf";
-      GC::LoadImages(temp.c_str());
+void Application::Quit() {
+    if (!m_inited) return;
 
-      // load textures
-      path = dataAt(FolderKind::LOADER);
-      temp = path + "textures.conf";
-      GC::LoadImages(temp.c_str());
+    GC::gc_free();
+    // SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    Free_Controls();
+    // sdl quit
+    SDL_Quit();
+    IMG_Quit();
+    Mix_Quit();
+    m_inited = false;
+}
 
-      //Загрузк шрифта и оптимизация дэффектов
-      UI::Initialize_Fonts(true);
+void Application::LoadGame() {
+    GC::gc_lock();
 
-      //Инициализация инструментов
-      InitalizeControls();
+    //Загружаем данные и готовим программу к запуску
 
-      // Set cursor
-      SDL_SetCursor(GC::GetCursor("cursor", {1, 1}));
+    GC::CheckResources();
 
-      Levels::Level_Init();
-   }
+    GC::gc_init();
 
-   void RoninApplication::LoadedScene() {
-      if (_lastSceneToFree) {
-         _lastSceneToFree->onUnloading();
-         if(!GC::gc_unload(_lastSceneToFree))
-            static_assert (true, "Failed release ");
+    string path = dataAt(FolderKind::LOADER);
+    string temp = path + "graphics.conf";
+    GC::LoadImages(temp.c_str());
 
-          _lastSceneToFree = nullptr;
-         //GC::UnloadUnused();
-         GC::gc_free_source();
-      }
+    // load textures
+    path = dataAt(FolderKind::LOADER);
+    temp = path + "textures.conf";
+    GC::LoadImages(temp.c_str());
 
-      m_sceneLoaded = true;
+    //Загрузк шрифта и оптимизация дэффектов
+    UI::Initialize_Fonts(true);
 
-      //capture memory as GC
-      GC::gc_unlock();
+    //Инициализация инструментов
+    InitalizeControls();
 
-      m_scene->awake();
-   }
+    // Set cursor
+    SDL_SetCursor(GC::GetCursor("cursor", {1, 1}));
 
-   void RoninApplication::LoadScene(Scene* scene) {
-      if (!scene || m_scene == scene) throw std::bad_cast();
+    Levels::Level_Init();
+}
 
-      if (m_scene) {
-         _lastSceneToFree = m_scene;
-         m_scene->Unload();
-      }
+void Application::LoadedScene() {
+    if (_lastSceneToFree) {
+        _lastSceneToFree->onUnloading();
+        if (!GC::gc_unload(_lastSceneToFree)) static_assert(true, "Failed release ");
 
-      if (!scene->is_hierarchy()) {
-         // init main object
-         scene->main_object = create_empty();
+        _lastSceneToFree = nullptr;
+        // GC::UnloadUnused();
+        GC::gc_free_source();
+    }
 
-         if (scene->main_object == nullptr) throw std::bad_exception();
+    m_sceneLoaded = true;
 
-         scene->main_object->transform()->name() = "Root Transform";
-      }
+    // capture memory as GC
+    GC::gc_unlock();
 
-      m_scene = scene;
-      m_sceneAccept = false;
-      m_sceneLoaded = false;
-   }
+    m_scene->awake();
+}
 
-   SDL_Surface* RoninApplication::ScreenShot() {
-      SDL_Rect rect;
-      void * pixels;
-      int pitch;
+void Application::LoadScene(Scene* scene) {
+    if (!scene || m_scene == scene) throw std::bad_cast();
 
-      SDL_RenderGetViewport(renderer, &rect);
-      pitch = (rect.w - rect.x) * 4;
-      pixels = malloc(pitch * (rect.h - rect.y));
-      //read the Texture buffer
-      SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_RGBA8888, pixels, pitch);
+    if (m_scene) {
+        _lastSceneToFree = m_scene;
+        m_scene->Unload();
+    }
 
+    if (!scene->is_hierarchy()) {
+        // init main object
+        scene->main_object = create_empty();
 
-      SDL_Surface *su = SDL_CreateRGBSurfaceFrom(pixels, pitch / 4, rect.h - rect.y, 32, pitch, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
-      return su;
-   }
+        if (scene->main_object == nullptr) throw std::bad_exception();
 
-   void RoninApplication::ScreenShot(const char* filename) {
-      SDL_Surface* surf = ScreenShot();
-      IMG_SavePNG(surf, filename);
-      SDL_FreeSurface(surf);
-   }
+        scene->main_object->transform()->name() = "Root Transform";
+    }
 
-   SDL_DisplayMode RoninApplication::display() {
-      SDL_DisplayMode display;
-      SDL_GetWindowDisplayMode(window, &display);
-      return display;
-   }
+    m_scene = scene;
+    m_sceneAccept = false;
+    m_sceneLoaded = false;
+}
 
-   void RoninApplication::quit() {
-      input::event->type = SDL_QUIT;
-      SDL_PushEvent(input::event);
-   }
+SDL_Surface* Application::ScreenShot() {
+    SDL_Rect rect;
+    void* pixels;
+    int pitch;
 
-   void RoninApplication::Update_Game() {
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);  // black clear
-      //Очистка
-      SDL_RenderClear(renderer);
+    SDL_RenderGetViewport(renderer, &rect);
+    pitch = (rect.w - rect.x) * 4;
+    pixels = malloc(pitch * (rect.h - rect.y));
+    // read the Texture buffer
+    SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_RGBA8888, pixels, pitch);
 
-      if (!m_sceneLoaded) {
-         // free cache
-         LoadedScene();
-         m_sceneLoaded = true;
-      } else {
-         //Обновляем сцену
-         if (!m_sceneAccept) {
-            SDL_RenderFlush(renderer);  // flush renderer before first render
-            m_scene->start();
-            m_sceneAccept = true;
-         } else {
-            m_scene->update();
-         }
+    SDL_Surface* su =
+        SDL_CreateRGBSurfaceFrom(pixels, pitch / 4, rect.h - rect.y, 32, pitch, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+    return su;
+}
 
-         m_scene->RenderScene(renderer);
-         m_scene->onDrawGizmos();  // Draw gizmos
-         m_scene->RenderUI(renderer);
+void Application::ScreenShot(const char* filename) {
+    SDL_Surface* surf = ScreenShot();
+    IMG_SavePNG(surf, filename);
+    SDL_FreeSurface(surf);
+}
 
-         if (!_lastSceneToFree) {
-            SDL_RenderPresent(renderer);
-            m_scene->lateUpdate();
-            m_scene->RenderSceneLate(renderer);
-         }
-      }
+SDL_DisplayMode Application::display() {
+    SDL_DisplayMode display;
+    SDL_GetWindowDisplayMode(window, &display);
+    return display;
+}
 
-      input::Reset();
-   }
+void Application::RequestQuit() {
+    input::event->type = SDL_QUIT;
+    SDL_PushEvent(input::event);
+}
 
-   void RoninApplication::translate(SDL_Event* e) {}
+bool Application::Simulate() {
+    /**/ SDL_Event e;
+    /**/ SDL_DisplayMode displayMode;
+    /**/ bool _queryQuit = false;
+    /**/ int firstStep;
+    /**/ char _title[128];
+    SDL_WindowFlags wndFlags;
 
-   SDL_Window* RoninApplication::GetWindow() { return window; }
+    SDL_GetDisplayMode(0, 0, &displayMode);
+    while (!_queryQuit) {
+        wndFlags = static_cast<SDL_WindowFlags>(SDL_GetWindowFlags(Application::GetWindow()));
 
-   SDL_Renderer* RoninApplication::GetRenderer() { return renderer; }
+        while (SDL_PollEvent(&e)) {
+            input::Update_Input(&e);
 
-   void RoninApplication::back_fail(void) { exit(EXIT_FAILURE); }
+            _queryQuit = e.type == SDL_QUIT;
+        }
 
-   void RoninApplication::fail(const std::string& message) {
-      std::string _template = message;
-      char _temp[32]{0};
-      tm* ltime;
-      time_t tt;
-      time(&tt);
+        if ((wndFlags & SDL_WindowFlags::SDL_WINDOW_MINIMIZED) != SDL_WindowFlags::SDL_WINDOW_MINIMIZED) {
+            // update
+            input::Late_Update();
 
-      ltime = localtime(&tt);
-      strftime(_temp, sizeof(_temp), "%d.%m.%y %H:%M:%S", ltime);
-      _template += "\n\n\t";
-      _template += _temp;
+            // Updating
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);  // black clear
+            //Очистка
+            SDL_RenderClear(renderer);
 
-      fprintf(stderr, _template.data());
+            if (!m_sceneLoaded) {
+                // free cache
+                LoadedScene();
+                m_sceneLoaded = true;
+            } else {
+                //Обновляем сцену
+                if (!m_sceneAccept) {
+                    SDL_RenderFlush(renderer);  // flush renderer before first render
+                    m_scene->start();
+                    m_sceneAccept = true;
+                } else {
+                    m_scene->update();
+                }
 
-      SDL_LogMessage(SDL_LogCategory::SDL_LOG_CATEGORY_APPLICATION,
-                     SDL_LogPriority::SDL_LOG_PRIORITY_CRITICAL,
-                     _template.data());
-      SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags::SDL_MESSAGEBOX_ERROR, "Fail",
-                               _template.data(), window);
-      back_fail();
-   }
+                m_scene->RenderScene(renderer);
+                m_scene->onDrawGizmos();  // Draw gizmos
+                m_scene->RenderUI(renderer);
 
-   void RoninApplication::fail_OutOfMemory() { fail("Out of memory!"); }
+                if (!_lastSceneToFree) {
+                    SDL_RenderPresent(renderer);
+                    m_scene->lateUpdate();
+                    m_scene->RenderSceneLate(renderer);
+                }
+            }
+
+            input::Reset();
+            translate(&e);
+
+            float _ltime = 0;
+
+            float fps = SDL_ceilf(Time::frame() / (SDL_GetTicks() / 1000.f));
+            if (Time::time() > _ltime) {
+#ifdef _GLIBCXX_DEBUG_ONLY
+                std::sprintf(_title,
+                             "NightFear (Debug) FPS:%d Memory:%luMiB, "
+                             "GC_Allocated:%d, SDL_Allocated:%d",
+                             static_cast<int>(fps), get_process_sizeMemory() / 1024 / 1024, GC::gc_total_allocated(),
+                             SDL_GetNumAllocations());
+
+#endif
+                SDL_SetWindowTitle(Application::GetWindow(), _title);
+                _ltime = Time::time() + 0.15f;
+            }
+
+            Time::update();
+        }
+    }
+
+    return _queryQuit;
+}
+
+void Application::translate(SDL_Event* e) {}
+
+SDL_Window* Application::GetWindow() { return window; }
+
+SDL_Renderer* Application::GetRenderer() { return renderer; }
+
+void Application::back_fail(void) { exit(EXIT_FAILURE); }
+
+void Application::fail(const std::string& message) {
+    std::string _template = message;
+    char _temp[32]{0};
+    tm* ltime;
+    time_t tt;
+    time(&tt);
+
+    ltime = localtime(&tt);
+    strftime(_temp, sizeof(_temp), "%d.%m.%y %H:%M:%S", ltime);
+    _template += "\n\n\t";
+    _template += _temp;
+
+    fprintf(stderr, _template.data());
+
+    SDL_LogMessage(SDL_LogCategory::SDL_LOG_CATEGORY_APPLICATION, SDL_LogPriority::SDL_LOG_PRIORITY_CRITICAL, _template.data());
+    SDL_ShowSimpleMessageBox(SDL_MessageBoxFlags::SDL_MESSAGEBOX_ERROR, "Fail", _template.data(), window);
+    back_fail();
+}
+
+void Application::fail_OutOfMemory() { fail("Out of memory!"); }
 }  // namespace RoninEngine

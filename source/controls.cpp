@@ -19,7 +19,7 @@ namespace RoninEngine::UI {
                     GC::gc_push<CTextRandomizerDisplay>()};
 
       for (auto i : m_controls) {
-         if (i == nullptr) RoninApplication::fail_OutOfMemory();
+         if (i == nullptr) Application::fail_OutOfMemory();
       }
    }
 
@@ -138,7 +138,7 @@ namespace RoninEngine::UI {
          }
       }
 
-      Render_String(RoninApplication::GetRenderer(), data.rect, data.text.c_str(),
+      Render_String(Application::GetRenderer(), data.rect, data.text.c_str(),
                     data.text.size());
 
       return false;

@@ -14,7 +14,7 @@ void Gizmos::DrawLine(Vec2 a, Vec2 b) {
     Vec2 p = Camera::mainCamera()->transform()->position();
     Vec2 dst;
 
-    auto display = RoninApplication::display();
+    auto display = Application::display();
 
     // dst.x = ((rect.w - dst.w) / 2.0f - (point->x + sourcePoint->x) *
     // squarePerPixels); dst.y = ((rect.h - dst.h) / 2.0f + (point->y -
@@ -29,9 +29,9 @@ void Gizmos::DrawLine(Vec2 a, Vec2 b) {
     b.x = dst.x - (p.x - b.x) * squarePerPixels;
     b.y = dst.y + (p.y - b.y) * squarePerPixels;
 
-    SDL_SetRenderDrawColor(RoninApplication::GetRenderer(), color.r, color.g,
+    SDL_SetRenderDrawColor(Application::GetRenderer(), color.r, color.g,
                            color.b, color.a);
-    SDL_RenderDrawLineF(RoninApplication::GetRenderer(), a.x, a.y, b.x, b.y);
+    SDL_RenderDrawLineF(Application::GetRenderer(), a.x, a.y, b.x, b.y);
 }
 void drawBox() {
     Vec2 a, b;
@@ -109,7 +109,7 @@ void Gizmos::DrawNavMesh(AIPathFinder::NavMesh* navMesh) {
          return;
     }
 
-    display = RoninApplication::display();
+    display = Application::display();
 
     color.r = 53;
     color.g = 0;

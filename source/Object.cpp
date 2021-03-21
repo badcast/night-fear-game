@@ -25,7 +25,7 @@ T* factory_base(bool initInHierarchy, T* instance, const char* name) {
 
         if (!RoninEngine::Scene::getScene()->is_hierarchy()) throw std::runtime_error("var pCurrentScene->mainObject is null");
 
-        if (std::is_same<T, GameObject>::value) {
+        if constexpr (std::is_same<T, GameObject>::value) {
             auto root = Scene::getScene()->main_object->transform();
             Transform* tr = ((GameObject*)instance)->transform();
             root->child_append(tr);
@@ -45,14 +45,19 @@ template Player* CreateObject<Player>();
 template Camera2D* CreateObject<Camera2D>();
 template Spotlight* CreateObject<Spotlight>();
 template SpriteRenderer* CreateObject<SpriteRenderer>();
+
+template GameObject* CreateObject<GameObject>(const string&);
+template Transform* CreateObject<Transform>(const string&);
+template Player* CreateObject<Player>(const string&);
+template Camera2D* CreateObject<Camera2D>(const string&);
+template Spotlight* CreateObject<Spotlight>(const string&);
+template SpriteRenderer* CreateObject<SpriteRenderer>(const string&);
 //-------------------------------------------------
 
 template <typename T>
 T* CreateObject() {
     return factory_base<T>(true, nullptr, nullptr);
 }
-
-template GameObject* CreateObject<GameObject>(const string& name);
 
 template <typename T>
 T* CreateObject(const string& name) {

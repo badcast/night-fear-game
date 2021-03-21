@@ -18,6 +18,7 @@
 #include <tuple>
 #include <typeinfo>
 #include <vector>
+#include <ctime>
 
 // libx/dev/modules/
 #include "../../../libx/dev/modules/config_fastfile.h"
@@ -33,7 +34,7 @@
 #include "types.h"
 
 namespace RoninEngine {
-class RoninApplication;
+class Application;
 class Scene;
 
 // Pre declaration

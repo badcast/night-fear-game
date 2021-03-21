@@ -9,7 +9,7 @@ namespace RoninEngine::Runtime {
 constexpr int GCInvalidID = 0xffffffff;
 
 class GC {
-    friend class ::RoninEngine::RoninApplication;
+    friend class ::RoninEngine::Application;
     friend class Scene;
 
    protected:
@@ -47,12 +47,12 @@ class GC {
     static void *gc_malloc(std::size_t size);
 
     template <typename T, typename... Args>
-    static T *gc_push_lvalue(T *&lvalue_pointer, Args &&...arguments) {
-        return lvalue_pointer = gc_push<T>(std::forward<Args&&>(arguments)...);
+    static T *gc_push_lvalue(T *&lvalue_pointer, Args... arguments) {
+        return lvalue_pointer = gc_push<T>(arguments...);
     }
 
     template <typename T, typename... Args>
-    static T *gc_push(Args ...arguments);
+    static T *gc_push(Args... arguments);
 
     template <typename T>
     static bool valid_type();

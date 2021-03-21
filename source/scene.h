@@ -5,7 +5,7 @@
 
 namespace RoninEngine {
    class Scene {
-         friend class RoninApplication;
+         friend class Application;
          friend class UI::GUI;
          friend class Runtime::Object;
          friend class Runtime::GameObject;

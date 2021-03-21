@@ -57,7 +57,7 @@ unix_process_memory unix_process_info_from_proc() {
 
   char buffer[64];
   if (f == nullptr)
-    RoninApplication::fail(
+    Application::fail(
         "unix: invalid read \"/proc/self/status\" access denied");
   while (fgets(buffer, static_cast<int>(sizeof(buffer)), f) != nullptr) {
     if (!strncmp(buffer, "VmSize:", 7)) {

@@ -337,7 +337,7 @@ namespace RoninEngine::UI
 	}
 	void GUI::GUI_SetMainColorRGBA(uint32_t ARGB)
 	{
-        SDL_SetRenderDrawColor(RoninApplication::GetRenderer(), (uid)(ARGB >> 24) & 0xFF,
+        SDL_SetRenderDrawColor(Application::GetRenderer(), (uid)(ARGB >> 24) & 0xFF,
             (uid)(ARGB >> 16) & 0xFF,
             (uid)(ARGB >> 8) & 0xFF,
             (uid)ARGB & 0xFF);

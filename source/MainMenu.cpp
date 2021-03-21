@@ -21,7 +21,7 @@ namespace RoninEngine
 		constexpr int _OFSET = 0x21;
 
 		//Инициализация меню
-		SDL_DisplayMode gameDisplay = RoninApplication::display();
+		SDL_DisplayMode gameDisplay = Application::display();
 
 		point_t point = { gameDisplay.w / 2 - 127, 300 };
 		point_t lastPoint;
@@ -92,12 +92,12 @@ namespace RoninEngine
 		}
 		else if (e(mmb_quit))
 		{
-			RoninApplication::quit();
+			Application::RequestQuit();
 		}
 		//start game menu events
 		else if (e(sgb_playgame))
 		{
-            RoninApplication::LoadScene(GC::gc_alloc_scene<GameScene>());
+            Application::LoadScene(GC::gc_alloc_scene<GameScene>());
 		}
 		//setting menu events
 

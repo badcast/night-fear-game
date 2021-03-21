@@ -10,11 +10,14 @@ using namespace RoninEngine::Runtime;
 using namespace RoninEngine::UI;
 using namespace RoninEngine::AIPathFinder;
 
-// Pre declaration
-#define DECL_OBJECT(X)                                  \
-    template X *GC::gc_push<X>();                       \
-    template X *GC::gc_push<X>(const std::string &);    \
-    template std::list<X> *GC::gc_push<std::list<X>>(); \
+/// Pre declaration --------------------------------------------------
+#define DECL_OBJECT(X)                                          \
+    template X *GC::gc_push<X>();                               \
+    template X *GC::gc_push<X>(const std::string &);            \
+    template std::list<X> *GC::gc_push<std::list<X>>();         \
+    template std::vector<X> *GC::gc_push<std::vector<X>>();     \
+    template std::list<X *> *GC::gc_push<std::list<X *>>();     \
+    template std::vector<X *> *GC::gc_push<std::vector<X *>>(); \
     template bool GC::gc_unload<X>(X *);
 
 template MainMenu *GC::gc_alloc_scene<MainMenu>();
@@ -27,7 +30,7 @@ DECL_OBJECT(SpriteRenderer)
 DECL_OBJECT(Camera)
 DECL_OBJECT(Camera2D)
 DECL_OBJECT(Spotlight)
-DECL_OBJECT(Player)
+DECL_OBJECT(Behaviour)
 DECL_OBJECT(Transform)
 DECL_OBJECT(Component)
 
@@ -40,15 +43,13 @@ DECL_OBJECT(long double)
 DECL_OBJECT(long)
 DECL_OBJECT(long long)
 
-template NavMesh *GC::gc_push<NavMesh>();
-template NavMesh *GC::gc_push<NavMesh>(const int &, const int &);
-template NavMesh *GC::gc_push<NavMesh>(int, int);
+DECL_OBJECT(NavMesh)
+
+template NavMesh *GC::gc_push<NavMesh>(std::size_t, std::size_t);
 template std::list<std::pair<Object *, float>> *GC::gc_push<std::list<std::pair<Object *, float>>>();
-template GUI *GC::gc_push<GUI>(Scene*);
 template Font_t *GC::gc_push<Font_t>();
 
 template bool GC::gc_unload<Scene>(Scene *);
-template bool GC::gc_unload<NavMesh>(NavMesh *);
 
 #undef DECL_OBJECT
 
@@ -328,7 +329,7 @@ void GC::CheckResources() {
     membuf[0] = '\0';
     if (!filesystem::exists(p)) {
         strcat(membuf, "\"Data\" is not found");
-        RoninApplication::fail(membuf);
+        Application::fail(membuf);
     }
     GC::gc_free(membuf);
 }
@@ -378,7 +379,7 @@ list<Texture *> *GC::LoadTextures(const string &packName, bool autoUnload) {
     if (iter == end(*_assocMultiCacheTextures)) {
         GC::gc_push_lvalue(_textures);
         for (auto i = begin(*surfaces); i != end(*surfaces); ++i) {
-            gc_alloc_texture_from(&p, SDL_CreateTextureFromSurface(RoninApplication::GetRenderer(), *i));
+            gc_alloc_texture_from(&p, SDL_CreateTextureFromSurface(Application::GetRenderer(), *i));
             _textures->emplace_back(p);
         }
         _assocMultiCacheTextures->emplace(make_pair(surfaces, _textures));
@@ -477,7 +478,8 @@ void GC::continue_gc() {
 void *GC::gc_malloc(std::size_t size) { return std::malloc(size); }
 
 template <typename T, typename... Args>
-T *GC::gc_push(Args ...arguments) {
+T *GC::gc_push(Args... arguments) {
+    // 2fr
     return nullptr;
 }
 
@@ -585,7 +587,7 @@ int GC::gc_alloc_sdl_texture(SDL_Texture **sdltexturePtr, const int &w, const in
 
     id = gc_wrte_memblock<SDL_Texture>(&mem);
     auto &&gc_ptr =
-        reinterpret_cast<SDL_Texture *>(mem->memory = SDL_CreateTexture(RoninApplication::GetRenderer(), format, access, w, h));
+        reinterpret_cast<SDL_Texture *>(mem->memory = SDL_CreateTexture(Application::GetRenderer(), format, access, w, h));
 
     if (sdltexturePtr != nullptr) (*sdltexturePtr) = gc_ptr;
 
@@ -597,10 +599,10 @@ int GC::gc_alloc_sdl_texture(SDL_Texture **sdltexturePtr, SDL_Surface *from) {
     MemoryStick *mem;
 
     id = gc_wrte_memblock<SDL_Texture>(&mem);
-    mem->memory = SDL_CreateTextureFromSurface(RoninApplication::GetRenderer(), from);
+    mem->memory = SDL_CreateTextureFromSurface(Application::GetRenderer(), from);
     auto gc_ptr = reinterpret_cast<SDL_Texture *>(mem->memory);
 
-    if (gc_ptr == nullptr) RoninApplication::fail_OutOfMemory();
+    if (gc_ptr == nullptr) Application::fail_OutOfMemory();
 
     if (sdltexturePtr != nullptr) (*sdltexturePtr) = gc_ptr;
 
@@ -639,7 +641,7 @@ int GC::gc_alloc_texture_from(Texture **texturePtr, SDL_Surface *from) {
     // alloc empty ptr
     // and create SDL_CreateTextureFromSurface
     id = gc_wrte_memblock<SDL_Texture>(&mem);
-    mem->memory = SDL_CreateTextureFromSurface(RoninApplication::GetRenderer(), from);
+    mem->memory = SDL_CreateTextureFromSurface(Application::GetRenderer(), from);
     auto gc_ptr = reinterpret_cast<SDL_Texture *>(mem->memory);
 
     gc_alloc_texture_from(texturePtr, gc_ptr);

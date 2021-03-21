@@ -101,7 +101,7 @@ void Scene::RenderScene(SDL_Renderer *renderer) {
     // Render on main camera
     Camera *cam = Camera::mainCamera();  // Рисуем сцену
     if (cam) {
-        SDL_DisplayMode display = RoninApplication::display();
+        SDL_DisplayMode display = Application::display();
         // FlushCache last result
         if (cam->targetClear) cam->__rendererOutResults.clear();
         // Рисуем в соотношение окна...

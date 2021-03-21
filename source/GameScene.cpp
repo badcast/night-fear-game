@@ -44,7 +44,7 @@ Player *player;
 void ui_event_handler(const uint8_t &id, void *userData) {
 
   if (b_mainMenu == id) {
-    RoninApplication::LoadScene(GC::gc_alloc_scene<MainMenu>());
+    Application::LoadScene(GC::gc_alloc_scene<MainMenu>());
   } else if (b_generateNav == id || id == b_clearNav) {
     paths.clear();
     arranged = 0;
@@ -64,7 +64,7 @@ void ui_event_handler(const uint8_t &id, void *userData) {
 void GameScene::awake() {
   gui = this->ui;
 
-  auto display = RoninApplication::display();
+  auto display = Application::display();
 
   GameObject *playerObj = CreateObject<GameObject>("Player");
   player = playerObj->Add_Component<Player>();
