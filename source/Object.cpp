@@ -11,8 +11,8 @@ T* factory_base(bool initInHierarchy, T* instance, const char* name) {
     if (instance == nullptr) {
         if (name == nullptr)
             GC::gc_push_lvalue<T>(instance);
-        else
-            GC::gc_push_lvalue<T>(instance, std::string(name));
+        //else
+            //GC::gc_push_lvalue<T>(instance, std::string(name));
 
     } else {
         instance = GC::gc_push<T>();
@@ -52,7 +52,7 @@ template Player* CreateObject<Player>(const string&);
 template Camera2D* CreateObject<Camera2D>(const string&);
 template Spotlight* CreateObject<Spotlight>(const string&);
 template SpriteRenderer* CreateObject<SpriteRenderer>(const string&);
-//-------------------------------------------------
+//-------------------------------------------------------------------
 
 template <typename T>
 T* CreateObject() {
@@ -109,7 +109,7 @@ void Destroy_Immediate(Object* obj) {
     }
 
     // todo: деструктор для этого объекта
-    SDL_Log("Object destroyed id: %d", obj->id);
+    SDL_Log("Object destroyed id: %lu", obj->id);
 
     Scene::getScene()->_objects.erase(obj);
     GC::gc_unload(obj);
@@ -168,8 +168,19 @@ GameObject* Instantiate(GameObject* obj) {
 
     return clone;
 }
-GameObject* Instantiate(GameObject* obj, Vec2 position, float angle) { return nullptr; }
-GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent, bool worldPositionState) { return nullptr; }
+GameObject* Instantiate(GameObject* obj, Vec2 position, float angle) {
+    obj = Instantiate(obj);
+    obj->transform()->position(position);
+    obj->transform()->angle(angle);
+    return obj;
+}
+GameObject* Instantiate(GameObject* obj, Vec2 position, Transform* parent, bool worldPositionState) {
+    throw std::bad_alloc();
+    obj = Instantiate(obj);
+    obj->transform()->position(position);
+    // TODO: arg parent and worldPositionState not implemented. Checkout
+    return obj;
+}
 
 // base class
 

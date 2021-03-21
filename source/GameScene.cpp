@@ -123,7 +123,7 @@ void GameScene::start() {
   GC::gc_alloc_sprite_with(&spr, texture);
   spriteRenderer->setSprite(spr);
 
-  GC::gc_push_lvalue(navMesh, NavMeshMagnitude, NavMeshMagnitude);
+  GC::gc_push_lvalue(navMesh, static_cast<std::size_t>(NavMeshMagnitude), static_cast<std::size_t>(NavMeshMagnitude));
   navMesh->worldScale = Vec2::one * NavMeshWorldScale;
 
   changeDrawPointPer = 0;

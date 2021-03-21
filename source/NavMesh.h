@@ -70,7 +70,7 @@ class NavMesh {
     size_t widthSpace, heightSpace;
     Vec2 worldScale;
 
-    NavMesh(std::size_t width, std::size_t height);
+    explicit NavMesh(std::size_t width, std::size_t height);
 
     ~NavMesh();
 
