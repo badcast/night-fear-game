@@ -18,19 +18,20 @@ set(RUNTIME_OUTPUT_NAME "NightFear")
 if(UNIX)
     set(OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/linux/)
 
-    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
-    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
-    SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
-    SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
-    SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
-    SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
-   # custom_log("<This is Linux Runtime>")
-
+    # custom_log("<This is Linux Runtime>")
+    message("<This is Linux Runtime>")
 elseif(WIN32)
     set(RUNTIME_OUTPUT_DIRECTORY "build/windows/")
 
-   # custom_log("<This is Windows Runtime>")
-
+    # custom_log("<This is Windows Runtime>")
+    message("<This is Windows Runtime>")
 endif()
 
-add_subdirectory(./source) #get sources and linking from the "source" directory
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
+SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")
+SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${OUTPUT_DIRECTORY}")
+
+add_subdirectory(./Sources) #get sources and linking from the "Sources" directory
