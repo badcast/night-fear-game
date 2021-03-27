@@ -14,7 +14,7 @@ namespace RoninEngine::Runtime
 
 	private:
 		::SDL_Texture* m_native;
-		char* raw_namePtr;
+          std::string _name;
 
 	public:
          Texture();

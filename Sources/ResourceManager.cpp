@@ -203,6 +203,7 @@ void GC::LoadImages(const char *filename) {
 void GC::UnloadUnused() { UnloadAll(false); }
 void GC::UnloadAll(bool immediate) {
     // TO-DO: реализовать очистку _assocSingleFile и других
+    return;
 
     for (auto xx = begin(*_assocMultiCacheTextures); xx != end(*_assocMultiCacheTextures); ++xx) {
         for (auto iter = begin(*xx->second); iter != end(*xx->second); ++iter) gc_unalloc(*iter);
@@ -308,8 +309,7 @@ Texture *GC::GetTexture(const string &resourceName, FolderKind pathOn, bool auto
     if (cache == end(*_assocCacheTextures)) {
         gc_alloc_texture_from(&texture, surf);
         auto i = _assocCacheTextures->insert(make_pair(surf, texture));
-        texture->raw_namePtr = (char *)SDL_malloc(resourceName.size() + 1);
-        strcpy(texture->raw_namePtr, resourceName.data());
+        texture->_name = resourceName;
     } else
         texture = cache->second;
 

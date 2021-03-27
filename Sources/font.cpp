@@ -144,9 +144,9 @@ void Render_String(SDL_Renderer *renderer, Rect_t rect, const char *text, int le
                    bool textWrap, bool hilight) {
     if (len <= 0 || !pfontTexture || hilight && !pfontTextureHilight) return;
 
-    uint8_t temp;
+    std::uint8_t temp;
     Rect_t *src;
-    uint16_t pos;
+    std::uint16_t pos;
     SDL_Rect dst = *(SDL_Rect *)&rect;
     point_t fontSize = pfont->fontSize + point_t(1, 1) * (pfontWidth - fontWidth);
     SDL_Texture *targetpfont = nullptr;
@@ -173,10 +173,12 @@ void Render_String(SDL_Renderer *renderer, Rect_t rect, const char *text, int le
         if (temp == 1) dst.y += -textWidth / 2;
     }
 
+    char * cc = "Hello";
+
     point_t begin = *(point_t *)&dst;
     int deltax;
     for (pos = 0; pos < len; ++pos) {
-        temp = *(uint8_t *)(text + pos);
+        memcpy(&temp, text+pos, 1);
         src = (pfont->data + temp);
         if (temp != '\n') {
             dst.w = src->w;
@@ -185,7 +187,7 @@ void Render_String(SDL_Renderer *renderer, Rect_t rect, const char *text, int le
 
             if (dst.x >= deltax) {
                 for (++pos; pos < len;) {
-                    temp = *(uint8_t *)(text + pos);
+                    temp = *(text + pos);
                     if (temp != '\n')
                         ++pos;
                     else

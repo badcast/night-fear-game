@@ -113,7 +113,7 @@ void Scene::RenderScene(SDL_Renderer *renderer) {
         if (_destructions->begin() == _destructions->end()) {
             GC::gc_unalloc(_destructions);
         } else {
-            _destructions->remove_if([this](pair<Object *, float> &p) {
+            _destructions->remove_if([](pair<Object *, float> &p) {
                 if (p.second <= Time::time()) {
                     Destroy_Immediate(p.first);
                     return true;

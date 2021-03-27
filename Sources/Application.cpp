@@ -67,6 +67,7 @@ void Application::LoadGame() {
 
     GC::CheckResources();
 
+    //initialize GC
     GC::gc_init();
 
     string path = dataAt(FolderKind::LOADER);

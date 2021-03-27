@@ -19,7 +19,7 @@ namespace RoninEngine::Runtime
 
 	class SpriteRenderer : public Renderer
 	{
-		Texture* texture;
+          Texture* texture;
 		Sprite* sprite;
 	public:
 		virtual ~SpriteRenderer();

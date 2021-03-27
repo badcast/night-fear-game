@@ -7,8 +7,6 @@ namespace RoninEngine::Runtime {
 	}
 
 	Texture::~Texture() {
-       if (raw_namePtr)
-           SDL_free(raw_namePtr);
 	}
 
 	const bool Texture::valid() {
@@ -116,6 +114,6 @@ namespace RoninEngine::Runtime {
 	}
 
 	const string Texture::name() {
-		return string(raw_namePtr == nullptr ? "Unknown" : raw_namePtr);
+          return string(_name.empty() ? "Unknown" : _name);
 	}
 }

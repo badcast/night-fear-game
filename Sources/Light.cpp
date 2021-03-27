@@ -35,12 +35,13 @@ void Light::GetLightSource(Render_info *render) {
 
   SDL_SetRenderTarget(render->renderer, target);
   SDL_SetRenderDrawColor(render->renderer, 0, 0, 0, 55);
-  SDL_RenderClear(render->renderer);
+  //SDL_RenderClear(render->renderer);
 
   // Get light
   this->GetLight(render->renderer);
 
   SDL_SetRenderTarget(render->renderer, lastTarget);
   SDL_RenderCopy(render->renderer, target, nullptr, nullptr); // copy
+  SDL_DestroyTexture(target);
 }
 } // namespace RoninEngine::Runtime
