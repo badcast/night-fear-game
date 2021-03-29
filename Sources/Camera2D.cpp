@@ -79,9 +79,9 @@ namespace RoninEngine::Runtime
 				dst.w = renderInfo.dst.w * squarePerPixels;
 				dst.h = renderInfo.dst.h * squarePerPixels;
 
-				//Положение по горизонтале 
+                    //h
 				dst.x = ((rect.w - dst.w) / 2.0f - (point->x - sourcePoint->x) * squarePerPixels);
-				//Положение по вертикале 
+                    //v
 				dst.y = ((rect.h - dst.h) / 2.0f + (point->y - sourcePoint->y) * squarePerPixels);
 
 				//SDL_RenderCopyF(renderer, renderInfo.texture, (SDL_Rect*)&renderInfo.src, (SDL_FRect*)&dst);

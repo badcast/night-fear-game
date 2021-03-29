@@ -6,39 +6,59 @@ using namespace RoninEngine;
 namespace RoninEngine {
 namespace Runtime {
 
-template <typename T>
-T* factory_base(bool initInHierarchy, T* instance, const char* name) {
-    if (instance == nullptr) {
-        if (name == nullptr)
-            GC::gc_alloc_lval<T>(instance);
-        else
-            GC::gc_alloc_lval<T>(instance, std::string(name));
+static const char _cloneStr[] = " (clone)";
 
+template <typename T>
+T* factory_base(bool initInHierarchy, T* clone, const char* name) {
+
+    if (clone == nullptr) {
+        if (name == nullptr)
+            GC::gc_push_lvalue<T>(clone);
+        else
+            GC::gc_push_lvalue<T>(clone, std::string(name));
     } else {
-        instance = Instantiate(instance);
+         T* newc;
+        if constexpr (std::is_same<T, GameObject>())
+            newc = Instantiate(clone);
+        else if constexpr (std::is_same<T, Transform>()) {
+            // TODO: Required cloning for Transform
+            GC::gc_push_lvalue(newc);
+        } else if constexpr (std::is_same<T, SpriteRenderer>()) {
+            GC::gc_push_lvalue(newc, *clone);
+
+        } else if constexpr (std::is_same<T, Camera2D>()) {
+            GC::gc_push_lvalue(newc, *clone);
+        } else {
+            static_assert(true, "undefined type");
+            newc = nullptr;
+        }
+        clone = newc;
     }
 
-    if (instance == nullptr) throw std::bad_alloc();
+    if (clone == nullptr) throw std::bad_alloc();
 
-    if (initInHierarchy) {
-        if (RoninEngine::Scene::getScene() == nullptr) throw std::runtime_error("var pCurrentScene is null");
+    if constexpr (std::is_same<T, GameObject>::value) {
+        if (initInHierarchy) {
+            if (RoninEngine::Scene::getScene() == nullptr) throw std::runtime_error("var pCurrentScene is null");
 
-        if (!RoninEngine::Scene::getScene()->is_hierarchy()) throw std::runtime_error("var pCurrentScene->mainObject is null");
+            if (!RoninEngine::Scene::getScene()->is_hierarchy())
+                throw std::runtime_error("var pCurrentScene->mainObject is null");
 
-        if constexpr (std::is_same<T, GameObject>::value) {
-            auto root = Scene::getScene()->main_object->transform();
-            Transform* tr = ((GameObject*)instance)->transform();
+            GameObject* && mainObj = std::move(Scene::getScene()->main_object);
+            auto root = mainObj->transform();
+            Transform* tr = ((GameObject*)clone)->transform();
             root->child_append(tr);
         }
     }
 
-    return instance;
+    return clone;
 }
 
 Transform* create_empty_transform() { return factory_base<Transform>(false, nullptr, nullptr); }
 GameObject* create_empty() { return factory_base<GameObject>(false, nullptr, nullptr); }
 
 // NOTE: WoW: Здесь профиксина 6 месячная проблема
+/*
 template GameObject* CreateObject<GameObject>();
 template Transform* CreateObject<Transform>();
 template Player* CreateObject<Player>();
@@ -51,30 +71,20 @@ template Transform* CreateObject<Transform>(const string&);
 template Player* CreateObject<Player>(const string&);
 template Camera2D* CreateObject<Camera2D>(const string&);
 template Spotlight* CreateObject<Spotlight>(const string&);
-template SpriteRenderer* CreateObject<SpriteRenderer>(const string&);
+template SpriteRenderer* CreateObject<SpriteRenderer>(const string&);*/
 //-------------------------------------------------------------------
 
-template <typename T>
-T* CreateObject() {
-    return factory_base<T>(true, nullptr, nullptr);
-}
+GameObject* CreateGameObject() { return factory_base<GameObject>(true, nullptr, nullptr); }
 
-template <typename T>
-T* CreateObject(const string& name) {
-    return factory_base<T>(true, nullptr, name.data());
-}
-
-template <typename T>
-T* CreateObject(T* copy) {
-    return factory_base<T>(true, copy, nullptr);
-}
+GameObject* CreateGameObject(const string& name) { return factory_base<GameObject>(true, nullptr, name.data()); }
 
 void Destroy(Object* obj) { Destroy(obj, 0); }
 
 void Destroy(Object* obj, float t) {
     if (!obj || !Scene::getScene()) throw std::bad_exception();
     if (!Scene::getScene()->_destructions) {
-        Scene::getScene()->_destructions = GC::gc_alloc<std::remove_pointer<decltype(Scene::getScene()->_destructions)>::type>();
+        Scene::getScene()->_destructions =
+            GC::gc_alloc<std::remove_pointer<decltype(Scene::getScene()->_destructions)>::type>();
     }
 
     auto ref = Scene::getScene()->_destructions;
@@ -90,7 +100,7 @@ void Destroy_Immediate(Object* obj) {
     if (!obj) throw std::runtime_error("Object is null");
 
     GameObject* gObj;
-    if (gObj = dynamic_cast<GameObject*>(obj)) {
+    if ((gObj = dynamic_cast<GameObject*>(obj)) != nullptr) {
         if (Scene::getScene()->_firstRunScripts) {
             Scene::getScene()->_firstRunScripts->remove_if([gObj](Behaviour* x) {
                 auto iter = find_if(std::begin(gObj->m_components), std::end(gObj->m_components),
@@ -121,16 +131,8 @@ bool instanced(Object* obj) {
     return iter != end(Scene::getScene()->_objects);
 }
 
-// Instantaite clone
-template <typename T>
-T* Instantiate(T* obj) {
-    return CreateObject<T>();
-}
-
 GameObject* Instantiate(GameObject* obj) {
-    const char _cloneStr[] = " (clone)";
-
-    GameObject* clone = CreateObject<GameObject>();
+    GameObject* clone = CreateGameObject();
     clone->name() = obj->name();
     if (clone->m_name.find(_cloneStr) == std::string::npos) clone->m_name += _cloneStr;
 
@@ -154,9 +156,9 @@ GameObject* Instantiate(GameObject* obj) {
                           });
             continue;
         } else if (dynamic_cast<SpriteRenderer*>(c)) {
-            c = CreateObject(reinterpret_cast<SpriteRenderer*>(c));
+            c = factory_base<SpriteRenderer>(false, reinterpret_cast<SpriteRenderer*>(c), nullptr);
         } else if (false /* dynamic_cast<Camera2D*>(c)*/) {
-            c = CreateObject(reinterpret_cast<Camera2D*>(c));
+            c = factory_base<Camera2D>(false, reinterpret_cast<Camera2D*>(c), nullptr);
         } else {
             static_assert("undefined type");
             continue;

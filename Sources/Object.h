@@ -7,14 +7,9 @@ namespace RoninEngine {
       extern Transform* create_empty_transform();
       extern GameObject* create_empty();
 
-      template <typename T>
-      T* CreateObject();
+      GameObject *CreateGameObject();
+      GameObject *CreateGameObject(const string& name);
 
-      template <typename T>
-      T* CreateObject(const string& name);
-
-      template <typename T>
-      T* CreateObject(T* copy);
 
       ///Уничтожает объект после рендера.
       void Destroy(Object* obj);

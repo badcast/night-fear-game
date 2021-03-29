@@ -5,6 +5,12 @@
 
 using namespace RoninEngine::Runtime;
 
+template Player* GameObject::Add_Component<Player>();
+template SpriteRenderer* GameObject::Add_Component<SpriteRenderer>();
+template Camera2D* GameObject::Add_Component<Camera2D>();
+template Spotlight* GameObject::Add_Component<Spotlight>();
+
+
 GameObject::GameObject() : GameObject("GameObject") {}
 
 GameObject::GameObject(const string& name) : Object(name) {
@@ -48,4 +54,12 @@ Component* GameObject::Add_Component(Component* component) {
     }
 
     return component;
+}
+
+template<typename T>
+std::enable_if_t<std::is_base_of<Component, T>::value, T*> GameObject::Add_Component()
+{
+    T* comp = GC::gc_push<T>();
+    Add_Component(reinterpret_cast<Component*>(comp));
+    return comp;
 }

@@ -66,7 +66,7 @@ int gc_wrte_memblock_runtime(MemoryStick **ms, const std::uint8_t& typeIndex, co
     (*ms)->memoryType = typeIndex;
 
     //не SDL тип, тогда вызываем memalloc
-    if (typeIndex <= SDL_TYPE_MAX_INDEX) {
+    if (typeIndex > SDL_TYPE_MAX_INDEX) {
         (*ms)->memory = GC::gc_malloc(size);
         memset((*ms)->memory, 0, size);
     } else {

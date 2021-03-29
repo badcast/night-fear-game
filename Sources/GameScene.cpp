@@ -66,7 +66,7 @@ void GameScene::awake() {
 
   auto display = Application::display();
 
-  GameObject *playerObj = CreateObject<GameObject>("Player");
+  GameObject *playerObj = CreateGameObject("Player");
   player = playerObj->Add_Component<Player>();
 
   player->playerCamera->visibleBorders = true;
@@ -95,10 +95,10 @@ vector<tuple<Transform *, float, list<Neuron *>>> ais;
 void GameScene::start() {
   SpriteRenderer *spriteRenderer;
   Sprite *spr;
-  GameObject *floor = CreateObject<GameObject>("Floor");
+  GameObject *floor = CreateGameObject("Floor");
   Texture *texture;
 
-  testObj = CreateObject<GameObject>("Population");
+  testObj = CreateGameObject("Population");
   spriteRenderer = testObj->Add_Component<SpriteRenderer>();
   spriteRenderer->renderType = SpriteRenderType::Simple;
   spriteRenderer->tileRenderPresent = SpriteRenderTile::Fixed;
@@ -127,7 +127,7 @@ void GameScene::start() {
   navMesh->worldScale = Vec2::one * NavMeshWorldScale;
 
   changeDrawPointPer = 0;
-  target = CreateObject<GameObject>()->Add_Component<SpriteRenderer>();
+  target = CreateGameObject()->Add_Component<SpriteRenderer>();
   target->zOrder = 1;
 
   GC::gc_alloc_texture_from(

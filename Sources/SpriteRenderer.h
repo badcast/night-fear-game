@@ -1,45 +1,41 @@
 #pragma once
 
-#include "framework.h"
 #include "Renderer.h"
 #include "Sprite.h"
+#include "framework.h"
 
-namespace RoninEngine::Runtime
-{
-    enum class SpriteRenderTile : char{
-		Fixed,
-		Place
-	};
-    enum class SpriteRenderType : char {
-        ///Обычное отрисовка спрайта с учетом его параметров.
-		Simple,
-        ///Отрисовка спрайта с учетом его параметров и черепиция от size
-		Tile
-	};
+namespace RoninEngine::Runtime {
+enum class SpriteRenderTile : char { Fixed, Place };
+enum class SpriteRenderType : char {
+    ///Обычное отрисовка спрайта с учетом его параметров.
+    Simple,
+    ///Отрисовка спрайта с учетом его параметров и черепиция от size
+    Tile
+};
 
-	class SpriteRenderer : public Renderer
-	{
-          Texture* texture;
-		Sprite* sprite;
-	public:
-		virtual ~SpriteRenderer();
+class SpriteRenderer : public Renderer {
+    Texture* texture;
+    Sprite* sprite;
 
-		SpriteRenderType renderType;
-		SpriteRenderTile tileRenderPresent;
-        SDL_Color color;
-		Vec2 size;
-        Vec2 flip;
+   public:
+    virtual ~SpriteRenderer();
 
-		SpriteRenderer();
-		SpriteRenderer(const string& name);
-		SpriteRenderer(SpriteRenderer&);
+    SpriteRenderType renderType;
+    SpriteRenderTile tileRenderPresent;
+    SDL_Color color;
+    Vec2 size;
+    Vec2 flip;
 
-		Vec2 GetSize();
+    SpriteRenderer();
+    SpriteRenderer(const string& name);
+    SpriteRenderer(SpriteRenderer&);
 
-		void setSprite(Sprite* sprite);
-		Sprite* getSprite();
+    Vec2 GetSize();
 
-		void Render(Render_info* render_info);
-	};
+    void setSprite(Sprite* sprite);
+    Sprite* getSprite();
 
-}
+    void Render(Render_info* render_info);
+};
+
+}  // namespace RoninEngine::Runtime
